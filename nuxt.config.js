@@ -45,7 +45,8 @@ module.exports = {
   */
   plugins: [
     '~/plugins/axios',
-    '~/plugins/toastr'
+    '~/plugins/toastr',
+    '~/plugins/selfPlugins'
   ],
 
   /*

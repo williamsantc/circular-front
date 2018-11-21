@@ -1,7 +1,7 @@
 <template>
-  <b-card>
+  <b-card ref="gg">
     <b-card-header>
-      <h4>Gestionar Area</h4>
+      <h4>{{ tituloFuncionlidad }}</h4>
     </b-card-header>
 
     <b-card-body>
@@ -74,7 +74,7 @@
     </b-card-body>
 
     <b-modal v-model="crudSettings.showModal"
-             title="Gestionar Area">
+             :title="tituloFuncionlidad">
       <b-row>
         <b-col>
           <b-form-group label="Nombre del area">
@@ -96,6 +96,7 @@
 
 <script>
 import Vue from 'vue'
+import MsgBox from '@/components/msg-box'
 
 const CRUD_SETTIINGS = require('@/utils/crudSettings')
 
@@ -120,8 +121,10 @@ const AREA = {
 
 export default {
   name: 'funcionalidad-area',
+  components: { MsgBox },
   data: function() {
     return {
+      tituloFuncionlidad: 'Gestionar Areas',
       crudSettings: JSON.parse(JSON.stringify(CRUD_SETTIINGS)),
       area: JSON.parse(JSON.stringify(AREA)),
       listaArea: [],
@@ -176,16 +179,25 @@ export default {
         })
     },
     eliminarArea: function(area_id) {
-      return this.$axios
-        .$post('/area/eliminar', { area_id: area_id })
-        .then(resp => {
-          this.$toastr.success(resp.msg, 'OK')
+      this.$confirm({
+        title: this.tituloFuncionlidad,
+        content: '¿Está seguro que desea eliminar el area seleccionada?'
+      })
+        .then(success => {
+          return this.$axios
+            .$post('/area/eliminar', { area_id: area_id })
+            .then(resp => {
+              this.$toastr.success(resp.msg, 'OK')
+            })
+            .catch(error => {
+              this.$toastr.error(error.msg, 'ERROR')
+            })
+            .then(() => {
+              this.getAreasWs()
+            })
         })
-        .catch(error => {
-          this.$toastr.error(error.msg, 'ERROR')
-        })
-        .then(() => {
-          this.getAreasWs()
+        .catch(cancel => {
+          this.$toastr.info('Solicitud cancelada', 'INFO')
         })
     }
   },
