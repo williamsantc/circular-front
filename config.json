@@ -1,0 +1,7 @@
+{
+  "secret": "williamsantc",
+  "refreshTokenSecret": "ref",
+  "port": 3000,
+  "tokenLife": 900,
+  "refreshTokenLife": 86400
+}
