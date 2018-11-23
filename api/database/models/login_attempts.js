@@ -10,7 +10,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     user_id: {
       type: DataTypes.STRING(20),
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'usuario',
+        key: 'user_id'
+      }
     },
     time: {
       type: DataTypes.DATEONLY,

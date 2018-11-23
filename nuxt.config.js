@@ -45,8 +45,7 @@ module.exports = {
   */
   plugins: [
     '~/plugins/axios',
-    '~/plugins/toastr',
-    '~/plugins/selfPlugins'
+    '~/plugins/installer'
   ],
 
   /*
@@ -102,7 +101,8 @@ module.exports = {
           }
         })
       }
-    }
+    },
+    watch: ["~/api/index.js"]
   },
   serverMiddleware: [
     // API middleware

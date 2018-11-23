@@ -17,14 +17,14 @@
         <b-col md="6" order="1" order-sm="2" align="right">
           <b-btn variant="primary"
                  @click="crudSettings.showModal = !crudSettings.showModal">
-            <i class="fa fa-plus" aria-hidden="true"></i> Nueva area
+            <i class="fa fa-plus" aria-hidden="true"></i> Nueva responsable
         </b-btn>
         </b-col>
       </b-row>
       <b-collapse class="mt-2" v-model="crudSettings.toogleFilter" id="collapseFilter">
         <b-row >
           <b-col>
-            <b-form-group label="Nombre del area a buscar">
+            <b-form-group label="Nombre del responsable a buscar">
               <b-input v-model="nombreSearch"></b-input>
             </b-form-group>
           </b-col>
@@ -33,9 +33,9 @@
       <b-row>
         <b-col>
           <br>
-          <h4 v-if="listaArea.length <= 0">No hay registros</h4>
+          <h4 v-if="listaResponsable.length <= 0">No hay registros</h4>
           <b-table v-else stacked="md"
-                   :items="listaArea" 
+                   :items="listaResponsable" 
                    :fields="fields"
                    striped
                    :per-page="crudSettings.perPage"
@@ -52,7 +52,7 @@
                 </b-col>
                 <b-col cols="1">
                   <b-btn variant="danger" size="sm"
-                  @click="eliminarArea(data.item.area_id)" 
+                  @click="eliminarResponsable(data.item.resp_id)" 
                          v-b-tooltip.hover title="Eliminar">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                   </b-btn>
@@ -64,9 +64,9 @@
       </b-row>
       <b-row>
         <b-col>
-          <b-pagination v-if="listaArea.length > crudSettings.perPage"
+          <b-pagination v-if="listaResponsable.length > crudSettings.perPage"
                         align="center"
-                        :total-rows="listaArea.length" 
+                        :total-rows="listaResponsable.length" 
                         :per-page="crudSettings.perPage" 
                         v-model="crudSettings.currentPage" />
         </b-col>
@@ -77,17 +77,26 @@
              :title="tituloFuncionlidad">
       <b-row>
         <b-col>
-          <b-form-group label="Nombre del area">
-            <b-input v-model="area.form.area_nombre" ref="area_nombre"></b-input>
+          <b-form-group label="Nombre del responsable">
+            <b-input v-model="responsable.form.resp_nombre" ref="resp_nombre"></b-input>
+          </b-form-group>
+          <b-form-group label="Cargo del responsable">
+            <b-input v-model="responsable.form.resp_cargo" ref="resp_cargo"></b-input>
           </b-form-group>
         </b-col>
       </b-row>
       <div slot="modal-footer">
-        <b-btn class="float-right" variant="primary" @click="gestionarArea">
+        <b-btn class="float-right" variant="primary" @click="gestionarResponsable">
           {{ crudSettings.msgBtn }}
         </b-btn>
       </div>
     </b-modal>
+    <b-row>
+      <b-col>
+        <tiny-mce v-model="content" :init="initTinyMce" api-key="gawdxg9y9xrk02tl5nlsgpqjjulh02zig2uo3sylmfplygul"></tiny-mce>
+      </b-col>
+    </b-row>
+    <b-button @click="prueba">dd</b-button>
     <b-card-footer>
       <br>
     </b-card-footer>
@@ -101,44 +110,67 @@ import { validarForm } from '@/mixins/validarForm'
 
 const CRUD_SETTIINGS = require('@/utils/crudSettings')
 
-const AREA = {
+const ENTIDAD = {
   form: {
-    area_id: '',
-    area_nombre: ''
+    resp_id: '',
+    resp_nombre: '',
+    resp_cargo: ''
   },
   config: {
-    area_id: {
+    resp_id: {
       type: 'String',
       required: false,
       msg: 'Error interno'
     },
-    area_nombre: {
+    resp_nombre: {
       type: 'String',
       required: true,
-      msg: 'Nombre del area'
+      msg: 'Nombre de la responsable'
+    },
+    resp_cargo: {
+      type: 'String',
+      required: true,
+      msg: 'Cargo del responsable'
     }
   }
 }
 
 export default {
-  name: 'funcionalidad-area',
+  name: 'funcionalidad-responsable',
   mixins: [validarForm],
   data: function() {
     return {
-      tituloFuncionlidad: 'Gestionar Areas',
+      content: '',
+      tituloFuncionlidad: 'Gestionar Responsables',
       crudSettings: JSON.parse(JSON.stringify(CRUD_SETTIINGS)),
-      area: JSON.parse(JSON.stringify(AREA)),
-      listaArea: [],
+      responsable: JSON.parse(JSON.stringify(ENTIDAD)),
+      listaResponsable: [],
       fields: [
-        { key: 'area_nombre', label: 'Nombre del Area', sortable: true },
+        { key: 'resp_nombre', label: 'Nombre del Responsable', sortable: true },
+        { key: 'resp_cargo', label: 'Cargo' },
         { key: 'acciones', label: 'Acciones' }
       ],
-      nombreSearch: ''
+      nombreSearch: '',
+      initTinyMce: {
+        plugins: [
+          'textcolor link paste visualchars charmap table preview lists'
+        ],
+        relative_urls: false,
+        remove_script_hostF: false,
+        toolbar:
+          'bold italic underline strikethrough |' +
+          ' alignleft aligncenter alignright alignjustify | ' +
+          ' bullist numlist | outdent indent | formatselect | ' +
+          ' fontselect | fontsizeselect | paste pastetext | ' +
+          ' undo redo | link unlink anchor | table | ' +
+          ' hr removeformat visualchars | subscript superscript | charmap preview ',
+        menubar: false
+      }
     }
   },
   watch: {
     nombreSearch: _.debounce(function(newValue) {
-      this.getAreasWs()
+      this.getResponsablesWs()
     }, 500),
     'crudSettings.showModal': function(newValue) {
       if (newValue) {
@@ -146,36 +178,41 @@ export default {
       }
 
       Vue.nextTick(() => {
-        this.area = JSON.parse(JSON.stringify(AREA))
+        this.responsable = JSON.parse(JSON.stringify(ENTIDAD))
         this.crudSettings.msgBtn = 'Registrar'
       })
     }
   },
   methods: {
-    getAreasWs: function() {
-      return this.$axios
-        .$get('/area/list', { params: { nombre: this.nombreSearch } })
-        .then(resp => {
-          this.listaArea = resp
-        })
-        .catch(error => {})
+    prueba: function() {
+      console.log(this.content)
     },
-    sendModificar: function(area) {
-      delete area.createdAt
-      delete area.updatedAt
+    getResponsablesWs: function() {
+      return this.$axios
+        .$get('/responsable/list', { params: { nombre: this.nombreSearch } })
+        .then(resp => {
+          this.listaResponsable = resp
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    sendModificar: function(responsable) {
+      delete responsable.createdAt
+      delete responsable.updatedAt
 
-      this.area.form = area
+      this.responsable.form = responsable
       this.crudSettings.msgBtn = 'Guardar Cambios'
       this.crudSettings.showModal = !this.crudSettings.showModal
     },
-    gestionarArea: function() {
-      if(!this.validarCampos(this.area)) { 
+    gestionarResponsable: function() {
+      if (!this.validarCampos(this.responsable)) {
         return
       }
       return this.$axios
-        .$post('/area/gestionar', this.area.form)
+        .$post('/responsable/gestionar', this.responsable.form)
         .then(resp => {
-          if(resp.processOk) {
+          if (resp.processOk) {
             this.$toastr.success(resp.msg, 'OK')
           } else {
             this.$toastr.error(resp.msg, 'ERROR')
@@ -186,17 +223,17 @@ export default {
           this.$toastr.error(error.msg, 'ERROR')
         })
         .then(() => {
-          this.getAreasWs()
+          this.getResponsablesWs()
         })
     },
-    eliminarArea: function(area_id) {
+    eliminarResponsable: function(resp_id) {
       return this.$confirm({
         title: this.tituloFuncionlidad,
-        content: '¿Está seguro que desea eliminar el area seleccionada?'
+        content: '¿Está seguro que desea eliminar el responsable seleccionado?'
       })
         .then(success => {
           return this.$axios
-            .$post('/area/eliminar', { area_id: area_id })
+            .$post('/responsable/eliminar', { resp_id: resp_id })
             .then(resp => {
               this.$toastr.success(resp.msg, 'OK')
             })
@@ -204,7 +241,7 @@ export default {
               this.$toastr.error(error.msg, 'ERROR')
             })
             .then(() => {
-              this.getAreasWs()
+              this.getResponsablesWs()
             })
         })
         .catch(cancel => {
@@ -213,7 +250,7 @@ export default {
     }
   },
   created: function() {
-    this.getAreasWs()
+    this.getResponsablesWs()
   }
 }
 </script>

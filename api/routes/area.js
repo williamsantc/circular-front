@@ -1,9 +1,24 @@
-var express = require('express');
-var router = express.Router();
-var models = require('../database/models');
+let express = require('express');
+let router = express.Router();
+let models = require('../database/models');
+
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op
 
 router.get('/list', (req, res, next) => {
-  models.area.findAll().then(areas => {
+
+  let options = {}
+
+  if (req.query.nombre) {
+    let nombreSearch = req.query.nombre.toUpperCase()
+    options.where = {
+      area_nombre: {
+        [Op.like]: '%' + nombreSearch  + '%'
+      }
+    }
+  }
+
+  models.area.findAll(options).then(areas => {
     res.status(200).send(areas)
   }).catch(error => {
     res.status(500).send(error)
@@ -13,18 +28,21 @@ router.get('/list', (req, res, next) => {
 router.post('/gestionar', (req, res, next) => {
   let area = req.body
   if (!area.area_id) {
-    models.area.create(area).then(areaCreated => {
-      res.status(200).send({ msg: 'Area registrada correctamente' })
-    }).catch(error => {
-      res.status(500).send({ msg: 'Error registrando el area' })
-      console.log(error)
-    })
+    models.area
+      .findOrCreate({ where: { area_nombre: area.area_nombre }, defaults: area })
+      .spread((area, created) => {
+        return created
+      }).then(created => {
+        let msg = (created ? 'Area registrada correctamente' : 'Ya existe un area con el mismo nombre')
+        res.status(200).send({ msg: msg, processOk: created })
+      })
+
   } else {
     models.area.update(area,
       { where: { area_id: area.area_id } }).then(areaUpdated => {
-        res.status(200).send({ msg: 'Cambios guardados en el area correctamente' })
+        res.status(200).send({ msg: 'Cambios guardados en el area correctamente', processOk: true })
       }).catch(error => {
-        res.status(500).send({ msg: 'Error guandando cambios el area' })
+        res.status(500).send({ msg: 'Error guandando cambios en el area' })
         console.log(error)
       })
   }

@@ -17,14 +17,14 @@
         <b-col md="6" order="1" order-sm="2" align="right">
           <b-btn variant="primary"
                  @click="crudSettings.showModal = !crudSettings.showModal">
-            <i class="fa fa-plus" aria-hidden="true"></i> Nueva area
+            <i class="fa fa-plus" aria-hidden="true"></i> Nueva entidad
         </b-btn>
         </b-col>
       </b-row>
       <b-collapse class="mt-2" v-model="crudSettings.toogleFilter" id="collapseFilter">
         <b-row >
           <b-col>
-            <b-form-group label="Nombre del area a buscar">
+            <b-form-group label="Nombre de la entidad a buscar">
               <b-input v-model="nombreSearch"></b-input>
             </b-form-group>
           </b-col>
@@ -33,9 +33,9 @@
       <b-row>
         <b-col>
           <br>
-          <h4 v-if="listaArea.length <= 0">No hay registros</h4>
+          <h4 v-if="listaEntidad.length <= 0">No hay registros</h4>
           <b-table v-else stacked="md"
-                   :items="listaArea" 
+                   :items="listaEntidad" 
                    :fields="fields"
                    striped
                    :per-page="crudSettings.perPage"
@@ -52,7 +52,7 @@
                 </b-col>
                 <b-col cols="1">
                   <b-btn variant="danger" size="sm"
-                  @click="eliminarArea(data.item.area_id)" 
+                  @click="eliminarArea(data.item.enti_id)" 
                          v-b-tooltip.hover title="Eliminar">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                   </b-btn>
@@ -64,9 +64,9 @@
       </b-row>
       <b-row>
         <b-col>
-          <b-pagination v-if="listaArea.length > crudSettings.perPage"
+          <b-pagination v-if="listaEntidad.length > crudSettings.perPage"
                         align="center"
-                        :total-rows="listaArea.length" 
+                        :total-rows="listaEntidad.length" 
                         :per-page="crudSettings.perPage" 
                         v-model="crudSettings.currentPage" />
         </b-col>
@@ -77,13 +77,13 @@
              :title="tituloFuncionlidad">
       <b-row>
         <b-col>
-          <b-form-group label="Nombre del area">
-            <b-input v-model="area.form.area_nombre" ref="area_nombre"></b-input>
+          <b-form-group label="Nombre del entidad">
+            <b-input v-model="entidad.form.enti_nombre" ref="enti_nombre"></b-input>
           </b-form-group>
         </b-col>
       </b-row>
       <div slot="modal-footer">
-        <b-btn class="float-right" variant="primary" @click="gestionarArea">
+        <b-btn class="float-right" variant="primary" @click="gestionarEntidad">
           {{ crudSettings.msgBtn }}
         </b-btn>
       </div>
@@ -101,36 +101,36 @@ import { validarForm } from '@/mixins/validarForm'
 
 const CRUD_SETTIINGS = require('@/utils/crudSettings')
 
-const AREA = {
+const ENTIDAD = {
   form: {
-    area_id: '',
-    area_nombre: ''
+    enti_id: '',
+    enti_nombre: ''
   },
   config: {
-    area_id: {
+    enti_id: {
       type: 'String',
       required: false,
       msg: 'Error interno'
     },
-    area_nombre: {
+    enti_nombre: {
       type: 'String',
       required: true,
-      msg: 'Nombre del area'
+      msg: 'Nombre de la entidad'
     }
   }
 }
 
 export default {
-  name: 'funcionalidad-area',
+  name: 'funcionalidad-entidad',
   mixins: [validarForm],
   data: function() {
     return {
-      tituloFuncionlidad: 'Gestionar Areas',
+      tituloFuncionlidad: 'Gestionar Entidades',
       crudSettings: JSON.parse(JSON.stringify(CRUD_SETTIINGS)),
-      area: JSON.parse(JSON.stringify(AREA)),
-      listaArea: [],
+      entidad: JSON.parse(JSON.stringify(ENTIDAD)),
+      listaEntidad: [],
       fields: [
-        { key: 'area_nombre', label: 'Nombre del Area', sortable: true },
+        { key: 'enti_nombre', label: 'Nombre de la Entidad', sortable: true },
         { key: 'acciones', label: 'Acciones' }
       ],
       nombreSearch: ''
@@ -138,7 +138,7 @@ export default {
   },
   watch: {
     nombreSearch: _.debounce(function(newValue) {
-      this.getAreasWs()
+      this.getEntidadesWs()
     }, 500),
     'crudSettings.showModal': function(newValue) {
       if (newValue) {
@@ -146,34 +146,36 @@ export default {
       }
 
       Vue.nextTick(() => {
-        this.area = JSON.parse(JSON.stringify(AREA))
+        this.entidad = JSON.parse(JSON.stringify(ENTIDAD))
         this.crudSettings.msgBtn = 'Registrar'
       })
     }
   },
   methods: {
-    getAreasWs: function() {
+    getEntidadesWs: function() {
       return this.$axios
-        .$get('/area/list', { params: { nombre: this.nombreSearch } })
+        .$get('/entidad/list', { params: { nombre: this.nombreSearch } })
         .then(resp => {
-          this.listaArea = resp
+          this.listaEntidad = resp
         })
-        .catch(error => {})
+        .catch(error => {
+          console.log(error)
+        })
     },
-    sendModificar: function(area) {
-      delete area.createdAt
-      delete area.updatedAt
+    sendModificar: function(entidad) {
+      delete entidad.createdAt
+      delete entidad.updatedAt
 
-      this.area.form = area
+      this.entidad.form = entidad
       this.crudSettings.msgBtn = 'Guardar Cambios'
       this.crudSettings.showModal = !this.crudSettings.showModal
     },
-    gestionarArea: function() {
-      if(!this.validarCampos(this.area)) { 
+    gestionarEntidad: function() {
+      if(!this.validarCampos(this.entidad)) { 
         return
       }
       return this.$axios
-        .$post('/area/gestionar', this.area.form)
+        .$post('/entidad/gestionar', this.entidad.form)
         .then(resp => {
           if(resp.processOk) {
             this.$toastr.success(resp.msg, 'OK')
@@ -186,17 +188,17 @@ export default {
           this.$toastr.error(error.msg, 'ERROR')
         })
         .then(() => {
-          this.getAreasWs()
+          this.getEntidadesWs()
         })
     },
-    eliminarArea: function(area_id) {
+    eliminarArea: function(enti_id) {
       return this.$confirm({
         title: this.tituloFuncionlidad,
-        content: '¿Está seguro que desea eliminar el area seleccionada?'
+        content: '¿Está seguro que desea eliminar la entidad seleccionada?'
       })
         .then(success => {
           return this.$axios
-            .$post('/area/eliminar', { area_id: area_id })
+            .$post('/entidad/eliminar', { enti_id: enti_id })
             .then(resp => {
               this.$toastr.success(resp.msg, 'OK')
             })
@@ -204,7 +206,7 @@ export default {
               this.$toastr.error(error.msg, 'ERROR')
             })
             .then(() => {
-              this.getAreasWs()
+              this.getEntidadesWs()
             })
         })
         .catch(cancel => {
@@ -213,7 +215,7 @@ export default {
     }
   },
   created: function() {
-    this.getAreasWs()
+    this.getEntidadesWs()
   }
 }
 </script>

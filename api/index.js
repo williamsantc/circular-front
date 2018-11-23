@@ -7,8 +7,9 @@ const logger = require('morgan');
 import { AuthMiddleware } from './AuthMiddleware'
 
 // Require API routes
-const indexRouter = require('./routes/index');
 const areaRouter = require('./routes/area');
+const entidadRouter = require('./routes/entidad');
+const responsableRouter = require('./routes/responsable');
 
 // Create express instnace
 const app = express()
@@ -26,8 +27,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(AuthMiddleware);
 
 // Import API Routes
-app.use('/', indexRouter);
 app.use('/area', areaRouter);
+app.use('/entidad', entidadRouter);
+app.use('/responsable', responsableRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

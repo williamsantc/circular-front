@@ -1,14 +1,19 @@
 export default {
   items: [
     {
-      name: 'Ingreso Notas',
-      url: '/prueba',
+      name: 'Gestionar Area',
+      url: '/area',
       icon: 'icon-speedometer'
     },
     {
-      name: 'Imprimir Acta',
-      url: '/usuario/registrar',
+      name: 'Gestionar Entidad',
+      url: '/entidad',
       icon: 'icon-pencil'
+    },
+    {
+      name: 'Gestionar Responsable',
+      url: '/responsable',
+      icon: 'icon-puzzle'
     }
     /*
     {

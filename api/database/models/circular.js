@@ -18,15 +18,27 @@ module.exports = function(sequelize, DataTypes) {
     },
     area_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'area',
+        key: 'area_id'
+      }
     },
     enti_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'entidad',
+        key: 'enti_id'
+      }
     },
     resp_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'responsable',
+        key: 'resp_id'
+      }
     },
     circ_anexos: {
       type: DataTypes.STRING(20),

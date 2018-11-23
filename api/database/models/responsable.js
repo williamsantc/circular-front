@@ -10,11 +10,18 @@ module.exports = function(sequelize, DataTypes) {
     },
     resp_nombre: {
       type: DataTypes.STRING(200),
-      allowNull: false
+      allowNull: false,
+      unique: true,
+      set: function (val) {
+        this.setDataValue('resp_nombre', val.toUpperCase());
+      }
     },
     resp_cargo: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: false,
+      set: function (val) {
+        this.setDataValue('resp_cargo', val.toUpperCase());
+      }
     }
   }, {
     tableName: 'responsable'

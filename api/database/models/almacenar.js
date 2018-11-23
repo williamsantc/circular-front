@@ -18,7 +18,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     circ_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'cirular',
+        key: 'circ_id'
+      }
     }
   }, {
     tableName: 'almacenar'

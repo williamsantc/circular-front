@@ -27,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
       unique: true
     },
     usua_password: {
-      type: DataTypes.STRING(200),
+      type: DataTypes.STRING(180),
       allowNull: false
     },
     usua_correo: {
@@ -36,7 +36,7 @@ module.exports = function(sequelize, DataTypes) {
       unique: true
     },
     usua_salt: {
-      type: DataTypes.STRING(200),
+      type: DataTypes.STRING(180),
       allowNull: true
     }
   }, {

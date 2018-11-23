@@ -10,7 +10,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     area_nombre: {
       type: DataTypes.STRING(200),
-      allowNull: false
+      allowNull: false,
+      unique: true,
+      set: function (val) {
+        this.setDataValue('area_nombre', val.toUpperCase());
+      }
     }
   }, {
     tableName: 'area'
