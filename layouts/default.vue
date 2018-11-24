@@ -53,8 +53,8 @@
     <TheFooter>
       <!--footer-->
       <div>
-        <a href="https://coreui.io">CoreUI</a>
-        <span class="ml-1">&copy; 2018 creativeLabs.</span>
+        <a href="https://github.com/williamsantc">William santos</a>
+        <span class="ml-1">&copy; 2018.</span>
       </div>
       <div class="ml-auto">
         <span class="mr-1">Powered by</span>

@@ -45,7 +45,7 @@
               <b-row>
                 <b-col cols="1">
                   <b-btn variant="primary" size="sm" 
-                         v-b-tooltip.hover title="Modificar"
+                          title="Modificar"
                          @click="sendModificar(data.item)">
                     <i class="fa fa-pencil" aria-hidden="true"></i>
                   </b-btn>
@@ -53,7 +53,7 @@
                 <b-col cols="1">
                   <b-btn variant="danger" size="sm"
                   @click="eliminarResponsable(data.item.resp_id)" 
-                         v-b-tooltip.hover title="Eliminar">
+                          title="Eliminar">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                   </b-btn>
                 </b-col>

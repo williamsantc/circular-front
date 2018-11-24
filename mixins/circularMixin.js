@@ -37,12 +37,16 @@ const circularMixin = {
         .catch(error => {
           console.log(error)
         })
+    },
+    cargarListasForaneas: function () {
+      return this.getAreasWs().then(() => {
+        this.getEntidadesWs().then(() => {
+          this.getResponsablesWs().then(() => {
+            return true
+          })
+        })
+      })
     }
-  },
-  beforeMount: function() {
-    this.getAreasWs()
-    this.getEntidadesWs()
-    this.getResponsablesWs()
   }
 }
 

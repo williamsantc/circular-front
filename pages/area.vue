@@ -5,8 +5,8 @@
     </b-card-header>
 
     <b-card-body>
-      <b-row>
-        <b-col md="6" order="2" order-sm="1">
+      <b-row align-h="between">
+        <b-col md="4" sm="4" order="2" order-sm="1">
           <b-btn variant="outline-primary"
                  @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
                  aria-controls="collapseFilter">
@@ -14,7 +14,7 @@
             <i :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')" aria-hidden="true"></i>
           </b-btn>
         </b-col>
-        <b-col md="6" order="1" order-sm="2" align="right">
+        <b-col md="4" sm="4" order-sm="2" align="right">
           <b-btn variant="primary"
                  @click="crudSettings.showModal = !crudSettings.showModal">
             <i class="fa fa-plus" aria-hidden="true"></i> Nueva area
@@ -45,15 +45,15 @@
               <b-row>
                 <b-col cols="1">
                   <b-btn variant="primary" size="sm" 
-                         v-b-tooltip.hover title="Modificar"
-                         @click="sendModificar(data.item)">
+                          title="Modificar"
+                          @click="sendModificar(data.item)">
                     <i class="fa fa-pencil" aria-hidden="true"></i>
                   </b-btn>
                 </b-col>
                 <b-col cols="1">
                   <b-btn variant="danger" size="sm"
-                  @click="eliminarArea(data.item.area_id)" 
-                         v-b-tooltip.hover title="Eliminar">
+                         @click="eliminarArea(data.item.area_id)" 
+                         title="Eliminar">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                   </b-btn>
                 </b-col>

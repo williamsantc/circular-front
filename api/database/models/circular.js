@@ -10,7 +10,10 @@ module.exports = function (sequelize, DataTypes) {
     },
     circ_asunto: {
       type: DataTypes.STRING(200),
-      allowNull: false
+      allowNull: false,
+      set: function (val) {
+        this.setDataValue('circ_asunto', val.toUpperCase());
+      }
     },
     circ_contenido: {
       type: DataTypes.TEXT,

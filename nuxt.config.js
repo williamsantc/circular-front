@@ -65,7 +65,7 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    baseURL: process.env.BASE_URL || 'http://localhost:3000/api/'
+    baseURL: `https://www.expresostachira.com.ve/api/`
   },
   auth: {
     // Options

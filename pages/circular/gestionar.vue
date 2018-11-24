@@ -77,8 +77,16 @@
     </b-row>
 
     </b-card-body>
-    <b-card-footer align="right">
-      <b-btn variant="primary" @click="gestionarCircular">{{ btnText }}</b-btn>
+    <b-card-footer>
+      <b-row>
+        <b-col>
+          <b-btn variant="default" @click="$router.push('/circular')">Volver</b-btn>
+        </b-col>
+        <b-col align="right">
+          <b-btn variant="primary" @click="gestionarCircular">{{ btnText }}</b-btn>
+        </b-col>
+      </b-row>
+      
     </b-card-footer>
   </b-card>
 </template>
@@ -197,6 +205,17 @@ export default {
           this.$toastr.error(error.msg, 'ERROR')
         })
     }
+  },
+  beforeMount: function() {
+    this.cargarListasForaneas().then(() => {
+      if (this.$route.params.circular) {
+        this.circular.form = this.$route.params.circular
+        this.entidad = this.$route.params.circular.entidad
+        this.responsable = this.$route.params.circular.responsable
+        this.area = this.$route.params.circular.area
+        this.btnText = 'Guardar cambios'
+      }
+    })
   }
 }
 </script>

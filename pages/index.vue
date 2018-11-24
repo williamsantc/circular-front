@@ -1,12 +1,13 @@
 <template>
-  <b-container>
-    <h1>Hola mundo!</h1>
-  </b-container>
+  <div/>
 </template>
 
 <script>
 export default {
-  layout: 'clean'
+  layout: 'clean',
+  beforeCreate: function () {
+    this.$router.push('/login')
+  },
 }
 </script>
 

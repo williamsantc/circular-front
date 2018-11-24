@@ -4,8 +4,8 @@
       <h4>{{ tituloFuncionlidad }}</h4>
     </b-card-header>
     <b-card-body>
-      <b-row>
-        <b-col md="6" order="2" order-sm="1">
+      <b-row align-h="between">
+        <b-col md="4" sm="4" order="2" order-sm="1">
           <b-btn variant="outline-primary"
                  @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
                  aria-controls="collapseFilter">
@@ -13,7 +13,7 @@
             <i :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')" aria-hidden="true"></i>
           </b-btn>
         </b-col>
-        <b-col md="6" order="1" order-sm="2" align="right">
+        <b-col md="4" sm="4" order="1" order-sm="2" align="right">
           <b-btn variant="primary"
                  @click="$router.push('/circular/gestionar')">
             <i class="fa fa-plus" aria-hidden="true"></i> Nueva circular
@@ -67,8 +67,8 @@
             </b-form-group>
           </b-col>
           <b-col md="6">
-            <b-form-group v-model="filtro.circ_fechahasta" label="Fecha Hasta:">
-              <b-input type="date"></b-input>
+            <b-form-group label="Fecha Hasta:">
+              <b-input v-model="filtro.circ_fechahasta" type="date"></b-input>
             </b-form-group>
           </b-col>
         </b-row>
@@ -89,7 +89,7 @@
               <b-row>
                 <b-col cols="1">
                   <b-btn variant="primary" size="sm" 
-                         v-b-tooltip.hover title="Modificar"
+                         title="Modificar"
                          class="m-1"
                          @click="sendModificar(data.item)">
                     <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -99,7 +99,7 @@
                   <b-btn variant="danger" size="sm"
                          @click="eliminarCircular(data.item.circ_id)" 
                          class="m-1"
-                         v-b-tooltip.hover title="Eliminar">
+                         title="Eliminar">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                   </b-btn>
                 </b-col>
@@ -149,11 +149,11 @@ export default {
       listaCircular: [],
       filtro: JSON.parse(JSON.stringify(FILTRO)),
       fields: [
-        { key: 'circ_asunto', label: 'Asunto'},
-        { key: 'circ_fecha', label: 'Fecha Emisión'},
-        { key: 'entidad.enti_nombre', label: 'Entidad'},
-        { key: 'area.area_nombre', label: 'Area'},
-        { key: 'responsable.resp_nombre', label: 'Responsable'},
+        { key: 'circ_asunto', label: 'Asunto' },
+        { key: 'circ_fecha', label: 'Fecha Emisión' },
+        { key: 'entidad.enti_nombre', label: 'Entidad' },
+        { key: 'area.area_nombre', label: 'Area' },
+        { key: 'responsable.resp_nombre', label: 'Responsable' },
         'acciones'
       ],
       tituloFuncionlidad: 'Gestionar Circulares'
@@ -175,13 +175,15 @@ export default {
       this.filtro.resp_id = newValue ? newValue.resp_id : ''
     }
   },
+  beforeMount: function() {
+    this.cargarListasForaneas()
+  },
   methods: {
     getCircularWs: _.debounce(function() {
       return this.$axios
-        .$get('/circular/list', {params: this.filtro})
+        .$get('/circular/list', { params: this.filtro })
         .then(resp => {
           this.listaCircular = resp
-          console.log(this.listaCircular)
           this.crudSettings.toogleFilter = false
         })
         .catch(error => {
@@ -195,7 +197,7 @@ export default {
       })
         .then(success => {
           return this.$axios
-            .$post('/cicular/eliminar', { circ_id: circ_id })
+            .$post('/circular/eliminar', { circ_id: circ_id })
             .then(resp => {
               this.$toastr.success(resp.msg, 'OK')
             })
@@ -210,7 +212,14 @@ export default {
           this.$toastr.info('Solicitud cancelada', 'INFO')
         })
     },
-    sendModificar: function(circular) {}
+    sendModificar: function(circular) {
+      this.$router.push({
+        name: 'circular-gestionar',
+        params: {
+          circular: circular
+        }
+      })
+    }
   }
 }
 </script>

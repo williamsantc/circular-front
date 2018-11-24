@@ -46,7 +46,7 @@ router.get('/list', (req, res, next) => {
   }
 
   options.include = [
-    { model: models.area,  as: 'area' },
+    { model: models.area, as: 'area' },
     { model: models.responsable, as: 'responsable' },
     { model: models.entidad, as: 'entidad' }
 
@@ -72,16 +72,18 @@ router.post('/gestionar', (req, res, next) => {
         circ_id: circular.circ_id
       }
     }).then(almacenarObject => {
-      if (!almacenarObject) {
-        res.status(200).send({ msg: 'La carga de la circular al sistemas ya fue realizada, no se puede modificar', processOk: false })
+      if (almacenarObject) {
+        res.status(200).send({ msg: 'La carga de la circular al sistema ya fue realizada, no se puede modificar', processOk: false })
+      } else {
+        models.circular.update(circular,
+          { where: { circ_id: circular.circ_id } }).then(circularUpdated => {
+            res.status(200).send({ msg: 'Cambios guardados en la circular correctamente', processOk: true })
+          }).catch(error => {
+            res.status(500).send({ msg: 'Error guandando cambios en la circular' })
+            console.log(error)
+          })
       }
-      models.circular.update(circular,
-        { where: { circ_id: circular.circ_id } }).then(circularUpdated => {
-          res.status(200).send({ msg: 'Cambios guardados en la circular correctamente', processOk: true })
-        }).catch(error => {
-          res.status(500).send({ msg: 'Error guandando cambios en la circular' })
-          console.log(error)
-        })
+
     })
 
   }
@@ -89,26 +91,29 @@ router.post('/gestionar', (req, res, next) => {
 
 router.post('/eliminar', (req, res, next) => {
   let circ_id = req.body.circ_id
-  if (!resp_id) {
+  if (!circ_id) {
     res.status(500).send({ msg: 'Error de comunicación' })
-  }
-  models.almacenar.findOne({
-    where: {
-      circ_id: circular.circ_id
-    }
-  }).then(almacenarObject => {
-    if (!almacenarObject) {
-      res.status(200).send({ msg: 'La carga de la circular al sistemas ya fue realizada, no se puede eliminar', processOk: false })
-    }
-    models.circular.destroy({
-      where: { circ_id: circ_id }
-    }).then(resp => {
-      res.status(200).send({ msg: 'Circular eliminada correctamente', processOk: true })
-    }).catch(error => {
-      res.status(500).send({ msg: 'Error eliminando la circular' })
-      console.log(error)
+  } else {
+    models.almacenar.findOne({
+      where: {
+        circ_id: circ_id
+      }
+    }).then(almacenarObject => {
+      if (almacenarObject) {
+        res.status(200).send({ msg: 'La carga de la circular al sistema ya fue realizada, no se puede eliminar', processOk: false })
+      } else {
+        models.circular.destroy({
+          where: { circ_id: circ_id }
+        }).then(resp => {
+          res.status(200).send({ msg: 'Circular eliminada correctamente', processOk: true })
+        }).catch(error => {
+          res.status(500).send({ msg: 'Error eliminando la circular' })
+          console.log(error)
+        })
+      }
+
     })
-  })
+  }
 
 });
 
