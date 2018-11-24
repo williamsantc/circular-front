@@ -31,6 +31,15 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+db.circular.belongsTo(db.area, { foreignKey: 'area_id', as: 'area' });
+db.area.hasOne(db.circular, { foreignKey: 'area_id', as: 'area' });
+
+db.circular.belongsTo(db.responsable, { foreignKey: 'resp_id', as: 'responsable' });
+db.responsable.hasOne(db.circular, { foreignKey: 'resp_id', as: 'responsable' });
+
+db.circular.belongsTo(db.entidad, { foreignKey: 'enti_id', as: 'entidad' });
+db.entidad.hasOne(db.circular, { foreignKey: 'enti_id', as: 'entidad' });
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 db.Op = Sequelize.Op;

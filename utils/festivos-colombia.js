@@ -39,7 +39,7 @@ const festivosColombia = {
     }
 
     let domPascua = this.determinarDomingoPascua(year)
-    // console.log(domPascua)
+    
     lista.push(this.formatDate(this.addDays(domPascua, -3))) // JUEVES SANTO
     lista.push(this.formatDate(this.addDays(domPascua, -2))) // VIERNES SANTO
     lista.push(this.formatDate(this.addDays(domPascua, 43))) // ASCENCION DE JESUS
@@ -50,6 +50,7 @@ const festivosColombia = {
     return lista
   },
 
+  // Añade (o resta) días a a una fecha dada
   addDays (fecha, days) {
     let tmp = new Date(fecha.getTime())
     tmp.setDate(tmp.getDate() + days)
@@ -81,6 +82,7 @@ const festivosColombia = {
     return fecha
   },
 
+  // Objeto Date a formato String
   formatDate (fecha) {
     let y = fecha.getFullYear()
     let m = fecha.getMonth() + 1

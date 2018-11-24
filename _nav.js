@@ -14,6 +14,11 @@ export default {
       name: 'Gestionar Responsable',
       url: '/responsable',
       icon: 'icon-puzzle'
+    },
+    {
+      name: 'Gestionar Circular',
+      url: '/circular',
+      icon: 'icon-puzzle'
     }
     /*
     {

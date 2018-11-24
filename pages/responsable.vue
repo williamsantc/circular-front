@@ -91,12 +91,6 @@
         </b-btn>
       </div>
     </b-modal>
-    <b-row>
-      <b-col>
-        <tiny-mce v-model="content" :init="initTinyMce" api-key="gawdxg9y9xrk02tl5nlsgpqjjulh02zig2uo3sylmfplygul"></tiny-mce>
-      </b-col>
-    </b-row>
-    <b-button @click="prueba">dd</b-button>
     <b-card-footer>
       <br>
     </b-card-footer>
@@ -106,7 +100,7 @@
 <script>
 import Vue from 'vue'
 import _ from 'lodash'
-import { validarForm } from '@/mixins/validarForm'
+import validarForm from '@/mixins/validarForm'
 
 const CRUD_SETTIINGS = require('@/utils/crudSettings')
 
@@ -198,8 +192,6 @@ export default {
         })
     },
     sendModificar: function(responsable) {
-      delete responsable.createdAt
-      delete responsable.updatedAt
 
       this.responsable.form = responsable
       this.crudSettings.msgBtn = 'Guardar Cambios'

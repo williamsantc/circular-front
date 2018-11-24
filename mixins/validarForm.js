@@ -1,22 +1,66 @@
 import Vue from 'vue'
-import FestivosColombia from '@/plugins/festivos-colombia.js'
+import FestivosColombia from '@/utils/festivos-colombia.js'
 
-export const validarForm = {
+const validarForm = {
   methods: {
+    estrategiaFestivosColombia: function () {
+      return FestivosColombia
+    },
+    stringToDate (dateString) {
+      return new Date(
+        parseInt(dateString.split('-')[0]),
+        parseInt(dateString.split('-')[1]) - 1,
+        parseInt(dateString.split('-')[2])
+      )
+    },
+    // si el día seleccionado no es hábil, busca el proximo día habil
+    setHabilDay: function (date) {
+      if (!this.isDiaHabil(date)) {
+        do {
+          date = FestivosColombia.addDays(date, 1)
+        } while (!this.isDiaHabil(date))
+      }
+
+      return FestivosColombia.formatDate(date)
+    },
+    addDays: function (date, cant) {
+      return FestivosColombia.formatDate(FestivosColombia.addDays(date, cant))
+    },
+    addDaysSoloHabiles: function (date, cant) {
+      let tmpDate
+      let diasFestivos = FestivosColombia.cargarFestivos(
+        new Date().getFullYear() + ''
+      )
+
+      for (let i = 1; i <= cant; i++) {
+        tmpDate = FestivosColombia.addDays(date, i)
+
+        if (tmpDate.getUTCDay() === 6 || tmpDate.getUTCDay() === 0) {
+          cant++
+          continue
+        }
+
+        for (let festivo in diasFestivos) {
+          if (
+            tmpDate.getTime() === this.stringToDate(diasFestivos[festivo]).getTime()
+          ) {
+            cant++
+            break
+          }
+        }
+      }
+
+      return FestivosColombia.formatDate(tmpDate)
+    },
     isDiaHabil: function (fecha) {
       let diasFestivos = FestivosColombia.cargarFestivos(
         new Date().getFullYear() + ''
       )
       let res = true
-        
+
       for (let festivo in diasFestivos) {
         if (
-          fecha.getTime() ===
-          new Date(
-            parseInt(diasFestivos[festivo].split('-')[0]),
-            parseInt(diasFestivos[festivo].split('-')[1]) - 1,
-            parseInt(diasFestivos[festivo].split('-')[2])
-          ).getTime()
+          fecha.getTime() === this.stringToDate(diasFestivos[festivo]).getTime()
         ) {
           res = false
           break
@@ -59,7 +103,7 @@ export const validarForm = {
         evt.preventDefault()
       }
     },
-    calcularDiferenciaDiasHabiles(fechaDesde, fechaHasta) {
+    calcularDiferenciaDiasHabiles (fechaDesde, fechaHasta) {
       if (!fechaDesde || !fechaHasta) {
         return 0
       }
@@ -78,19 +122,10 @@ export const validarForm = {
         let fechaString = FestivosColombia.formatDate(
           FestivosColombia.addDays(fechaDesde, i)
         )
-        let pivoteFecha = new Date(
-          parseInt(fechaString.split('-')[0]),
-          parseInt(fechaString.split('-')[1]) - 1,
-          parseInt(fechaString.split('-')[2])
-        )
+        let pivoteFecha = this.stringToDate(fechaString)
         for (let festivo in diasFestivos) {
           if (
-            pivoteFecha.getTime() ===
-            new Date(
-              parseInt(diasFestivos[festivo].split('-')[0]),
-              parseInt(diasFestivos[festivo].split('-')[1]) - 1,
-              parseInt(diasFestivos[festivo].split('-')[2])
-            ).getTime()
+            pivoteFecha.getTime() === this.stringToDate(diasFestivos[festivo]).getTime()
           ) {
             diasNoHabiles++
           }
@@ -116,13 +151,13 @@ export const validarForm = {
           ? config[values].ref
           : values
         let ref =
-          indexDinamico !== undefined
+          !this.isEmpty(indexDinamico)
             ? this.$refs[selector][indexDinamico]
             : this.$refs[selector]
         switch (config[values].type) {
           case 'String':
             if (
-              form[values] === '' &&
+              this.isEmpty(form[values]) &&
               !config[values].hasOwnProperty('validar')
             ) {
               this.sendFocus(ref)
@@ -149,7 +184,7 @@ export const validarForm = {
 
           case 'Number':
             if (
-              form[values] === '' &&
+              this.isEmpty(form[values]) &&
               !config[values].hasOwnProperty('validar')
             ) {
               this.sendFocus(ref)
@@ -198,7 +233,7 @@ export const validarForm = {
             break
           case 'Email':
             if (
-              form[values] === '' &&
+              this.isEmpty(form[values]) &&
               !config[values].hasOwnProperty('validar')
             ) {
               this.sendFocus(ref)
@@ -225,7 +260,7 @@ export const validarForm = {
                 return false
               }
             } else if (
-              form[values].value === '' &&
+              this.isEmpty(form[values].value) &&
               !config[values].hasOwnProperty('validar')
             ) {
               this.sendFocus(ref.$el.querySelector('input'))
@@ -248,7 +283,7 @@ export const validarForm = {
             break
           case 'Date':
             if (
-              (form[values] === '' || form[values] === null) &&
+              this.isEmpty(form[values]) &&
               !config[values].hasOwnProperty('validar')
             ) {
               this.sendFocus(ref)
@@ -262,24 +297,16 @@ export const validarForm = {
               new Date().getFullYear() + ''
             )
 
-            let date = new Date(
-              parseInt(form[values].split('-')[0]),
-              parseInt(form[values].split('-')[1]) - 1,
-              parseInt(form[values].split('-')[2])
-            )
+            let date = this.stringToDate(form[values])
             if (
               config[values].hasOwnProperty('difference') &&
               config[values].difference
             ) {
-              let nextDate = new Date(
-                parseInt(config[values].nextDate.split('-')[0]),
-                parseInt(config[values].nextDate.split('-')[1]) - 1,
-                parseInt(config[values].nextDate.split('-')[2])
-              )
+              let fechaDesde = this.stringToDate(config[values].fechaDesde)
               let diasMaximo = config[values].difference
 
               if (
-                this.calcularDiferenciaDiasHabiles(date, nextDate) > diasMaximo
+                this.calcularDiferenciaDiasHabiles(fechaDesde, date) > diasMaximo
               ) {
                 this.sendFocus(ref)
                 this.$toastr.error(
@@ -329,7 +356,7 @@ export const validarForm = {
             break
           case 'Time':
             if (
-              form[values] === '' &&
+              this.isEmpty(form[values]) &&
               !config[values].hasOwnProperty('validar')
             ) {
               this.sendFocus(ref)
@@ -367,7 +394,7 @@ export const validarForm = {
             }
             break
           case 'CheckBox':
-            if (!form[values] && !config[values].hasOwnProperty('validar')) {
+            if (this.isEmpty(form[values]) && !config[values].hasOwnProperty('validar')) {
               this.sendFocus(ref)
               this.$toastr.error(
                 'Campos imcompletos, verifique el campo: ' + config[values].msg
@@ -377,7 +404,7 @@ export const validarForm = {
             break
           case 'Radio':
             if (
-              form[values] === '' &&
+              this.isEmpty(form[values]) &&
               !config[values].hasOwnProperty('validar')
             ) {
               this.sendFocus(ref.$el.querySelector('input'))
@@ -389,7 +416,7 @@ export const validarForm = {
             break
           case 'Select':
             if (
-              form[values] === '' &&
+              this.isEmpty(form[values]) &&
               !config[values].hasOwnProperty('validar')
             ) {
               this.sendFocus(ref.$el)
@@ -420,7 +447,36 @@ export const validarForm = {
             }
 
             break
+          case 'Html':
+            if (
+              this.isEmpty(form[values]) &&
+              !config[values].hasOwnProperty('validar')
+            ) {
+              this.sendFocus(ref.$el)
+              this.$toastr.error(
+                'Campos imcompletos, verifique: ' + config[values].msg
+              )
+              return false
+            }
+            
+            // crea elemento html temporal
+            let tmp = document.createElement("div")
+            document.body.appendChild(tmp)
+            tmp.innerHTML = form[values]
 
+            if (tmp.innerText.trim().length <= 0) {
+              this.sendFocus(ref.$el)
+              this.$toastr.error(
+                'Campos imcompletos, verifique: ' + config[values].msg
+              )
+              tmp.parentNode.removeChild(tmp)
+              return false
+            }
+
+            // elimina el elemento temporal
+            tmp.parentNode.removeChild(tmp)
+
+            break
           default:
             console.log(config[values].type)
             break
@@ -428,14 +484,19 @@ export const validarForm = {
       }
       return true
     },
+    isEmpty: function (element) {
+      return (element === '' || element === undefined || element === null)
+    },
     validateEmail: function (email) {
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return re.test(String(email).toLowerCase())
     },
-    sendFocus(element) {
+    sendFocus (element) {
       Vue.nextTick(() => {
         element.focus()
       })
     }
   }
 }
+
+export default validarForm

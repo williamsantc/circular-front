@@ -1,6 +1,6 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('circular', {
     circ_id: {
       type: DataTypes.BIGINT,
@@ -45,10 +45,13 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     circ_fecha: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.DATEONLY,
       allowNull: false
     }
   }, {
-    tableName: 'circular'
-  });
+      tableName: 'circular',
+      defaultScope: {
+        exclude: ['createdAt', 'updatedAt']
+      }
+    });
 };

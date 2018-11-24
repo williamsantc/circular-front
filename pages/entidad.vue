@@ -97,7 +97,7 @@
 <script>
 import Vue from 'vue'
 import _ from 'lodash'
-import { validarForm } from '@/mixins/validarForm'
+import validarForm from '@/mixins/validarForm'
 
 const CRUD_SETTIINGS = require('@/utils/crudSettings')
 
@@ -163,8 +163,6 @@ export default {
         })
     },
     sendModificar: function(entidad) {
-      delete entidad.createdAt
-      delete entidad.updatedAt
 
       this.entidad.form = entidad
       this.crudSettings.msgBtn = 'Guardar Cambios'
@@ -216,6 +214,7 @@ export default {
   },
   created: function() {
     this.getEntidadesWs()
+
   }
 }
 </script>

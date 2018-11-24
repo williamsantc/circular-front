@@ -97,7 +97,7 @@
 <script>
 import Vue from 'vue'
 import _ from 'lodash'
-import { validarForm } from '@/mixins/validarForm'
+import validarForm from '@/mixins/validarForm'
 
 const CRUD_SETTIINGS = require('@/utils/crudSettings')
 
@@ -157,12 +157,11 @@ export default {
         .$get('/area/list', { params: { nombre: this.nombreSearch } })
         .then(resp => {
           this.listaArea = resp
+          console.log(this.listaArea)
         })
         .catch(error => {})
     },
     sendModificar: function(area) {
-      delete area.createdAt
-      delete area.updatedAt
 
       this.area.form = area
       this.crudSettings.msgBtn = 'Guardar Cambios'

@@ -3,11 +3,13 @@ let router = express.Router();
 let models = require('../database/models');
 
 const Sequelize = require('sequelize');
-const Op = Sequelize.Op
+const Op = Sequelize.Op;
 
 router.get('/list', (req, res, next) => {
 
-  let options = {}
+  let options = {
+    attributes: { exclude: ['createdAt', 'updatedAt'] }
+  }
 
   if (req.query.nombre) {
     let nombreSearch = req.query.nombre.toUpperCase()

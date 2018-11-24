@@ -10,6 +10,7 @@ import { AuthMiddleware } from './AuthMiddleware'
 const areaRouter = require('./routes/area');
 const entidadRouter = require('./routes/entidad');
 const responsableRouter = require('./routes/responsable');
+const circularRouter = require('./routes/circular');
 
 // Create express instnace
 const app = express()
@@ -30,6 +31,7 @@ app.use(AuthMiddleware);
 app.use('/area', areaRouter);
 app.use('/entidad', entidadRouter);
 app.use('/responsable', responsableRouter);
+app.use('/circular', circularRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

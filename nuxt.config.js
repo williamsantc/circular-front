@@ -27,6 +27,7 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    '~/node_modules/vue-multiselect/dist/vue-multiselect.min.css',
     '~/assets/main.css',
     /* Import Font Awesome Icons Set */
     '~/node_modules/flag-icon-css/css/flag-icon.min.css',
