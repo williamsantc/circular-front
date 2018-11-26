@@ -11,7 +11,8 @@ const areaRouter = require('./routes/area');
 const entidadRouter = require('./routes/entidad');
 const responsableRouter = require('./routes/responsable');
 const circularRouter = require('./routes/circular');
-const almacenarRouter = require('./routes/almacenar');
+const almaMultiRouter = require('./routes/almacenar_multipart');
+const almaPLainRouter = require('./routes/almacenar_plain');
 
 // Create express instnace
 const app = express()
@@ -26,14 +27,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(AuthMiddleware);
-
-// Import API Routes
-app.use('/area', areaRouter);
-app.use('/entidad', entidadRouter);
-app.use('/responsable', responsableRouter);
-app.use('/circular', circularRouter);
-app.use('/almacenar', almacenarRouter);
+// Import API Routes, las rutas que requieren verifiacion de token, se envía el middleware
+app.use('/area', AuthMiddleware, areaRouter);
+app.use('/entidad', AuthMiddleware, entidadRouter);
+app.use('/responsable', AuthMiddleware, responsableRouter);
+app.use('/circular', AuthMiddleware, circularRouter);
+app.use('/almacenar_multi', AuthMiddleware, almaMultiRouter);
+app.use('/almacenar_plain', AuthMiddleware, almaPLainRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

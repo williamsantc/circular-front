@@ -39,7 +39,7 @@ const createPDF = function (circular) {
 
 
   headerFooterFormatting(pdf)
-  pdf.save('prueba.pdf')
+  pdf.save('circular' + circular.circ_id + '_' + new Date().getTime() + '.pdf')
 }
 
 const addElem = function (pdf, text, yPos) {
@@ -233,7 +233,7 @@ const setHeader = function (pdf) {
 
 export const calcularNumeracion = function (circ_id) {
   // si desea aumentar el concatenador de de CEROS, aumente el valor de la variable size
-  let size = 8
+  let size = 6
   let ceros = ''
   for (let i = 0; i < size - circ_id.toString().length; i++) {
     ceros += '0'

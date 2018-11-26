@@ -20,7 +20,49 @@
         </b-btn>
         </b-col>
       </b-row>
-
+      <b-row>
+        <b-col>
+       <br>
+          <h4 v-if="listaAlmacenar.length <= 0">No hay registros</h4>
+      <b-table v-else stacked="md"
+                   :items="listaAlmacenar" 
+                   :fields="fields"
+                   striped
+                   fixed
+                   :per-page="crudSettings.perPage"
+                   :current-page="crudSettings.currentPage"
+                   hover>
+            <template slot="circ_id" slot-scope="data">
+              {{ calcularNumeracion(data.item.circ_id) }}
+            </template>
+            <template slot="acciones" slot-scope="data">
+              <b-btn variant="primary" size="sm" 
+                      title="Modificar"
+                      class="mr-1"
+                      @click="sendModificar(data.item)">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+              </b-btn>
+              <b-btn variant="danger" size="sm"
+              @click="eliminar(data.item.alma_id)" 
+                      title="Eliminar">
+                <i class="fa fa-trash" aria-hidden="true"></i>
+              </b-btn>
+              <b-btn  variant="success" 
+                      size="sm"
+                      title="Descargar"
+                      @click="descargarCircular(data.item)"
+                      class="ml-1">
+                <i class="fa fa-download" aria-hidden="true"></i>
+              </b-btn>
+            </template>
+          </b-table>
+        </b-col>
+      </b-row>
+          <b-pagination v-if="listaAlmacenar.length > crudSettings.perPage"
+                        align="center"
+                        :total-rows="listaAlmacenar.length" 
+                        :per-page="crudSettings.perPage" 
+                        v-model="crudSettings.currentPage" />
       <b-modal v-model="crudSettings.showModal"
              :title="tituloFuncionlidad">
       <b-row>
@@ -71,6 +113,7 @@
 <script>
 import Vue from 'vue'
 import _ from 'lodash'
+import { calcularNumeracion } from '@/utils/createPDF'
 import validarForm from '@/mixins/validarForm'
 
 const CRUD_SETTIINGS = require('@/utils/crudSettings')
@@ -118,7 +161,14 @@ export default {
       crudSettings: JSON.parse(JSON.stringify(CRUD_SETTIINGS)),
       almacenar: JSON.parse(JSON.stringify(ALMACENAR)),
       listaCircular: [],
-      circular: null
+      listaAlmacenar: [],
+      circular: null,
+      fields: [
+        { key: 'circ_id', label: 'Numeración circular' },
+        { key: 'alma_descripcion', label: 'Descripción circular almacenada' },
+        { key: 'circular.circ_asunto', label: 'Asunto circular' },
+        'acciones'
+      ]
     }
   },
   computed: {
@@ -132,11 +182,96 @@ export default {
   watch: {
     circular: function(newValue) {
       this.almacenar.form.circ_id = newValue ? newValue.circ_id : ''
+    },
+    'crudSettings.showModal': function(newValue) {
+      if (newValue) {
+        return
+      }
+
+      Vue.nextTick(() => {
+        this.almacenar = JSON.parse(JSON.stringify(ALMACENAR))
+        this.circular = null
+        this.$refs.alma_file.reset()
+        this.crudSettings.msgBtn = 'Registrar'
+      })
     }
   },
   methods: {
-    pru: function() {
-      location.href = '/api/almacenar/get'
+    calcularNumeracion,
+    getAlmacenarWs: function() {
+      return this.$axios
+        .$get('/api/almacenar_plain/list')
+        .then(resp => {
+          this.listaAlmacenar = resp
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    sendModificar: function(almacenar) {
+      this.almacenar.form.alma_id = almacenar.alma_id
+      this.almacenar.form.alma_descripcion = almacenar.alma_descripcion
+      this.almacenar.form.alma_file = null
+
+      this.circular = this.listaCircularSelect.find(circular => {
+        return circular.circ_id === almacenar.circ_id
+      })
+      this.$refs.alma_file.reset()
+      this.crudSettings.msgBtn = 'Guardar Cambios'
+      this.crudSettings.showModal = !this.crudSettings.showModal
+    },
+    eliminar: function(alma_id) {
+      return this.$confirm({
+        title: this.tituloFuncionlidad,
+        content: '¿Está seguro que desea eliminar la circular almacenada?'
+      })
+        .then(success => {
+          return this.$axios
+            .$post('/api/almacenar_plain/eliminar', { alma_id: alma_id })
+            .then(resp => {
+              this.$toastr[resp.variant](resp.msg, resp.title)
+            })
+            .catch(error => {
+              this.$toastr.error(error.msg, 'ERROR')
+            })
+            .then(() => {
+              this.getEntidadesWs()
+            })
+        })
+        .catch(cancel => {
+          this.$toastr.info('Solicitud cancelada', 'INFO')
+        })
+        .then(() => {
+          this.getAlmacenarWs()
+        })
+    },
+    descargarCircular: function(almacenar) {
+      this.$axios
+        .get('/api/almacenar_plain/get', {
+          params: {
+            circular: almacenar.alma_id
+          },
+          responseType: 'blob' // important
+        })
+        .then(response => {
+          const url = window.URL.createObjectURL(new Blob([response.data]))
+
+          // crea el elemento
+          const link = document.createElement('a')
+          link.href = url
+          link.setAttribute('download', 'circular'+ almacenar.circ_id + '_' + new Date().getTime() + '.pdf')
+
+          // añade el elemento al cuerpo
+          document.body.appendChild(link)
+          link.click()
+
+          // elimina elemento creado
+          link.parentNode.removeChild(link)
+          this.$toastr.success('Descarga generada', 'OK')
+        })
+        .catch(err => {
+          this.$toastr.error('Error en la descarga', 'Circular no encontrada')
+        })
     },
     gestionarAlmacenar: function() {
       if (!this.validarCampos(this.almacenar)) {
@@ -150,12 +285,23 @@ export default {
       }
 
       return this.$axios
-        .$post('/api/almacenar/save', form, {
+        .$post('/api/almacenar_multi/gestionar', form, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         })
-        .then(resp => {})
+        .then(resp => {
+          this.$toastr[resp.variant](resp.msg, resp.title)
+          if (resp.variant !== 'error') {
+            this.crudSettings.showModal = !this.crudSettings.showModal
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+        .then(() => {
+          this.getAlmacenarWs()
+        })
     },
     getCircularWs: function() {
       return this.$axios
@@ -171,7 +317,7 @@ export default {
   },
   beforeMount: function() {
     this.getCircularWs()
-    this.pru()
+    this.getAlmacenarWs()
   }
 }
 </script>
