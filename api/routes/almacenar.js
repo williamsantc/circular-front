@@ -9,7 +9,6 @@ const storage = multer.diskStorage({
     callback(null, './uploads')
   },
   filename: function (req, file, callback) {
-    console.log(req.body)
     callback(null, 'signed_' + new Date().getTime() + '_id_' + req.body.circ_id + path.extname(file.originalname))
   }
 })
