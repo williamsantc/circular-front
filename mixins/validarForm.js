@@ -458,7 +458,7 @@ const validarForm = {
               )
               return false
             }
-            
+
             // crea elemento html temporal
             let tmp = document.createElement("div")
             document.body.appendChild(tmp)
@@ -476,6 +476,50 @@ const validarForm = {
             // elimina el elemento temporal
             tmp.parentNode.removeChild(tmp)
 
+            break
+          case 'File':
+            if (this.isEmpty(form[values])) {
+              this.sendFocus(ref.$el.querySelector('input'))
+              this.$toastr.error(
+                'Campos imcompletos, verifique: ' + config[values].msg
+              )
+              return false
+            }
+
+            if (config[values].accept) {
+              if (typeof config[values].accept === 'string' && form[values].type !== config[values].accept) {
+                this.sendFocus(ref.$el.querySelector('input'))
+                this.$toastr.error(
+                  'Tipo de archivo no permitido, verifique: ' + config[values].msg
+                )
+                return false
+              } else {
+                let accepted = false
+                for (let type in config[values].accept) {
+                  if (form[values].type === config[values].accept[type]) {
+                    accepted = true
+                    break
+                  }
+                }
+
+                if (!accepted) {
+                  this.sendFocus(ref.$el.querySelector('input'))
+                  this.$toastr.error(
+                    'Tipo de archivo no permitido, verifique: ' + config[values].msg
+                  )
+                  return false
+                }
+              }
+            }
+
+            if (config[values].maxSize && config[values].maxSize < form[values].size) {
+              let maxSize = config[values].maxSize / 1024 / 1024
+              this.sendFocus(ref.$el.querySelector('input'))
+              this.$toastr.error(
+                'Tamaño máximo permitido: ' + maxSize + 'Mb , verifique: ' + config[values].msg
+              )
+              return false
+            }
             break
           default:
             console.log(config[values].type)

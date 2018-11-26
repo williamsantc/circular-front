@@ -78,7 +78,15 @@
       <b-row>
         <b-col>
           <b-form-group label="Nombre del area">
-            <b-input v-model="area.form.area_nombre" ref="area_nombre"></b-input>
+            <b-form-textarea placeholder="Ingrese Nombre del area"
+                           :rows="6"
+                           no-resize
+                           ref="area_nombre"
+                           @keydown.native="validarCantidadCaracteres($event, area.form.area_nombre, 200)"
+                           v-model="area.form.area_nombre"
+                           :max-rows="6">
+
+          </b-form-textarea>
           </b-form-group>
         </b-col>
       </b-row>
@@ -115,7 +123,8 @@ const AREA = {
     area_nombre: {
       type: 'String',
       required: true,
-      msg: 'Nombre del area'
+      msg: 'Nombre del area',
+      limite: 200
     }
   }
 }

@@ -40,6 +40,9 @@ db.responsable.hasOne(db.circular, { foreignKey: 'resp_id', as: 'responsable' })
 db.circular.belongsTo(db.entidad, { foreignKey: 'enti_id', as: 'entidad' });
 db.entidad.hasOne(db.circular, { foreignKey: 'enti_id', as: 'entidad' });
 
+db.almacenar.belongsTo(db.circular, { foreignKey: 'circ_id', as: 'circular' });
+db.circular.hasOne(db.almacenar, { foreignKey: 'circ_id', as: 'circular' })
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 db.Op = Sequelize.Op;

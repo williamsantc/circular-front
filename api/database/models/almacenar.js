@@ -8,8 +8,8 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    alma_url: {
-      type: DataTypes.STRING(200),
+    alma_file: {
+      type: DataTypes.BLOB,
       allowNull: false
     },
     alma_descripcion: {

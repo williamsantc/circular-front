@@ -78,10 +78,21 @@
       <b-row>
         <b-col>
           <b-form-group label="Nombre del responsable">
-            <b-input v-model="responsable.form.resp_nombre" ref="resp_nombre"></b-input>
+            <b-form-textarea placeholder="Ingrese nombre del responsable"
+                           :rows="6"
+                           no-resize
+                           @keydown.native="validarCantidadCaracteres($event, responsable.form.resp_nombre, 200)"
+                           ref="resp_nombre"
+                           v-model="responsable.form.resp_nombre"
+                           :max-rows="6">
+
+          </b-form-textarea>
           </b-form-group>
           <b-form-group label="Cargo del responsable">
-            <b-input v-model="responsable.form.resp_cargo" ref="resp_cargo"></b-input>
+            <b-input v-model="responsable.form.resp_cargo" 
+                     ref="resp_cargo" 
+                     @keydown.native="validarCantidadCaracteres($event, responsable.form.resp_cargo, 200)">
+            </b-input>
           </b-form-group>
         </b-col>
       </b-row>
@@ -119,12 +130,14 @@ const ENTIDAD = {
     resp_nombre: {
       type: 'String',
       required: true,
-      msg: 'Nombre de la responsable'
+      msg: 'Nombre de la responsable',
+      limite: 200
     },
     resp_cargo: {
       type: 'String',
       required: true,
-      msg: 'Cargo del responsable'
+      msg: 'Cargo del responsable',
+      limite: 50
     }
   }
 }
@@ -178,9 +191,6 @@ export default {
     }
   },
   methods: {
-    prueba: function() {
-      console.log(this.content)
-    },
     getResponsablesWs: function() {
       return this.$axios
         .$get('/api/responsable/list', { params: { nombre: this.nombreSearch } })

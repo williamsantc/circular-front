@@ -77,8 +77,15 @@
              :title="tituloFuncionlidad">
       <b-row>
         <b-col>
-          <b-form-group label="Nombre del entidad">
-            <b-input v-model="entidad.form.enti_nombre" ref="enti_nombre"></b-input>
+          <b-form-group label="Nombre de la entidad">
+            <b-form-textarea placeholder="Ingrese asunto de la entidad"
+                           :rows="6"
+                           no-resize
+                           ref="enti_nombre"
+                           @keydown.native="validarCantidadCaracteres($event, entidad.form.enti_nombre, 200)"
+                           v-model="entidad.form.enti_nombre"
+                           :max-rows="6">
+            </b-form-textarea>
           </b-form-group>
         </b-col>
       </b-row>
@@ -115,7 +122,8 @@ const ENTIDAD = {
     enti_nombre: {
       type: 'String',
       required: true,
-      msg: 'Nombre de la entidad'
+      msg: 'Nombre de la entidad',
+      limite: 200
     }
   }
 }
