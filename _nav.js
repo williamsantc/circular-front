@@ -16,9 +16,20 @@ export default {
       icon: 'icon-puzzle'
     },
     {
-      name: 'Gestionar Circular',
-      url: '/circular',
-      icon: 'icon-puzzle'
+      name: 'Circular',
+      icon: 'icon-cursor',
+      children: [
+        {
+          name: 'Gestionar',
+          url: '/circular',
+          icon: 'icon-cursor'
+        },
+        {
+          name: 'Amacenar',
+          url: '/circular/almacenar',
+          icon: 'icon-cursor'
+        }
+      ]
     }
     /*
     {

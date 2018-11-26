@@ -196,7 +196,7 @@ export default {
         return
       }
       return this.$axios
-        .$post('/circular/gestionar', this.circular.form)
+        .$post('/api/circular/gestionar', this.circular.form)
         .then(resp => {
           this.$toastr.success(resp.msg, 'OK')
           this.$router.push('/circular')

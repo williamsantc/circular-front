@@ -154,7 +154,7 @@ export default {
   methods: {
     getAreasWs: function() {
       return this.$axios
-        .$get('/area/list', { params: { nombre: this.nombreSearch } })
+        .$get('/api/area/list', { params: { nombre: this.nombreSearch } })
         .then(resp => {
           this.listaArea = resp
           console.log(this.listaArea)
@@ -163,7 +163,7 @@ export default {
     },
     sendModificar: function(area) {
 
-      this.area.form = area
+      this.area.form = JSON.parse(JSON.stringify(area))
       this.crudSettings.msgBtn = 'Guardar Cambios'
       this.crudSettings.showModal = !this.crudSettings.showModal
     },
@@ -172,7 +172,7 @@ export default {
         return
       }
       return this.$axios
-        .$post('/area/gestionar', this.area.form)
+        .$post('/api/area/gestionar', this.area.form)
         .then(resp => {
           if(resp.processOk) {
             this.$toastr.success(resp.msg, 'OK')
@@ -195,7 +195,7 @@ export default {
       })
         .then(success => {
           return this.$axios
-            .$post('/area/eliminar', { area_id: area_id })
+            .$post('/api/area/eliminar', { area_id: area_id })
             .then(resp => {
               this.$toastr.success(resp.msg, 'OK')
             })

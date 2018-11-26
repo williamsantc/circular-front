@@ -17,7 +17,7 @@
         <b-col md="6" order="1" order-sm="2" align="right">
           <b-btn variant="primary"
                  @click="crudSettings.showModal = !crudSettings.showModal">
-            <i class="fa fa-plus" aria-hidden="true"></i> Nueva responsable
+            <i class="fa fa-plus" aria-hidden="true"></i> Nuevo responsable
         </b-btn>
         </b-col>
       </b-row>
@@ -183,7 +183,7 @@ export default {
     },
     getResponsablesWs: function() {
       return this.$axios
-        .$get('/responsable/list', { params: { nombre: this.nombreSearch } })
+        .$get('/api/responsable/list', { params: { nombre: this.nombreSearch } })
         .then(resp => {
           this.listaResponsable = resp
         })
@@ -193,7 +193,7 @@ export default {
     },
     sendModificar: function(responsable) {
 
-      this.responsable.form = responsable
+      this.responsable.form = JSON.parse(JSON.stringify(responsable))
       this.crudSettings.msgBtn = 'Guardar Cambios'
       this.crudSettings.showModal = !this.crudSettings.showModal
     },
@@ -202,7 +202,7 @@ export default {
         return
       }
       return this.$axios
-        .$post('/responsable/gestionar', this.responsable.form)
+        .$post('/api/responsable/gestionar', this.responsable.form)
         .then(resp => {
           if (resp.processOk) {
             this.$toastr.success(resp.msg, 'OK')
@@ -225,7 +225,7 @@ export default {
       })
         .then(success => {
           return this.$axios
-            .$post('/responsable/eliminar', { resp_id: resp_id })
+            .$post('/api/responsable/eliminar', { resp_id: resp_id })
             .then(resp => {
               this.$toastr.success(resp.msg, 'OK')
             })

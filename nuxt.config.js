@@ -15,6 +15,9 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      { src: 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js' }
     ]
   },
 
@@ -65,16 +68,16 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    baseURL: `https://www.expresostachira.com.ve/api/`
+    baseURL: process.env.BASE_URL || 'http://localhost:3000/'
   },
   auth: {
     // Options
     strategies: {
       local: {
         endpoints: {
-          login: {url: '/user/login', method: 'post', propertyName:    'token' },
+          login: { url: '/user/login', method: 'post', propertyName: 'token' },
           logout: false,
-          user: {url: '/user/user', method: 'get', propertyName: 'data'},
+          user: { url: '/user/user', method: 'get', propertyName: 'data' },
         },
         tokenRequired: true,
         tokenType: 'Bearer'
@@ -89,7 +92,7 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
-    extend(config, ctx) {
+    extend (config, ctx) {
       // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {
         config.module.rules.push({
@@ -97,8 +100,8 @@ module.exports = {
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules)/,
-          options : {
-            fix : true
+          options: {
+            fix: true
           }
         })
       }

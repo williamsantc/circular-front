@@ -154,7 +154,7 @@ export default {
   methods: {
     getEntidadesWs: function() {
       return this.$axios
-        .$get('/entidad/list', { params: { nombre: this.nombreSearch } })
+        .$get('/api/entidad/list', { params: { nombre: this.nombreSearch } })
         .then(resp => {
           this.listaEntidad = resp
         })
@@ -164,7 +164,7 @@ export default {
     },
     sendModificar: function(entidad) {
 
-      this.entidad.form = entidad
+      this.entidad.form = JSON.parse(JSON.stringify(entidad))
       this.crudSettings.msgBtn = 'Guardar Cambios'
       this.crudSettings.showModal = !this.crudSettings.showModal
     },
@@ -173,7 +173,7 @@ export default {
         return
       }
       return this.$axios
-        .$post('/entidad/gestionar', this.entidad.form)
+        .$post('/api/entidad/gestionar', this.entidad.form)
         .then(resp => {
           if(resp.processOk) {
             this.$toastr.success(resp.msg, 'OK')
@@ -196,7 +196,7 @@ export default {
       })
         .then(success => {
           return this.$axios
-            .$post('/entidad/eliminar', { enti_id: enti_id })
+            .$post('/api/entidad/eliminar', { enti_id: enti_id })
             .then(resp => {
               this.$toastr.success(resp.msg, 'OK')
             })

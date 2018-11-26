@@ -82,28 +82,28 @@
                    :items="listaCircular" 
                    :fields="fields"
                    striped
+                   fixed
                    :per-page="crudSettings.perPage"
                    :current-page="crudSettings.currentPage"
                    hover>
             <template slot="acciones" slot-scope="data">
-              <b-row>
-                <b-col cols="1">
-                  <b-btn variant="primary" size="sm" 
-                         title="Modificar"
-                         class="m-1"
-                         @click="sendModificar(data.item)">
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                  </b-btn>
-                </b-col>
-                <b-col cols="1">
-                  <b-btn variant="danger" size="sm"
-                         @click="eliminarCircular(data.item.circ_id)" 
-                         class="m-1"
-                         title="Eliminar">
-                    <i class="fa fa-trash" aria-hidden="true"></i>
-                  </b-btn>
-                </b-col>
-              </b-row>
+              <b-btn variant="primary" size="sm" 
+                      title="Modificar"
+                      class="mr-1"
+                      @click="sendModificar(data.item)">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+              </b-btn>
+              <b-btn variant="danger" size="sm"
+                      @click="eliminarCircular(data.item.circ_id)"
+                      title="Eliminar">
+                <i class="fa fa-trash" aria-hidden="true"></i>
+              </b-btn>
+              <b-btn variant="success" size="sm"
+                      @click="generarPDF(data.item)" 
+                      class="ml-1"
+                      title="Descargar">
+                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+              </b-btn>
             </template>
           </b-table>
         </b-col>
@@ -128,6 +128,7 @@
 import Vue from 'vue'
 import _ from 'lodash'
 import circularMixin from '@/mixins/circularMixin'
+import createPDF from '@/utils/createPDF'
 
 const CRUD_SETTIINGS = require('@/utils/crudSettings')
 
@@ -161,8 +162,9 @@ export default {
   },
   watch: {
     filtro: {
-      handler: 'getCircularWs',
-      immediate: true,
+      handler: _.debounce(function () {
+        this.getCircularWs()
+      }, 500),
       deep: true
     },
     area: function(newValue) {
@@ -179,9 +181,12 @@ export default {
     this.cargarListasForaneas()
   },
   methods: {
-    getCircularWs: _.debounce(function() {
+    generarPDF: function (circular) {
+      createPDF(circular)
+    },
+    getCircularWs: function() {
       return this.$axios
-        .$get('/circular/list', { params: this.filtro })
+        .$get('/api/circular/list', { params: this.filtro })
         .then(resp => {
           this.listaCircular = resp
           this.crudSettings.toogleFilter = false
@@ -189,7 +194,7 @@ export default {
         .catch(error => {
           console.log(error)
         })
-    }, 500),
+    },
     eliminarCircular: function(circ_id) {
       return this.$confirm({
         title: this.tituloFuncionlidad,
@@ -197,7 +202,7 @@ export default {
       })
         .then(success => {
           return this.$axios
-            .$post('/circular/eliminar', { circ_id: circ_id })
+            .$post('/api/circular/eliminar', { circ_id: circ_id })
             .then(resp => {
               this.$toastr.success(resp.msg, 'OK')
             })
@@ -220,7 +225,11 @@ export default {
         }
       })
     }
-  }
+  },
+  beforeMount: function () {
+    this.cargarListasForaneas()
+      this.getCircularWs()
+    }
 }
 </script>
 

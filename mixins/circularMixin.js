@@ -12,7 +12,7 @@ const circularMixin = {
   methods: {
     getAreasWs: function () {
       return this.$axios
-        .$get('/area/list')
+        .$get('/api/area/list')
         .then(resp => {
           this.listaArea = resp
         })
@@ -20,7 +20,7 @@ const circularMixin = {
     },
     getEntidadesWs: function () {
       return this.$axios
-        .$get('/entidad/list')
+        .$get('/api/entidad/list')
         .then(resp => {
           this.listaEntidad = resp
         })
@@ -30,7 +30,7 @@ const circularMixin = {
     },
     getResponsablesWs: function () {
       return this.$axios
-        .$get('/responsable/list')
+        .$get('/api/responsable/list')
         .then(resp => {
           this.listaResponsable = resp
         })

@@ -485,7 +485,7 @@ const validarForm = {
       return true
     },
     isEmpty: function (element) {
-      return (element === '' || element === undefined || element === null)
+      return (element === undefined || element === null || (typeof element === 'string' && element.trim() === ''))
     },
     validateEmail: function (email) {
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
