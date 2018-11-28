@@ -15,7 +15,7 @@
   },
   "production": {
     "username": "expresos_admin",
-    "password": "@xataka24",
+    "password": "",
     "database": "expresos_circular",
     "host": "127.0.0.1",
     "dialect": "mysql"
