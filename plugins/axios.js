@@ -1,12 +1,20 @@
-export default function ({ $axios, redirect }) {
-  $axios.onRequest(config => {
-    config.headers.common['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+import Vue from 'vue';
+
+export default function ({ store, app }) {
+
+  app.$axios.onRequest(config => {
+    config.headers.common['Authorization'] = store.state.accessToken
   })
 
-  $axios.onError(error => {
+  app.$axios.onResponseError(error => {
     const code = parseInt(error.response && error.response.status)
-    if (code === 400) {
-      redirect('/400')
+
+    if (code === 403) {
+      app.router.push('/login')
+      Vue.prototype.$toastr.error('No se detectaron las credenciales', 'Inicie sesión')
+    } else if (code === 401) {
+
     }
+
   })
 }

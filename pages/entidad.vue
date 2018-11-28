@@ -162,12 +162,13 @@ export default {
   methods: {
     getEntidadesWs: function() {
       return this.$axios
-        .$get('/api/entidad/list', { params: { nombre: this.nombreSearch } })
+        .get('/api/entidad/list', { params: { nombre: this.nombreSearch } })
         .then(resp => {
-          this.listaEntidad = resp
+          this.listaEntidad = resp.data
+          console.log(resp.headers)
         })
         .catch(error => {
-          console.log(error)
+          console.log(error.response.data)
         })
     },
     sendModificar: function(entidad) {
@@ -191,7 +192,8 @@ export default {
           this.crudSettings.showModal = !this.crudSettings.showModal
         })
         .catch(error => {
-          this.$toastr.error(error.msg, 'ERROR')
+          console(error.response.data)
+          this.$toastr.error(error.response.data.msg, 'ERROR')
         })
         .then(() => {
           this.getEntidadesWs()
@@ -209,7 +211,8 @@ export default {
               this.$toastr.success(resp.msg, 'OK')
             })
             .catch(error => {
-              this.$toastr.error(error.msg, 'ERROR')
+              console.log(error.response.dataS)
+              this.$toastr.error(error.response.data.msg, 'ERROR')
             })
             .then(() => {
               this.getEntidadesWs()

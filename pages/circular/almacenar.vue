@@ -205,7 +205,7 @@ export default {
           this.listaAlmacenar = resp
         })
         .catch(error => {
-          console.log(error)
+          console.log(error.response.data)
         })
     },
     sendModificar: function(almacenar) {
@@ -232,7 +232,7 @@ export default {
               this.$toastr[resp.variant](resp.msg, resp.title)
             })
             .catch(error => {
-              this.$toastr.error(error.msg, 'ERROR')
+              this.$toastr.error(error.response.data.msg, 'ERROR')
             })
             .then(() => {
               this.getEntidadesWs()
@@ -297,7 +297,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error)
+          console.log(error.response.data)
         })
         .then(() => {
           this.getAlmacenarWs()
@@ -311,7 +311,7 @@ export default {
           this.crudSettings.toogleFilter = false
         })
         .catch(error => {
-          console.log(error)
+          console.log(error.response.data)
         })
     }
   },

@@ -166,7 +166,6 @@ export default {
         .$get('/api/area/list', { params: { nombre: this.nombreSearch } })
         .then(resp => {
           this.listaArea = resp
-          console.log(this.listaArea)
         })
         .catch(error => {})
     },

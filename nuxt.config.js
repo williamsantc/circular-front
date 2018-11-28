@@ -70,6 +70,7 @@ module.exports = {
     // See https://github.com/nuxt-community/axios-module#options
     baseURL: process.env.BASE_URL || 'http://localhost:3000/'
   },
+  /*
   auth: {
     // Options
     strategies: {
@@ -84,6 +85,7 @@ module.exports = {
       }
     }
   },
+  */
 
   /*
   ** Build configuration

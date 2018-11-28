@@ -100,6 +100,9 @@ export default {
     list () {
       return this.$route.matched.filter(route => route.name || route.meta.label )
     }
-  }
+  },
+  beforeCreate: function () {
+    this.$axios.get('/api/auth/check_token')
+  },
 }
 </script>

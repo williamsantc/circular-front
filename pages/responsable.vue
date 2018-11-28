@@ -222,7 +222,8 @@ export default {
           this.crudSettings.showModal = !this.crudSettings.showModal
         })
         .catch(error => {
-          this.$toastr.error(error.msg, 'ERROR')
+          console.log(error.response.data)
+          this.$toastr.error(error.response.data.msg, 'ERROR')
         })
         .then(() => {
           this.getResponsablesWs()
@@ -240,7 +241,8 @@ export default {
               this.$toastr.success(resp.msg, 'OK')
             })
             .catch(error => {
-              this.$toastr.error(error.msg, 'ERROR')
+              console.log(error.response.data)
+              this.$toastr.error(error.response.data.msg, 'ERROR')
             })
             .then(() => {
               this.getResponsablesWs()

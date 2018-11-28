@@ -6,18 +6,22 @@
     <b-card-body>
       <b-row align-h="between">
         <b-col md="4" sm="4" order="2" order-sm="1">
-          <b-btn variant="outline-primary"
-                 @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
-                 aria-controls="collapseFilter">
-            <i class="fa fa-search" aria-hidden="true"></i> filtro de búsqueda 
-            <i :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')" aria-hidden="true"></i>
+          <b-btn
+            variant="outline-primary"
+            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
+            aria-controls="collapseFilter"
+          >
+            <i class="fa fa-search" aria-hidden="true"></i> filtro de búsqueda
+            <i
+              :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')"
+              aria-hidden="true"
+            ></i>
           </b-btn>
         </b-col>
         <b-col md="4" sm="4" order="1" order-sm="2" align="right">
-          <b-btn variant="primary"
-                 @click="$router.push('/circular/gestionar')">
+          <b-btn variant="primary" @click="$router.push('/circular/gestionar')">
             <i class="fa fa-plus" aria-hidden="true"></i> Nueva circular
-        </b-btn>
+          </b-btn>
         </b-col>
       </b-row>
       <b-collapse class="mt-2" v-model="crudSettings.toogleFilter" id="collapseFilter">
@@ -29,34 +33,37 @@
           </b-col>
           <b-col md="6">
             <b-form-group label="Entidad:">
-              <multiselect v-model="entidad" 
-                           :options="listaEntidad" 
-                           placeholder="Seleccione una opción" 
-                           label="enti_nombre" 
-                           track-by="enti_nombre">
-              </multiselect>
+              <multiselect
+                v-model="entidad"
+                :options="listaEntidad"
+                placeholder="Seleccione una opción"
+                label="enti_nombre"
+                track-by="enti_nombre"
+              ></multiselect>
             </b-form-group>
           </b-col>
         </b-row>
         <b-row>
           <b-col md="6">
             <b-form-group label="Responsable:">
-              <multiselect v-model="responsable" 
-                           :options="listaResponsable" 
-                           placeholder="Seleccione una opción" 
-                           label="resp_nombre" 
-                           track-by="resp_nombre">
-              </multiselect>
+              <multiselect
+                v-model="responsable"
+                :options="listaResponsable"
+                placeholder="Seleccione una opción"
+                label="resp_nombre"
+                track-by="resp_nombre"
+              ></multiselect>
             </b-form-group>
           </b-col>
           <b-col md="6">
             <b-form-group label="Area:">
-              <multiselect v-model="area" 
-                           :options="listaArea" 
-                           placeholder="Seleccione una opción" 
-                           label="area_nombre" 
-                           track-by="area_nombre">
-              </multiselect>
+              <multiselect
+                v-model="area"
+                :options="listaArea"
+                placeholder="Seleccione una opción"
+                label="area_nombre"
+                track-by="area_nombre"
+              ></multiselect>
             </b-form-group>
           </b-col>
         </b-row>
@@ -76,33 +83,44 @@
       <br>
       <b-row>
         <b-col>
-          
           <h4 v-if="listaCircular.length <= 0">No hay registros</h4>
-          <b-table v-else stacked="md"
-                   :items="listaCircular" 
-                   :fields="fields"
-                   striped
-                   fixed
-                   :per-page="crudSettings.perPage"
-                   :current-page="crudSettings.currentPage"
-                   hover>
+          <b-table
+            v-else
+            stacked="md"
+            :items="listaCircularMutated"
+            :fields="fields"
+            striped
+            fixed
+            :per-page="crudSettings.perPage"
+            :current-page="crudSettings.currentPage"
+            hover
+          >
             <template slot="acciones" slot-scope="data">
-              <b-btn variant="primary" size="sm" 
-                      title="Modificar"
-                      class="mr-1"
-                      @click="sendModificar(data.item)">
+              <b-btn
+                variant="primary"
+                size="sm"
+                title="Modificar"
+                class="mr-1"
+                @click="sendModificar(data.item)"
+              >
                 <i class="fa fa-pencil" aria-hidden="true"></i>
               </b-btn>
-              <b-btn variant="danger" size="sm"
-                      @click="eliminarCircular(data.item.circ_id)"
-                      title="Eliminar">
+              <b-btn
+                variant="danger"
+                size="sm"
+                @click="eliminarCircular(data.item.circ_id)"
+                title="Eliminar"
+              >
                 <i class="fa fa-trash" aria-hidden="true"></i>
               </b-btn>
-              <b-btn variant="success" size="sm"
-                      @click="generarPDF(data.item)" 
-                      class="ml-1"
-                      title="Descargar">
-                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+              <b-btn
+                variant="success"
+                size="sm"
+                @click="generarPDF(data.item)"
+                class="ml-1"
+                title="Descargar"
+              >
+                <i :class="data.item.downloadIcon" ref="downloadFile" aria-hidden="true"></i>
               </b-btn>
             </template>
           </b-table>
@@ -110,11 +128,13 @@
       </b-row>
       <b-row>
         <b-col>
-          <b-pagination v-if="listaCircular.length > crudSettings.perPage"
-                        align="center"
-                        :total-rows="listaCircular.length" 
-                        :per-page="crudSettings.perPage" 
-                        v-model="crudSettings.currentPage" />
+          <b-pagination
+            v-if="listaCircularMutated.length > crudSettings.perPage"
+            align="center"
+            :total-rows="listaCircularMutated.length"
+            :per-page="crudSettings.perPage"
+            v-model="crudSettings.currentPage"
+          />
         </b-col>
       </b-row>
     </b-card-body>
@@ -141,6 +161,8 @@ const FILTRO = {
   circ_fechahasta: ''
 }
 
+// fa fa-spinner fa-spin fa-1x fa-fw
+
 export default {
   name: 'listado-circular',
   mixins: [circularMixin],
@@ -160,9 +182,17 @@ export default {
       tituloFuncionlidad: 'Gestionar Circulares'
     }
   },
+  computed: {
+    listaCircularMutated: function() {
+      return this.listaCircular.map(circular => ({
+        ...circular,
+        downloadIcon: 'fa fa-file-pdf-o'
+      }))
+    }
+  },
   watch: {
     filtro: {
-      handler: _.debounce(function () {
+      handler: _.debounce(function() {
         this.getCircularWs()
       }, 500),
       deep: true
@@ -181,8 +211,10 @@ export default {
     this.cargarListasForaneas()
   },
   methods: {
-    generarPDF: function (circular) {
+    generarPDF: function(circular) {
+      circular.downloadIcon = 'fa fa-spinner fa-spin fa-1x fa-fw'
       createPDF(circular)
+      circular.downloadIcon = 'fa fa-file-pdf-o'
     },
     getCircularWs: function() {
       return this.$axios
@@ -192,7 +224,7 @@ export default {
           this.crudSettings.toogleFilter = false
         })
         .catch(error => {
-          console.log(error)
+          console.log(error.response.data)
         })
     },
     eliminarCircular: function(circ_id) {
@@ -207,7 +239,7 @@ export default {
               this.$toastr.success(resp.msg, 'OK')
             })
             .catch(error => {
-              this.$toastr.error(error.msg, 'ERROR')
+              this.$toastr.error(error.response.data.msg, 'ERROR')
             })
             .then(() => {
               this.getCircularWs()
@@ -226,10 +258,10 @@ export default {
       })
     }
   },
-  beforeMount: function () {
+  beforeMount: function() {
     this.cargarListasForaneas()
-      this.getCircularWs()
-    }
+    this.getCircularWs()
+  }
 }
 </script>
 

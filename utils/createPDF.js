@@ -2,7 +2,6 @@ import jsPDF from 'jspdf'
 import autotable from 'jspdf-autotable'
 import { escudo } from './dataURLimages'
 import { fechaParaDocumentos } from '@/utils/dateUtils'
-import html2canvas from 'html2canvas'
 
 
 const createPDF = function (circular) {

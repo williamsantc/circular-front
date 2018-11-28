@@ -1,23 +1,39 @@
 const jwt = require('jsonwebtoken');
+const authSettings = require('./authSettings');
 
 const isEmpty = function (element) {
   return (element === undefined || element === null || (typeof element === 'string' && element.trim() === ''))
 }
 
 export const AuthMiddleware = (req, res, next) => {
-  const user = {
-    "email": 'william',
-    "name": 'santos'
-  };
 
-  // do the database authentication here, with user name and password combination.
-  const token = jwt.sign(user, 'qlqElmio', { expiresIn: 50000});
-  const authHeader = req.headers.authorization
-  if(isEmpty(authHeader)) {
-    res.status(403).send('Acceso no autorizado')
-    return
+  let authHeader = req.headers.authorization
+  if (isEmpty(authHeader)) {
+    return res.status(403).send({
+      'error': true,
+      'message': 'No token provided.'
+    })
   }
 
-  
-  next();
+  authHeader = authHeader.replace('Bearer ', '').trim()
+  console.log(authHeader)
+
+  // verifies secret and checks exp
+  jwt.verify(authHeader, authSettings.sign, function (err, decoded) {
+    if (err) {
+      console.log(err.name)
+    }
+
+    if (err && err.name === 'TokenExpiredError') {
+      return res.status(401).send({ 'error': true, 'message': 'Unauthorized access.' });
+    } else if (err) {
+      return res.status(403).send({ 'error': true, 'message': 'Invalid token.' });
+    }
+    req.decoded = decoded;
+
+    res.set('custom-header', 'hi-there')
+
+    next();
+  });
+
 }

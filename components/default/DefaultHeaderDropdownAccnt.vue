@@ -8,7 +8,7 @@
     </template>\
     <template slot="dropdown">
       <b-dropdown-header tag="div" class="text-center"><strong>Cuenta</strong></b-dropdown-header>
-      <b-dropdown-item><i class="fa fa-user-circle-o" /> Usuario:
+      <b-dropdown-item><i class="fa fa-user-circle-o" /> {{ $store.getters.dataUsuario.nombreCompleto }}
       </b-dropdown-item>
       <b-dropdown-item @click="cerrarSesion"><i class="fa fa-sign-out" /> Cerrar sesión
       </b-dropdown-item>
@@ -29,7 +29,7 @@ export default {
   methods: {
     cerrarSesion: function () {
       this.$store.dispatch('cerrarSesion')
-      this.$router.push('/pages/login')
+      this.$router.push('/login')
     }
   }
 }

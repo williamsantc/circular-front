@@ -202,7 +202,7 @@ export default {
           this.$router.push('/circular')
         })
         .catch(error => {
-          this.$toastr.error(error.msg, 'ERROR')
+          this.$toastr.error(error.response.data.msg, 'ERROR')
         })
     }
   },

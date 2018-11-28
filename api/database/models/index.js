@@ -41,7 +41,21 @@ db.circular.belongsTo(db.entidad, { foreignKey: 'enti_id', as: 'entidad' });
 db.entidad.hasOne(db.circular, { foreignKey: 'enti_id', as: 'entidad' });
 
 db.almacenar.belongsTo(db.circular, { foreignKey: 'circ_id', as: 'circular' });
-db.circular.hasOne(db.almacenar, { foreignKey: 'circ_id', as: 'circular' })
+db.circular.hasOne(db.almacenar, { foreignKey: 'circ_id', as: 'circular' });
+
+db.usuario.belongsToMany(db.rol, {
+  through: {
+    model: db.usuariorol,
+    unique: false
+  }, foreignKey: 'usua_id', as: 'usuario'
+});
+
+db.rol.belongsToMany(db.usuario, {
+  through: {
+    model: db.usuariorol,
+    unique: false
+  }, foreignKey: 'rol_id', as: 'rol'
+});
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
