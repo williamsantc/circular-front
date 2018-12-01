@@ -26,7 +26,7 @@ const createStore = () => {
         state.accessToken = 'Bearer ' + data.accessToken
         state.dataUsuario = data.dataUsuario
       },
-      REFRESH_TOKEN: function(state, token) {
+      REFRESH_TOKEN: function (state, token) {
         state.accessToken = 'Bearer ' + token
       },
       RESET: function (state) {
@@ -38,7 +38,7 @@ const createStore = () => {
         return this.$axios.post('/api/auth/get_token', payload).then(resp => {
           context.commit('GET_TOKEN', resp.data)
         }).catch(error => {
-          Vue.prototype.$toastr.error(error.response.data)
+          Vue.prototype.$toastr.error(error.response.data, 'Error de credenciales')
         })
 
       },
@@ -46,18 +46,24 @@ const createStore = () => {
         context.commit('RESET')
       },
       refreshToken: function (context) {
-        return this.$axios.post('/api/auth/refresh_token', context.state.accessToken).then(resp => {
-          context.commit('REFRESH_TOKEN', resp.data.refreshToken)
+        return this.$axios.post('/api/auth/refresh_token', {
+          accessToken: context.state.accessToken,
+          dataUsuario: context.state.dataUsuario
+        }).then(resp => {
+          if (resp.data.accessToken) {
+            context.commit('REFRESH_TOKEN', resp.data.accessToken)
+          }
         }).catch(error => {
           console.log(error.data)
         })
-        
+
       }
     },
     getters: {
       accessToken: state => state.accessToken,
       dataUsuario: state => state.dataUsuario
-    }
+    },
+    plugins: [vuexLocalStorage.plugin]
   })
 }
 

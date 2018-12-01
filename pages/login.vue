@@ -10,10 +10,8 @@ export default {
   components: {
     Login
   }
-  
 }
 </script>
 
 <style scoped>
-
 </style>

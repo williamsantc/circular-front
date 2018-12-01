@@ -14,6 +14,8 @@ const circularRouter = require('./routes/circular');
 const almaMultiRouter = require('./routes/almacenar_multipart');
 const almaPLainRouter = require('./routes/almacenar_plain');
 const authRouter = require('./routes/auth');
+const usuarioRouter = require('./routes/usuario');
+const rolRouter = require('./routes/rol');
 
 // Create express instnace
 const app = express()
@@ -37,6 +39,8 @@ app.use('/responsable', AuthMiddleware, responsableRouter);
 app.use('/circular', AuthMiddleware, circularRouter);
 app.use('/almacenar_multi', AuthMiddleware, almaMultiRouter);
 app.use('/almacenar_plain', AuthMiddleware, almaPLainRouter);
+app.use('/usuario', AuthMiddleware, usuarioRouter);
+app.use('/rol', AuthMiddleware,rolRouter);
 
 
 // catch 404 and forward to error handler

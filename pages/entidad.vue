@@ -7,22 +7,26 @@
     <b-card-body>
       <b-row>
         <b-col md="6" order="2" order-sm="1">
-          <b-btn variant="outline-primary"
-                 @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
-                 aria-controls="collapseFilter">
-            <i class="fa fa-search" aria-hidden="true"></i> filtro de búsqueda 
-            <i :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')" aria-hidden="true"></i>
+          <b-btn
+            variant="outline-primary"
+            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
+            aria-controls="collapseFilter"
+          >
+            <i class="fa fa-search" aria-hidden="true"></i> filtro de búsqueda
+            <i
+              :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')"
+              aria-hidden="true"
+            ></i>
           </b-btn>
         </b-col>
         <b-col md="6" order="1" order-sm="2" align="right">
-          <b-btn variant="primary"
-                 @click="crudSettings.showModal = !crudSettings.showModal">
+          <b-btn variant="primary" @click="crudSettings.showModal = !crudSettings.showModal">
             <i class="fa fa-plus" aria-hidden="true"></i> Nueva entidad
-        </b-btn>
+          </b-btn>
         </b-col>
       </b-row>
       <b-collapse class="mt-2" v-model="crudSettings.toogleFilter" id="collapseFilter">
-        <b-row >
+        <b-row>
           <b-col>
             <b-form-group label="Nombre de la entidad a buscar">
               <b-input v-model="nombreSearch"></b-input>
@@ -33,27 +37,36 @@
       <b-row>
         <b-col>
           <br>
-          <h4 v-if="listaEntidad.length <= 0">No hay registros</h4>
-          <b-table v-else stacked="md"
-                   :items="listaEntidad" 
-                   :fields="fields"
-                   striped
-                   :per-page="crudSettings.perPage"
-                   :current-page="crudSettings.currentPage"
-                   hover>
+          <b-alert show variant="info" v-if="listaEntidad.length <= 0">No hay registros</b-alert>
+          <b-table
+            v-else
+            stacked="md"
+            :items="listaEntidad"
+            :fields="fields"
+            striped
+            :per-page="crudSettings.perPage"
+            :current-page="crudSettings.currentPage"
+            hover
+          >
             <template slot="acciones" slot-scope="data">
               <b-row>
                 <b-col cols="1">
-                  <b-btn variant="primary" size="sm" 
-                          title="Modificar"
-                         @click="sendModificar(data.item)">
+                  <b-btn
+                    variant="primary"
+                    size="sm"
+                    title="Modificar"
+                    @click="sendModificar(data.item)"
+                  >
                     <i class="fa fa-pencil" aria-hidden="true"></i>
                   </b-btn>
                 </b-col>
                 <b-col cols="1">
-                  <b-btn variant="danger" size="sm"
-                  @click="eliminarArea(data.item.enti_id)" 
-                          title="Eliminar">
+                  <b-btn
+                    variant="danger"
+                    size="sm"
+                    @click="eliminarArea(data.item.enti_id)"
+                    title="Eliminar"
+                  >
                     <i class="fa fa-trash" aria-hidden="true"></i>
                   </b-btn>
                 </b-col>
@@ -64,35 +77,39 @@
       </b-row>
       <b-row>
         <b-col>
-          <b-pagination v-if="listaEntidad.length > crudSettings.perPage"
-                        align="center"
-                        :total-rows="listaEntidad.length" 
-                        :per-page="crudSettings.perPage" 
-                        v-model="crudSettings.currentPage" />
+          <b-pagination
+            v-if="listaEntidad.length > crudSettings.perPage"
+            align="center"
+            :total-rows="listaEntidad.length"
+            :per-page="crudSettings.perPage"
+            v-model="crudSettings.currentPage"
+          />
         </b-col>
       </b-row>
     </b-card-body>
 
-    <b-modal v-model="crudSettings.showModal"
-             :title="tituloFuncionlidad">
+    <b-modal v-model="crudSettings.showModal" :title="tituloFuncionlidad">
       <b-row>
         <b-col>
           <b-form-group label="Nombre de la entidad">
-            <b-form-textarea placeholder="Ingrese asunto de la entidad"
-                           :rows="6"
-                           no-resize
-                           ref="enti_nombre"
-                           @keydown.native="validarCantidadCaracteres($event, entidad.form.enti_nombre, 200)"
-                           v-model="entidad.form.enti_nombre"
-                           :max-rows="6">
-            </b-form-textarea>
+            <b-form-textarea
+              placeholder="Ingrese asunto de la entidad"
+              :rows="6"
+              no-resize
+              ref="enti_nombre"
+              @keydown.native="validarCantidadCaracteres($event, entidad.form.enti_nombre, 200)"
+              v-model="entidad.form.enti_nombre"
+              :max-rows="6"
+            ></b-form-textarea>
           </b-form-group>
         </b-col>
       </b-row>
       <div slot="modal-footer">
-        <b-btn class="float-right" variant="primary" @click="gestionarEntidad">
-          {{ crudSettings.msgBtn }}
-        </b-btn>
+        <b-btn
+          class="float-right"
+          variant="primary"
+          @click="gestionarEntidad"
+        >{{ crudSettings.msgBtn }}</b-btn>
       </div>
     </b-modal>
     <b-card-footer>
@@ -165,26 +182,24 @@ export default {
         .get('/api/entidad/list', { params: { nombre: this.nombreSearch } })
         .then(resp => {
           this.listaEntidad = resp.data
-          console.log(resp.headers)
         })
         .catch(error => {
           console.log(error.response.data)
         })
     },
     sendModificar: function(entidad) {
-
       this.entidad.form = JSON.parse(JSON.stringify(entidad))
       this.crudSettings.msgBtn = 'Guardar Cambios'
       this.crudSettings.showModal = !this.crudSettings.showModal
     },
     gestionarEntidad: function() {
-      if(!this.validarCampos(this.entidad)) { 
+      if (!this.validarCampos(this.entidad)) {
         return
       }
       return this.$axios
         .$post('/api/entidad/gestionar', this.entidad.form)
         .then(resp => {
-          if(resp.processOk) {
+          if (resp.processOk) {
             this.$toastr.success(resp.msg, 'OK')
           } else {
             this.$toastr.error(resp.msg, 'ERROR')
@@ -211,7 +226,6 @@ export default {
               this.$toastr.success(resp.msg, 'OK')
             })
             .catch(error => {
-              console.log(error.response.dataS)
               this.$toastr.error(error.response.data.msg, 'ERROR')
             })
             .then(() => {
@@ -225,7 +239,6 @@ export default {
   },
   created: function() {
     this.getEntidadesWs()
-
   }
 }
 </script>

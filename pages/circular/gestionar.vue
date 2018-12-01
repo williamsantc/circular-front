@@ -4,78 +4,81 @@
       <h4>{{ tituloFuncionlidad }}</h4>
     </b-card-header>
     <b-card-body>
-
       <b-row>
-      <b-col>
-        <b-form-group label="Asunto:">
-          <b-form-textarea placeholder="Ingrese asunto de la circular"
-                           :rows="3"
-                           no-resize
-                           ref="circ_asunto"
-                           v-model="circular.form.circ_asunto"
-                           :max-rows="6">
-
-          </b-form-textarea>
-        </b-form-group>
-        <b-form-group label="Contenido Circular:">
-          <tiny-mce v-model="circular.form.circ_contenido" 
-                    :init="initTinyMce" 
-                    ref="circ_contenido"
-                    :api-key="apiTiny">
-          </tiny-mce>
-        </b-form-group>
-        <b-row>
-          <b-col md="6">
-            <b-form-group label="Area:">
-              <multiselect v-model="area" 
-                           :options="listaArea" 
-                           placeholder="Seleccione una opción" 
-                           label="area_nombre"
-                           ref="area_id"
-                           track-by="area_nombre">
-              </multiselect>
-            </b-form-group>
-          </b-col>
-          <b-col md="6">
-            <b-form-group label="Entidad:">
-              <multiselect v-model="entidad" 
-                           :options="listaEntidad" 
-                           placeholder="Seleccione una opción" 
-                           label="enti_nombre" 
-                           ref="enti_id"
-                           track-by="enti_nombre">
-              </multiselect>
-            </b-form-group>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col md="6">
-            <b-form-group label="Responsable:">
-              <multiselect v-model="responsable" 
-                           :options="listaResponsable" 
-                           placeholder="Seleccione una opción" 
-                           label="resp_nombre" 
-                           ref="resp_id"
-                           track-by="resp_nombre">
-              </multiselect>
-            </b-form-group>
-          </b-col>
-          <b-col md="6">
-            <b-form-group label="Fecha emisión:">
-              <b-input type="date" ref="circ_fecha" v-model="circular.form.circ_fecha"></b-input>
-            </b-form-group>
-          </b-col>
-        </b-row>
-        <b-form-group label="Anexos:">
-          <tiny-mce v-model="circular.form.circ_anexos" 
-                    :init="initTinyMce" 
-                    ref="circ_anexos"
-                    :api-key="apiTiny">
-          </tiny-mce>
-        </b-form-group>
-      </b-col>
-    </b-row>
-
+        <b-col>
+          <b-form-group label="Asunto:">
+            <b-form-textarea
+              placeholder="Ingrese asunto de la circular"
+              :rows="3"
+              no-resize
+              ref="circ_asunto"
+              v-model="circular.form.circ_asunto"
+              :max-rows="6"
+            ></b-form-textarea>
+          </b-form-group>
+          <b-form-group label="Contenido Circular:">
+            <tiny-mce
+              v-model="circular.form.circ_contenido"
+              :init="initTinyMce"
+              ref="circ_contenido"
+              :api-key="apiTiny"
+            ></tiny-mce>
+          </b-form-group>
+          <b-row>
+            <b-col md="6">
+              <b-form-group label="Area:">
+                <multiselect
+                  v-model="area"
+                  :options="listaArea"
+                  placeholder="Seleccione una opción"
+                  label="area_nombre"
+                  ref="area_id"
+                  track-by="area_nombre"
+                ></multiselect>
+              </b-form-group>
+            </b-col>
+            <b-col md="6">
+              <b-form-group label="Entidad:">
+                <multiselect
+                  v-model="entidad"
+                  :options="listaEntidad"
+                  placeholder="Seleccione una opción"
+                  label="enti_nombre"
+                  ref="enti_id"
+                  track-by="enti_nombre"
+                ></multiselect>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col md="6">
+              <b-form-group label="Responsable:">
+                <multiselect
+                  v-model="responsable"
+                  :options="listaResponsable"
+                  placeholder="Seleccione una opción"
+                  label="resp_nombre"
+                  ref="resp_id"
+                  track-by="resp_nombre"
+                ></multiselect>
+              </b-form-group>
+            </b-col>
+            <b-col md="6">
+              <b-form-group label="Fecha emisión:">
+                <b-input type="date" ref="circ_fecha" v-model="circular.form.circ_fecha"></b-input>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-form-group label="Anexos:">
+            <tiny-mce
+              v-model="circular.form.circ_anexos"
+              :init="initTinyMce"
+              ref="circ_anexos"
+              :api-key="apiTiny"
+            ></tiny-mce>
+          </b-form-group>
+        </b-col>
+      </b-row>
     </b-card-body>
     <b-card-footer>
       <b-row>
@@ -86,7 +89,6 @@
           <b-btn variant="primary" @click="gestionarCircular">{{ btnText }}</b-btn>
         </b-col>
       </b-row>
-      
     </b-card-footer>
   </b-card>
 </template>

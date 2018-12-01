@@ -1,6 +1,6 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('usuario', {
     usua_id: {
       type: DataTypes.BIGINT,
@@ -40,6 +40,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'usuario'
-  });
+      tableName: 'usuario'
+    });
 };

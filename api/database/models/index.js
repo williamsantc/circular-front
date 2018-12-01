@@ -47,14 +47,28 @@ db.usuario.belongsToMany(db.rol, {
   through: {
     model: db.usuariorol,
     unique: false
-  }, foreignKey: 'usua_id', as: 'usuario'
+  }, foreignKey: 'usua_id', as: 'rol'
 });
 
 db.rol.belongsToMany(db.usuario, {
   through: {
     model: db.usuariorol,
     unique: false
-  }, foreignKey: 'rol_id', as: 'rol'
+  }, foreignKey: 'rol_id', as: 'usuario'
+});
+
+db.rol.belongsToMany(db.funcionalidad, {
+  through: {
+    model: db.rolfuncionalidad,
+    unique: false
+  }, foreignKey: 'rol_id', as: 'funcionalidad'
+});
+
+db.funcionalidad.belongsToMany(db.rol, {
+  through: {
+    model: db.rolfuncionalidad,
+    unique: false
+  }, foreignKey: 'func_id', as: 'rol'
 });
 
 db.sequelize = sequelize;

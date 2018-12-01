@@ -1,6 +1,6 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('usuariorol', {
     usro_id: {
       type: DataTypes.BIGINT,
@@ -25,6 +25,6 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   }, {
-    tableName: 'usuariorol'
-  });
+      tableName: 'usuariorol'
+    });
 };

@@ -15,7 +15,7 @@ router.get('/list', (req, res, next) => {
     let nombreSearch = req.query.nombre.toUpperCase()
     options.where = {
       area_nombre: {
-        [Op.like]: '%' + nombreSearch  + '%'
+        [Op.like]: '%' + nombreSearch + '%'
       }
     }
   }

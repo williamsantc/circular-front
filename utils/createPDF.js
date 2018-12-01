@@ -106,7 +106,7 @@ const addFirma = function (pdf, circular) {
 
   let margins = {
     top: 70,
-    bottom: 10,
+    bottom: 15,
     left: 30,
     width: 550
   }
@@ -159,75 +159,74 @@ const headerFooterFormatting = function (pdf) {
 }
 
 const addFooter = function (pdf, index, totalPages) {
+
+  pdf.setPage(index)
+
   pdf.setFontSize(8)
   pdf.setFontType('normal')
   pdf.text('Página ' + index + ' de ' + totalPages, 185, 270)
+
 }
 
 
 const setHeader = function (pdf) {
-  let pageCount = pdf.internal.getNumberOfPages()
-  for (let i = 0; i < pageCount; i++) {
-    pdf.setPage(i)
 
-    // IMAGEN
-    pdf.rect(10, 10, 55, 30)
-    pdf.addImage(escudo, 'JPEG', 17.5, 10, 40, 30)
+  // IMAGEN
+  pdf.rect(10, 10, 55, 30)
+  pdf.addImage(escudo, 'JPEG', 17.5, 10, 40, 30)
 
-    // SISTEMA DE GESTIÓN DE LA CALIDAD Y SISTEMA DE CONTROL INTERN
-    pdf.rect(65, 10, 85, 30)
-    pdf.setFontSize(10)
-    pdf.text(72.5, 15, 'SISTEMA DE GESTIÓN DE LA CALIDAD Y')
-    pdf.text(78.5, 20, 'SISTEMA DE CONTROL INTERNO')
+  // SISTEMA DE GESTIÓN DE LA CALIDAD Y SISTEMA DE CONTROL INTERN
+  pdf.rect(65, 10, 85, 30)
+  pdf.setFontSize(10)
+  pdf.text(72.5, 15, 'SISTEMA DE GESTIÓN DE LA CALIDAD Y')
+  pdf.text(78.5, 20, 'SISTEMA DE CONTROL INTERNO')
 
-    pdf.setFontSize(12)
+  pdf.setFontSize(12)
 
-    // CIRCULAR
-    pdf.setFontType('bold')
-    pdf.text(96, 30, 'CIRCULAR')
+  // CIRCULAR
+  pdf.setFontType('bold')
+  pdf.text(96, 30, 'CIRCULAR')
 
-    pdf.setFontSize(10)
+  pdf.setFontSize(10)
 
-    // VERSION
-    pdf.rect(150, 10, 55, 15)
-    pdf.text(155, 18, 'Versión: 1')
+  // VERSION
+  pdf.rect(150, 10, 55, 15)
+  pdf.text(155, 18, 'Versión: 1')
 
-    // FECHA
-    pdf.rect(150, 25, 55, 15)
-    pdf.text(155, 33, 'FECHA: Junio 2011')
+  // FECHA
+  pdf.rect(150, 25, 55, 15)
+  pdf.text(155, 33, 'FECHA: Junio 2011')
 
-    // APOYO A LA GESTION INSTITUCIONAL
-    pdf.setFontType('normal')
-    pdf.rect(10, 40, 55, 15)
-    pdf.text(18, 46, 'APOYO A LA GESTIÓN')
-    pdf.text(23, 51, 'INSTITUCIONAL')
+  // APOYO A LA GESTION INSTITUCIONAL
+  pdf.setFontType('normal')
+  pdf.rect(10, 40, 55, 15)
+  pdf.text(18, 46, 'APOYO A LA GESTIÓN')
+  pdf.text(23, 51, 'INSTITUCIONAL')
 
-    // GESTION ADMINISTRATIVA
-    pdf.rect(65, 40, 85, 15)
-    pdf.text(85, 48, 'GESTIÓN ADMINISTRATIVA')
+  // GESTION ADMINISTRATIVA
+  pdf.rect(65, 40, 85, 15)
+  pdf.text(85, 48, 'GESTIÓN ADMINISTRATIVA')
 
-    // GESTION DOCUMENTAL ARCHIVO Y CORRESPONDECIA
-    pdf.rect(150, 40, 55, 15)
-    pdf.text(155.5, 44, 'GESTIÓN DOCUMENTAL,')
-    pdf.text(166, 48.5, 'ARCHIVO Y')
-    pdf.text(156, 53, 'CORRESPONDENCIA')
+  // GESTION DOCUMENTAL ARCHIVO Y CORRESPONDECIA
+  pdf.rect(150, 40, 55, 15)
+  pdf.text(155.5, 44, 'GESTIÓN DOCUMENTAL,')
+  pdf.text(166, 48.5, 'ARCHIVO Y')
+  pdf.text(156, 53, 'CORRESPONDENCIA')
 
-    pdf.setFontType('bold')
+  pdf.setFontType('bold')
 
-    //MACROPROCESO
-    pdf.rect(10, 55, 55, 7)
-    pdf.text(23.5, 59, 'Macro proceso')
+  //MACROPROCESO
+  pdf.rect(10, 55, 55, 7)
+  pdf.text(23.5, 59, 'Macro proceso')
 
-    // PROCESO
-    pdf.rect(65, 55, 85, 7)
-    pdf.text(103, 59, 'Proceso')
+  // PROCESO
+  pdf.rect(65, 55, 85, 7)
+  pdf.text(103, 59, 'Proceso')
 
-    // SUBPROCESO
-    pdf.rect(150, 55, 55, 7)
-    pdf.text(166, 59, 'Subproceso')
+  // SUBPROCESO
+  pdf.rect(150, 55, 55, 7)
+  pdf.text(166, 59, 'Subproceso')
 
-
-  }
 }
 
 export const calcularNumeracion = function (circ_id) {

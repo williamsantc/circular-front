@@ -30,6 +30,11 @@ export default {
           icon: 'icon-cursor'
         }
       ]
+    },
+    {
+      name: 'Gestionar Usuario',
+      url: '/usuario',
+      icon: 'icon-puzzle'
     }
     /*
     {

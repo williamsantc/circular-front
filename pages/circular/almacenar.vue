@@ -6,103 +6,122 @@
     <b-card-body>
       <b-row>
         <b-col md="6" order="2" order-sm="1">
-          <b-btn variant="outline-primary"
-                 @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
-                 aria-controls="collapseFilter">
-            <i class="fa fa-search" aria-hidden="true"></i> filtro de búsqueda 
-            <i :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')" aria-hidden="true"></i>
+          <b-btn
+            variant="outline-primary"
+            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
+            aria-controls="collapseFilter"
+          >
+            <i class="fa fa-search" aria-hidden="true"></i> filtro de búsqueda
+            <i
+              :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')"
+              aria-hidden="true"
+            ></i>
           </b-btn>
         </b-col>
         <b-col md="6" order="1" order-sm="2" align="right">
-          <b-btn variant="primary"
-                 @click="crudSettings.showModal = !crudSettings.showModal">
+          <b-btn variant="primary" @click="crudSettings.showModal = !crudSettings.showModal">
             <i class="fa fa-plus" aria-hidden="true"></i> Almacenar
-        </b-btn>
+          </b-btn>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
-       <br>
-          <h4 v-if="listaAlmacenar.length <= 0">No hay registros</h4>
-      <b-table v-else stacked="md"
-                   :items="listaAlmacenar" 
-                   :fields="fields"
-                   striped
-                   fixed
-                   :per-page="crudSettings.perPage"
-                   :current-page="crudSettings.currentPage"
-                   hover>
-            <template slot="circ_id" slot-scope="data">
-              {{ calcularNumeracion(data.item.circ_id) }}
-            </template>
+          <br>
+          <b-alert show variant="info" v-if="listaAlmacenar.length <= 0">No hay registros</b-alert>
+          <b-table
+            v-else
+            stacked="md"
+            :items="listaAlmacenar"
+            :fields="fields"
+            striped
+            fixed
+            :per-page="crudSettings.perPage"
+            :current-page="crudSettings.currentPage"
+            hover
+          >
+            <template slot="circ_id" slot-scope="data">{{ calcularNumeracion(data.item.circ_id) }}</template>
             <template slot="acciones" slot-scope="data">
-              <b-btn variant="primary" size="sm" 
-                      title="Modificar"
-                      class="mr-1"
-                      @click="sendModificar(data.item)">
+              <b-btn
+                variant="primary"
+                size="sm"
+                title="Modificar"
+                class="mr-1"
+                @click="sendModificar(data.item)"
+              >
                 <i class="fa fa-pencil" aria-hidden="true"></i>
               </b-btn>
-              <b-btn variant="danger" size="sm"
-              @click="eliminar(data.item.alma_id)" 
-                      title="Eliminar">
+              <b-btn
+                variant="danger"
+                size="sm"
+                @click="eliminar(data.item.alma_id)"
+                title="Eliminar"
+              >
                 <i class="fa fa-trash" aria-hidden="true"></i>
               </b-btn>
-              <b-btn  variant="success" 
-                      size="sm"
-                      title="Descargar"
-                      @click="descargarCircular(data.item)"
-                      class="ml-1">
+              <b-btn
+                variant="success"
+                size="sm"
+                title="Descargar"
+                @click="descargarCircular(data.item)"
+                class="ml-1"
+              >
                 <i class="fa fa-download" aria-hidden="true"></i>
               </b-btn>
             </template>
           </b-table>
         </b-col>
       </b-row>
-          <b-pagination v-if="listaAlmacenar.length > crudSettings.perPage"
-                        align="center"
-                        :total-rows="listaAlmacenar.length" 
-                        :per-page="crudSettings.perPage" 
-                        v-model="crudSettings.currentPage" />
-      <b-modal v-model="crudSettings.showModal"
-             :title="tituloFuncionlidad">
-      <b-row>
-        <b-col>
-          <b-form-group label="Circular a almacenar">
-            <multiselect v-model="circular" 
-                           :options="listaCircularSelect" 
-                           placeholder="Seleccione una opción" 
-                           label="trackBy"
-                           :show-labels="false"
-                           ref="circ_id"
-                           track-by="trackBy">
-              </multiselect>
-          </b-form-group>
-          <b-form-group label="Descripción para almacenar">
-            <b-form-textarea placeholder="Ingrese descripcion"
-                           :rows="6"
-                           no-resize
-                           @keydown.native="validarCantidadCaracteres($event, almacenar.form.alma_descripcion, 200)"
-                           ref="alma_descripcion"
-                           v-model="almacenar.form.alma_descripcion"
-                           :max-rows="6">
-
-          </b-form-textarea>
-          </b-form-group>
-          <b-form-group label="Cargar Circular">
-            <b-form-file v-model="almacenar.form.alma_file" 
-                         :state="Boolean(almacenar.form.alma_file)" 
-                         ref="alma_file"
-                         placeholder="Seleccione la circular a almacenar"
-                         accept="application/pdf"></b-form-file>
-          </b-form-group>
-        </b-col>
-      </b-row>
-      <div slot="modal-footer">
-        <b-btn class="float-right" variant="primary" @click="gestionarAlmacenar">
-          {{ crudSettings.msgBtn }}
-        </b-btn>
-      </div>
-    </b-modal>
+      <b-pagination
+        v-if="listaAlmacenar.length > crudSettings.perPage"
+        align="center"
+        :total-rows="listaAlmacenar.length"
+        :per-page="crudSettings.perPage"
+        v-model="crudSettings.currentPage"
+      />
+      <b-modal v-model="crudSettings.showModal" :title="tituloFuncionlidad">
+        <b-row>
+          <b-col>
+            <b-form-group label="Circular a almacenar">
+              <multiselect
+                v-model="circular"
+                :options="listaCircularSelect"
+                placeholder="Seleccione una opción"
+                label="trackBy"
+                :show-labels="false"
+                ref="circ_id"
+                track-by="trackBy"
+              ></multiselect>
+            </b-form-group>
+            <b-form-group label="Descripción para almacenar">
+              <b-form-textarea
+                placeholder="Ingrese descripcion"
+                :rows="6"
+                no-resize
+                @keydown.native="validarCantidadCaracteres($event, almacenar.form.alma_descripcion, 200)"
+                ref="alma_descripcion"
+                v-model="almacenar.form.alma_descripcion"
+                :max-rows="6"
+              ></b-form-textarea>
+            </b-form-group>
+            <b-form-group label="Cargar Circular">
+              <b-form-file
+                v-model="almacenar.form.alma_file"
+                :state="Boolean(almacenar.form.alma_file)"
+                ref="alma_file"
+                placeholder="Seleccione la circular a almacenar"
+                accept="application/pdf"
+              ></b-form-file>
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <div slot="modal-footer">
+          <b-btn
+            class="float-right"
+            variant="primary"
+            @click="gestionarAlmacenar"
+          >{{ crudSettings.msgBtn }}</b-btn>
+        </div>
+      </b-modal>
     </b-card-body>
     <b-card-footer>
       <br>
@@ -259,7 +278,10 @@ export default {
           // crea el elemento
           const link = document.createElement('a')
           link.href = url
-          link.setAttribute('download', 'circular'+ almacenar.circ_id + '_' + new Date().getTime() + '.pdf')
+          link.setAttribute(
+            'download',
+            'circular' + almacenar.circ_id + '_' + new Date().getTime() + '.pdf'
+          )
 
           // añade el elemento al cuerpo
           document.body.appendChild(link)

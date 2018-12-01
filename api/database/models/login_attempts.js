@@ -1,6 +1,6 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('login_attempts', {
     loat_id: {
       type: DataTypes.BIGINT,
@@ -21,6 +21,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'login_attempts'
-  });
+      tableName: 'login_attempts'
+    });
 };

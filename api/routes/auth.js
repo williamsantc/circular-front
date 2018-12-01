@@ -5,11 +5,12 @@ const path = require('path')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
 const CryptoJS = require('crypto-js');
+const jwtDecode = require('jwt-decode');
 
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
-const authSettings = require('../authSettings')
+import authSettings from '../authSettings'
 
 import { AuthMiddleware } from '../AuthMiddleware'
 
@@ -30,6 +31,7 @@ router.post('/get_token', function (req, res, next) {
 
       if (realPassword === usuario.usua_password) {
         let usuarioResp = {
+          userId: usuario.usua_id,
           documento: usuario.usua_documento,
           nombreCompleto: usuario.usua_apellido + ' ' + usuario.usua_nombre,
           usuario: usuario.usua_usuario,
@@ -46,12 +48,40 @@ router.post('/get_token', function (req, res, next) {
   }
 })
 
-router.get('/check_token', AuthMiddleware, function(req, res, next) {
+router.get('/check_token', AuthMiddleware, function (req, res, next) {
   res.status(200).send('OK')
 })
 
 router.post('/refresh_token', function (req, res, next) {
   // cuando los token mueran...
+  let authHeader = req.body.accessToken.replace('Bearer ', '').trim()
+
+  let user = ''
+
+  if (req.body.dataUsuario) {
+    user = req.body.dataUsuario
+  } else {
+    return res.status(403).send({ 'error': true, 'message': 'Invalid user.' });
+  }
+
+  // verifies secret and checks exp
+  jwt.verify(authHeader, authSettings.sign, function (err, decoded) {
+
+    if (err && err.name === 'TokenExpiredError') {
+
+      const token = jwt.sign({ dataUsuario: user }, authSettings.sign, { expiresIn: authSettings.expiresIn });
+
+      return res.status(200).send({ accessToken: token })
+
+    } else if (err) {
+
+      return res.status(403).send({ 'error': true, 'message': 'Invalid token.' });
+    } else {
+
+      return res.status(200).send({ valid: 'Token still alive.' })
+    }
+  });
+
 
 })
 

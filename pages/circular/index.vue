@@ -83,7 +83,7 @@
       <br>
       <b-row>
         <b-col>
-          <h4 v-if="listaCircular.length <= 0">No hay registros</h4>
+          <b-alert show variant="info" v-if="listaCircular.length <= 0">No hay registros</b-alert>
           <b-table
             v-else
             stacked="md"

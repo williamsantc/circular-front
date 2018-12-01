@@ -1,6 +1,6 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('responsable', {
     resp_id: {
       type: DataTypes.BIGINT,
@@ -24,6 +24,6 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   }, {
-    tableName: 'responsable'
-  });
+      tableName: 'responsable'
+    });
 };

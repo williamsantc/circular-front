@@ -1,6 +1,6 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('funcionalidad', {
     func_id: {
       type: DataTypes.BIGINT,
@@ -18,6 +18,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     }
   }, {
-    tableName: 'funcionalidad'
-  });
+      tableName: 'funcionalidad'
+    });
 };

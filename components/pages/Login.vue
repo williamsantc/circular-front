@@ -10,19 +10,37 @@
                   <h1>Iniciar sesión</h1>
                   <p class="text-muted">Ingrese con su usuario y contraseña</p>
                   <b-input-group class="mb-3">
-                    <b-input-group-prepend><b-input-group-text><i class="icon-user"></i></b-input-group-text></b-input-group-prepend>
-                    <b-form-input type="text" v-model="user" class="form-control" placeholder="nombre de usuario"/>
+                    <b-input-group-prepend>
+                      <b-input-group-text>
+                        <i class="icon-user"></i>
+                      </b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input
+                      type="text"
+                      v-model="user"
+                      class="form-control"
+                      placeholder="nombre de usuario"
+                    />
                   </b-input-group>
                   <b-input-group class="mb-3">
-                    <b-input-group-prepend><b-input-group-text><i class="icon-key"></i></b-input-group-text></b-input-group-prepend>
-                    <b-form-input type="password" v-model="pass" class="form-control" placeholder="contraseña"/>
+                    <b-input-group-prepend>
+                      <b-input-group-text>
+                        <i class="icon-key"></i>
+                      </b-input-group-text>
+                    </b-input-group-prepend>
+                    <b-form-input
+                      type="password"
+                      v-model="pass"
+                      class="form-control"
+                      placeholder="contraseña"
+                    />
                   </b-input-group>
                   <b-row>
-                    <b-col cols="6">
-                      
-                    </b-col>
+                    <b-col cols="6"></b-col>
                     <b-col cols="6" class="text-right">
-                      <b-button variant="primary" @click="ingresar"  class="px-4"><i class="fa fa-sign-in" aria-hidden="true"></i> Ingresar</b-button>
+                      <b-button variant="primary" @click="ingresar" class="px-4">
+                        <i class="fa fa-sign-in" aria-hidden="true"></i> Ingresar
+                      </b-button>
                     </b-col>
                   </b-row>
                 </b-form>
@@ -75,15 +93,18 @@ export default {
       }
 
       this.$store.dispatch('login', paypload).then(() => {
-        if(!this.isEmpty(this.$store.getters.accessToken)) {
-          this.$toastr.success('Bienvenido')
+        
+      })
+    },
+    cargarEnAplicacion: function () {
+      if(!this.isEmpty(this.$store.getters.accessToken)) {
+          this.$toastr.success('Bienvenido, ' + this.$store.getters.dataUsuario.nombreCompleto, 'Aplicación circular')
           this.$router.push('/circular')
         }
-      })
     }
   },
   created: function () {
-    
+    this.cargarEnAplicacion()
   }
     
 }

@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const authSettings = require('./authSettings');
+
+import authSettings from './authSettings';
 
 const isEmpty = function (element) {
   return (element === undefined || element === null || (typeof element === 'string' && element.trim() === ''))
@@ -16,7 +17,6 @@ export const AuthMiddleware = (req, res, next) => {
   }
 
   authHeader = authHeader.replace('Bearer ', '').trim()
-  console.log(authHeader)
 
   // verifies secret and checks exp
   jwt.verify(authHeader, authSettings.sign, function (err, decoded) {
@@ -30,8 +30,7 @@ export const AuthMiddleware = (req, res, next) => {
       return res.status(403).send({ 'error': true, 'message': 'Invalid token.' });
     }
     req.decoded = decoded;
-
-    res.set('custom-header', 'hi-there')
+    // res.set('custom-header', 'hi-there')
 
     next();
   });

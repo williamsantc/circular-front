@@ -1,6 +1,6 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('almacenar', {
     alma_id: {
       type: DataTypes.BIGINT,
@@ -29,6 +29,6 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   }, {
-    tableName: 'almacenar'
-  });
+      tableName: 'almacenar'
+    });
 };
