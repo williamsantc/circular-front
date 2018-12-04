@@ -18,6 +18,7 @@ export default {
     {
       name: 'Circular',
       icon: 'icon-cursor',
+      url: '/circular',
       children: [
         {
           name: 'Gestionar',
@@ -34,6 +35,11 @@ export default {
     {
       name: 'Gestionar Usuario',
       url: '/usuario',
+      icon: 'icon-puzzle'
+    },
+    {
+      name: 'Gestionar Funcionalidad',
+      url: '/funcionalidad',
       icon: 'icon-puzzle'
     }
     /*

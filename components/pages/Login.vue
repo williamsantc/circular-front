@@ -93,7 +93,9 @@ export default {
       }
 
       this.$store.dispatch('login', paypload).then(() => {
-        
+        this.$store.dispatch('cargarFuncionalidades').then(() => {
+          this.cargarEnAplicacion()
+        })
       })
     },
     cargarEnAplicacion: function () {

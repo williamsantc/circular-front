@@ -8,6 +8,13 @@ const Op = Sequelize.Op;
 router.get('/list', (req, res, next) => {
 
   let options = {
+    include: {
+      model: models.funcionalidad,
+      as: 'funcionalidad',
+      attributes: {
+        exclude: ['updatedAt', 'createdAt']
+      }
+    },
     attributes: { exclude: ['createdAt', 'updatedAt'] }
   }
 

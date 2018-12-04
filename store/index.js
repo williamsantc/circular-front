@@ -14,7 +14,8 @@ if (process.browser) {
 const getDefaultState = () => {
   return {
     accessToken: '',
-    dataUsuario: {}
+    dataUsuario: {},
+    funcionalidades: []
   }
 }
 
@@ -31,6 +32,9 @@ const createStore = () => {
       },
       RESET: function (state) {
         Object.assign(state, getDefaultState())
+      },
+      LOAD_FUNCIONALIDADES: function(state, funcionalidades) {
+        state.funcionalidades = funcionalidades
       }
     },
     actions: {
@@ -57,11 +61,20 @@ const createStore = () => {
           console.log(error.data)
         })
 
+      },
+      cargarFuncionalidades: function (context) {
+        return this.$axios.get('/api/funcionalidad/listar_funcionalidades').then(resp => {
+          context.commit('LOAD_FUNCIONALIDADES', resp.data)
+        }).catch(err => {
+          console.log(err.response.data)
+          context.commit('LOAD_FUNCIONALIDADES', [])
+        })
       }
     },
     getters: {
       accessToken: state => state.accessToken,
-      dataUsuario: state => state.dataUsuario
+      dataUsuario: state => state.dataUsuario,
+      funcionalidades: state => state.funcionalidades
     },
     plugins: [vuexLocalStorage.plugin]
   })

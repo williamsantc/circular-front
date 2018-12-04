@@ -14,4 +14,4 @@ Vue.use(vbMsgBox)
 
 Vue.component('tiny-mce', Editor)
   // register globally
-  Vue.component('multiselect', Multiselect)
+Vue.component('multiselect', Multiselect)

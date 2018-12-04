@@ -55,28 +55,23 @@
         hover
       >
         <template slot="acciones" slot-scope="data">
-          <b-row>
-            <b-col cols="1">
-              <b-btn
-                variant="primary"
-                size="sm"
-                title="Modificar"
-                @click="sendModificar(data.item)"
-              >
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-              </b-btn>
-            </b-col>
-            <b-col cols="1">
-              <b-btn
-                variant="danger"
-                size="sm"
-                @click="eliminarUsuario(data.item.usua_id)"
-                title="Eliminar"
-              >
-                <i class="fa fa-trash" aria-hidden="true"></i>
-              </b-btn>
-            </b-col>
-          </b-row>
+          <b-btn
+            variant="primary"
+            class="mr-1"
+            size="sm"
+            title="Modificar"
+            @click="sendModificar(data.item)"
+          >
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+          </b-btn>
+          <b-btn
+            variant="danger"
+            size="sm"
+            @click="eliminarUsuario(data.item.usua_id)"
+            title="Eliminar"
+          >
+            <i class="fa fa-trash" aria-hidden="true"></i>
+          </b-btn>
         </template>
       </b-table>
       <b-pagination
@@ -159,7 +154,7 @@ const USUARIO = {
       required: true,
       msg: 'Correo electrónico'
     },
-    listaRoles: {
+    rol: {
       type: 'Array',
       required: true,
       msg: 'Roles'
@@ -203,12 +198,45 @@ export default {
     }
   },
   methods: {
+    eliminarUsuario: function(usua_id) {
+      return this.$confirm({
+        title: this.tituloFuncionlidad,
+        content: '¿Está seguro que desea eliminar el usuario?'
+      })
+        .then(success => {
+          return this.$axios
+            .$post('/api/usuario/eliminar', { usua_id: usua_id })
+            .then(resp => {
+              this.$toastr[resp.variant](resp.msg, 'OK')
+            })
+            .catch(error => {
+              this.$toastr.error(error.response.data.msg, 'ERROR')
+            })
+        })
+        .catch(cancel => {
+          this.$toastr.info('Solicitud cancelada', 'INFO')
+        })
+        .then(() => {
+          this.getUsuariosWs()
+        })
+    },
     gestionarUsuario: function() {
       if (!this.validarCampos(this.usuario)) {
         return
       }
 
-      console.log(this.usuario)
+      this.$axios
+        .$post('/api/usuario/gestionar', this.usuario.form)
+        .then(resp => {
+          this.$toastr.success(resp.msg, 'OK')
+          this.crudSettings.showModal = !this.crudSettings.showModal
+        })
+        .catch(error => {
+          console.log(error.response.data)
+        })
+        .then(() => {
+          this.getUsuariosWs()
+        })
     },
     getRolesWs: function() {
       return this.$axios

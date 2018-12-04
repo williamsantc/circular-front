@@ -49,28 +49,23 @@
             hover
           >
             <template slot="acciones" slot-scope="data">
-              <b-row>
-                <b-col cols="1">
-                  <b-btn
-                    variant="primary"
-                    size="sm"
-                    title="Modificar"
-                    @click="sendModificar(data.item)"
-                  >
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                  </b-btn>
-                </b-col>
-                <b-col cols="1">
-                  <b-btn
-                    variant="danger"
-                    size="sm"
-                    @click="eliminarArea(data.item.enti_id)"
-                    title="Eliminar"
-                  >
-                    <i class="fa fa-trash" aria-hidden="true"></i>
-                  </b-btn>
-                </b-col>
-              </b-row>
+              <b-btn
+                variant="primary"
+                size="sm"
+                title="Modificar"
+                class="mr-1"
+                @click="sendModificar(data.item)"
+              >
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+              </b-btn>
+              <b-btn
+                variant="danger"
+                size="sm"
+                @click="eliminarArea(data.item.enti_id)"
+                title="Eliminar"
+              >
+                <i class="fa fa-trash" aria-hidden="true"></i>
+              </b-btn>
             </template>
           </b-table>
         </b-col>

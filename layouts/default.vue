@@ -35,7 +35,7 @@
       <AppSidebar fixed>
         <SidebarHeader/>
         <SidebarForm/>
-        <SidebarNav :navItems="nav"/>
+        <SidebarNav :navItems="$store.getters.funcionalidades"/>
         <SidebarFooter/>
         <SidebarMinimizer/>
       </AppSidebar>
@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import nav from '@/_nav'
+// import nav from '@/_nav'
 import { Header as AppHeader, SidebarToggler, Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav, Aside as AppAside, AsideToggler, Footer as TheFooter, Breadcrumb } from '@coreui/vue'
 import DefaultAside from '@/components/default/DefaultAside'
 import DefaultHeaderDropdownAccnt from '@/components/default/DefaultHeaderDropdownAccnt'
@@ -90,7 +90,7 @@ export default {
   },
   data () {
     return {
-      nav: nav.items
+      // nav: nav.items
     }
   },
   computed: {
@@ -102,7 +102,8 @@ export default {
     }
   },
   beforeCreate: function () {
-    this.$axios.get('/api/auth/check_token')
+    // this.$axios.get('/api/auth/check_token')
+    
   },
 }
 </script>

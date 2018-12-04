@@ -10,11 +10,17 @@ module.exports = function (sequelize, DataTypes) {
     },
     usua_nombre: {
       type: DataTypes.STRING(100),
-      allowNull: false
+      allowNull: false,
+      set: function (val) {
+        this.setDataValue('usua_nombre', val.toUpperCase());
+      }
     },
     usua_apellido: {
       type: DataTypes.STRING(100),
-      allowNull: false
+      allowNull: false,
+      set: function (val) {
+        this.setDataValue('usua_apellido', val.toUpperCase());
+      }
     },
     usua_documento: {
       type: DataTypes.STRING(20),
@@ -23,12 +29,12 @@ module.exports = function (sequelize, DataTypes) {
     },
     usua_usuario: {
       type: DataTypes.STRING(20),
-      allowNull: false,
+      allowNull: true,
       unique: true
     },
     usua_password: {
       type: DataTypes.STRING(180),
-      allowNull: false
+      allowNull: true
     },
     usua_correo: {
       type: DataTypes.STRING(20),

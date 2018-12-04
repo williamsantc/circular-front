@@ -253,9 +253,6 @@ export default {
             .catch(error => {
               this.$toastr.error(error.response.data.msg, 'ERROR')
             })
-            .then(() => {
-              this.getEntidadesWs()
-            })
         })
         .catch(cancel => {
           this.$toastr.info('Solicitud cancelada', 'INFO')

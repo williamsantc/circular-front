@@ -2,8 +2,9 @@
   <AppHeaderDropdown right no-caret>
     <template slot="header">
       <img
-        src="~/static/img/avatars/user.jpg"
+        src="~/static/img/avatars/user.png"
         class="img-avatar"
+        :title="$store.getters.dataUsuario.nombreCompleto"
         alt="Usuario" />
     </template>\
     <template slot="dropdown">

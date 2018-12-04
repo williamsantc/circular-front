@@ -289,7 +289,7 @@ const validarForm = {
             ) {
               this.$toastr.error(
                 'No hay elementos en la lista: ' + config[values].msg
-              )
+              , 'Campos incompletos')
               return false
             }
             break
@@ -441,7 +441,7 @@ const validarForm = {
             if (config[values].hasOwnProperty('lista')) {
               let checkModificacion = false
               config[values].lista.forEach(element => {
-                if (element.value === form[values]) {
+                if (element.value === form[values] || element === form[values]) {
                   checkModificacion = true
                 }
               })

@@ -16,6 +16,22 @@ module.exports = function (sequelize, DataTypes) {
     func_url: {
       type: DataTypes.STRING(100),
       allowNull: false
+    },
+    func_tipo: {
+      type: DataTypes.STRING(45),
+      allowNull: false
+    },
+    func_icono: {
+      type: DataTypes.STRING(45),
+      allowNull: false
+    },
+    func_padre: {
+      type: DataTypes.BIGINT,
+      allowNull: true
+    },
+    func_orden: {
+      type: DataTypes.STRING(2),
+      allowNull: false
     }
   }, {
       tableName: 'funcionalidad'
