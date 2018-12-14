@@ -15,7 +15,9 @@ const getDefaultState = () => {
   return {
     accessToken: '',
     dataUsuario: {},
-    funcionalidades: []
+    funcionalidades: [],
+    funcionalidadesPorRol: [],
+    rolActual: null
   }
 }
 
@@ -33,8 +35,17 @@ const createStore = () => {
       RESET: function (state) {
         Object.assign(state, getDefaultState())
       },
-      LOAD_FUNCIONALIDADES: function(state, funcionalidades) {
-        state.funcionalidades = funcionalidades
+      LOAD_FUNCIONALIDADES: function (state, funcionalidadesPorRol) {
+        state.funcionalidadesPorRol = funcionalidadesPorRol
+        state.funcionalidades = state.funcionalidadesPorRol[0].nav
+        state.rolActual = state.funcionalidadesPorRol[0].rol_id
+      },
+      SET_CURRENT_ROL: function (state, rol) {
+        if (!rol) {
+          return
+        }
+        state.rolActual = rol
+        state.funcionalidades = state.funcionalidadesPorRol.filter(funcRol => funcRol.rol_id === rol)[0].nav
       }
     },
     actions: {
@@ -63,18 +74,22 @@ const createStore = () => {
 
       },
       cargarFuncionalidades: function (context) {
-        return this.$axios.get('/api/funcionalidad/listar_funcionalidades').then(resp => {
+        return this.$axios.get('/api/funcionalidad/listar_nav').then(resp => {
           context.commit('LOAD_FUNCIONALIDADES', resp.data)
         }).catch(err => {
           console.log(err.response.data)
           context.commit('LOAD_FUNCIONALIDADES', [])
         })
+      },
+      cambiarRol: function (context, rol) {
+        context.commit('SET_CURRENT_ROL', rol)
       }
     },
     getters: {
       accessToken: state => state.accessToken,
       dataUsuario: state => state.dataUsuario,
-      funcionalidades: state => state.funcionalidades
+      funcionalidades: state => state.funcionalidades,
+      rolActual: state => state.rolActual
     },
     plugins: [vuexLocalStorage.plugin]
   })

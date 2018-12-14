@@ -12,7 +12,7 @@
             @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
             aria-controls="collapseFilter"
           >
-            <i class="fa fa-search" aria-hidden="true"></i> filtro de búsqueda
+            <i class="fa fa-search" aria-hidden="true"></i> Filtrar búsqueda
             <i
               :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')"
               aria-hidden="true"

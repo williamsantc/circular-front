@@ -1,7 +1,7 @@
 {
-  "name": "circular",
+  "name": "circulapp",
   "version": "1.0.0",
-  "description": "proyecto circular",
+  "description": "App Para el manejo y gestión de circulares",
   "author": "William Santos",
   "private": true,
   "scripts": {
@@ -59,6 +59,7 @@
     "sequelize-cli": "^5.3.0",
     "simple-line-icons": "^2.4.1",
     "toastr": "^2.1.4",
+    "v-calendar-scheduler": "^0.7.4",
     "vue-chartjs": "^3.4.0",
     "vue-msgbox": "^0.2.14",
     "vue-multiselect": "^2.1.3",

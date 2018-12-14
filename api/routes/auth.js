@@ -18,8 +18,18 @@ router.post('/get_token', function (req, res, next) {
   let credentials = req.body
   if (credentials && credentials.user && credentials.pass) {
     models.usuario.findOne({
+      include: {
+        model: models.rol,
+        as: 'rol',
+        attributes: {
+          exclude: ['updatedAt', 'createdAt']
+        }
+      },
       where: {
         usua_usuario: credentials.user
+      },
+      attributes: {
+        exclude: ['updatedAt', 'createdAt']
       }
     }).then(usuario => {
       if (!usuario) {
@@ -37,9 +47,9 @@ router.post('/get_token', function (req, res, next) {
           usuario: usuario.usua_usuario,
           correo: usuario.usua_correo
         }
-        let dateSign = new Date()
-        const token = jwt.sign({ dataUsuario: usuarioResp }, authSettings.sign, { expiresIn: authSettings.expiresIn });
-        res.status(200).send({ accessToken: token, dataUsuario: usuarioResp })
+        let dateSign = authSettings.sign + (new Date()).getDate() + ((new Date()).getMonth() + 1) + (new Date()).getFullYear()
+        const token = jwt.sign({ dataUsuario: usuario }, dateSign, { expiresIn: authSettings.expiresIn });
+        res.status(200).send({ accessToken: token, dataUsuario: usuario })
       } else {
         res.status(403).send('contraseña incorrecta')
       }
@@ -64,12 +74,14 @@ router.post('/refresh_token', function (req, res, next) {
     return res.status(403).send({ 'error': true, 'message': 'Invalid user.' });
   }
 
+  let dateSign = authSettings.sign + (new Date()).getDate() + ((new Date()).getMonth() + 1) + (new Date()).getFullYear()
   // verifies secret and checks exp
-  jwt.verify(authHeader, authSettings.sign, function (err, decoded) {
+  jwt.verify(authHeader, dateSign, function (err, decoded) {
 
     if (err && err.name === 'TokenExpiredError') {
 
-      const token = jwt.sign({ dataUsuario: user }, authSettings.sign, { expiresIn: authSettings.expiresIn });
+
+      const token = jwt.sign({ dataUsuario: user }, dateSign, { expiresIn: authSettings.expiresIn });
 
       return res.status(200).send({ accessToken: token })
 

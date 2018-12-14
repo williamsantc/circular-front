@@ -1,34 +1,28 @@
 <template>
   <div class="app">
     <AppHeader fixed>
-      <SidebarToggler 
-        class="d-lg-none" 
-        display="md" 
-        mobile />
-      <b-link 
-        class="navbar-brand" 
-        to="/">
-        <img 
-          class="navbar-brand-full" 
-          src="@/static/img/logo.png" 
-          width="89" 
-          height="25" 
-          alt="Asimilación Ing. Sistemas">
-        <img 
-          class="navbar-brand-minimized" 
-          src="@/static/img/logo-symbol.png" 
-          width="30" 
-          height="30" 
-          alt="Asimilación Ing. Sistemas">
+      <SidebarToggler class="d-lg-none" display="md" mobile/>
+      <b-link class="navbar-brand" to="#">
+        <img
+          class="navbar-brand-full"
+          src="@/static/img/logo.png"
+          width="89"
+          height="25"
+          alt="Asimilación Ing. Sistemas"
+        >
+        <img
+          class="navbar-brand-minimized"
+          src="@/static/img/logo-symbol.png"
+          width="30"
+          height="30"
+          alt="Asimilación Ing. Sistemas"
+        >
       </b-link>
-      <SidebarToggler 
-        class="d-md-down-none" 
-        display="lg" />
+      <SidebarToggler class="d-md-down-none" display="lg"/>
       <b-navbar-nav class="ml-auto">
-        
-        <DefaultHeaderDropdownAccnt/>
+        <DefaultHeaderDropdownAccnt @change-rol-request="toggleRol"/>
       </b-navbar-nav>
-      
+
       <!--<AsideToggler class="d-lg-none" mobile />-->
     </AppHeader>
     <div class="app-body">
@@ -61,12 +55,28 @@
         <a href="https://coreui.io">CoreUI for Vue</a>
       </div>
     </TheFooter>
+    <b-modal size="sm" hide-footer v-model="modalShow" title="Cambiar Rol">
+      <b-select v-model="rol_id" :options="selectRol"></b-select>
+    </b-modal>
   </div>
 </template>
 
 <script>
 // import nav from '@/_nav'
-import { Header as AppHeader, SidebarToggler, Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav, Aside as AppAside, AsideToggler, Footer as TheFooter, Breadcrumb } from '@coreui/vue'
+import {
+  Header as AppHeader,
+  SidebarToggler,
+  Sidebar as AppSidebar,
+  SidebarFooter,
+  SidebarForm,
+  SidebarHeader,
+  SidebarMinimizer,
+  SidebarNav,
+  Aside as AppAside,
+  AsideToggler,
+  Footer as TheFooter,
+  Breadcrumb
+} from '@coreui/vue'
 import DefaultAside from '@/components/default/DefaultAside'
 import DefaultHeaderDropdownAccnt from '@/components/default/DefaultHeaderDropdownAccnt'
 
@@ -88,22 +98,46 @@ export default {
     SidebarNav,
     SidebarMinimizer
   },
-  data () {
+  data() {
     return {
       // nav: nav.items
+      modalShow: false
     }
   },
   computed: {
-    name () {
+    rol_id: {
+      set: function(newValue) {
+        this.$store.dispatch('cambiarRol', newValue)
+        this.modalShow = false
+      },
+      get: function() {
+        return this.$store.getters.rolActual
+      }
+    },
+    name() {
       return this.$route.name
     },
-    list () {
-      return this.$route.matched.filter(route => route.name || route.meta.label )
+    list() {
+      return this.$route.matched.filter(route => route.name || route.meta.label)
+    },
+    selectRol: function() {
+      if (!this.$store.getters.dataUsuario.rol) {
+        return []
+      }
+      return this.$store.getters.dataUsuario.rol.map(rol => ({
+        text: rol.rol_descripcion,
+        value: rol.rol_id
+      }))
     }
   },
-  beforeCreate: function () {
-    // this.$axios.get('/api/auth/check_token')
-    
+  methods: {
+    toggleRol: function() {
+      this.modalShow = true
+      // this.$alert()
+    }
   },
+  created: function() {
+    // this.$axios.get('/api/auth/check_token')
+  }
 }
 </script>

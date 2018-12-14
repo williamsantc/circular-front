@@ -100,7 +100,7 @@ export default {
     },
     cargarEnAplicacion: function () {
       if(!this.isEmpty(this.$store.getters.accessToken)) {
-          this.$toastr.success('Bienvenido, ' + this.$store.getters.dataUsuario.nombreCompleto, 'Aplicación circular')
+          this.$toastr.success('Bienvenido', 'Aplicación circular')
           this.$router.push('/circular')
         }
     }

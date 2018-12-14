@@ -18,8 +18,10 @@ export const AuthMiddleware = (req, res, next) => {
 
   authHeader = authHeader.replace('Bearer ', '').trim()
 
+  let dateSign = authSettings.sign + (new Date()).getDate() + ((new Date()).getMonth() + 1) + (new Date()).getFullYear()
+
   // verifies secret and checks exp
-  jwt.verify(authHeader, authSettings.sign, function (err, decoded) {
+  jwt.verify(authHeader, dateSign, function (err, decoded) {
     if (err) {
       console.log(err.name)
     }

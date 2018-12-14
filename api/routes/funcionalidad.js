@@ -37,10 +37,7 @@ router.get('/list', (req, res, next) => {
   })
 });
 
-router.get('/listar_funcionalidades', (req, res, next) => {
-
-  // Por ahora todas las func
-
+router.get('/listar_func_hijas', (req, res, next) => {
   let options = {
     include: {
       model: models.funcionalidad,
@@ -61,34 +58,107 @@ router.get('/listar_funcionalidades', (req, res, next) => {
   models.funcionalidad.findAll(options).then(funcs => {
     let funcsFiltered = funcs.filter(func => func.func_padre === null)
 
-    let nav = []
+    res.status(200).send(funcsFiltered)
+  }).catch(error => {
+    res.status(500).send(error)
+  })
+})
 
-    funcsFiltered.forEach(funcFil => {
-      let funcNav = {
-        name: funcFil.func_descripcion,
-        url: funcFil.func_url,
-        icon: funcFil.func_icono
+router.get('/listar_nav', (req, res, next) => {
+
+  let user_id = req.decoded.dataUsuario.usua_id
+
+  
+  // Por ahora todas las func
+
+  let options = {
+    include: {
+      model: models.funcionalidad,
+      as: 'hijas',
+      attributes: {
+        exclude: ['updatedAt', 'createdAt'],
+        order: [
+          ['func_orden', 'ASC']
+        ]
       }
+    },
+    attributes: { exclude: ['createdAt', 'updatedAt'] },
+    order: [
+      ['func_orden', 'ASC']
+    ]
+  }
 
-      if (funcFil.hijas.length > 0) {
-        funcNav.children = []
+  models.usuario.findOne({
+    include: {
+      model: models.rol,
+      as: 'rol',
+      attributes: {
+        exclude: ['updatedAt', 'createdAt']
+      },
+      include: {
+        model: models.funcionalidad,
+        as: 'funcionalidad',
+        attributes: {
+          exclude: ['updatedAt', 'createdAt']
+        },
+        include: {
+          model: models.funcionalidad,
+          as: 'hijas',
+          attributes: {
+            exclude: ['updatedAt', 'createdAt'],
+            order: [
+              ['func_orden', 'ASC']
+            ]
+          }
+        }
       }
+    },
+    where: {
+      usua_id: user_id
+    }
+  }).then(user => {
 
-      funcFil.hijas.forEach(funcHija => {
-        let funcNavHija = {
-          name: funcHija.func_descripcion,
-          url: funcHija.func_url,
-          icon: funcHija.func_icono
+    let rolFuncionalidad = []
+
+    user.rol.forEach(rol => {
+
+      let funcsFiltered = rol.funcionalidad.filter(func => func.func_padre === null)
+
+      let nav = []
+
+      funcsFiltered.forEach(funcFil => {
+        let funcNav = {
+          name: funcFil.func_descripcion,
+          url: funcFil.func_url,
+          icon: funcFil.func_icono
         }
 
-        funcNav.children.push(funcNavHija)
+        if (funcFil.hijas.length > 0) {
+          funcNav.children = []
+        }
+
+        funcFil.hijas.forEach(funcHija => {
+          let funcNavHija = {
+            name: funcHija.func_descripcion,
+            url: funcHija.func_url,
+            icon: funcHija.func_icono
+          }
+
+          funcNav.children.push(funcNavHija)
+        })
+
+        nav.push(funcNav)
       })
 
-      nav.push(funcNav)
+      rolFuncionalidad.push({ rol_id: rol.rol_id, nav: nav })
+
     })
 
-    res.status(200).send(nav)
+
+
+    res.status(200).send(rolFuncionalidad)
   }).catch(error => {
+    console.log(error)
     res.status(500).send(error)
   })
 });
