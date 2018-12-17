@@ -21,6 +21,7 @@
     "@coreui/vue": "^2.0.0",
     "@nuxtjs/auth": "^4.5.3",
     "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/pwa": "^2.6.0",
     "@tinymce/tinymce-vue": "^1.1.0",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.1.3",

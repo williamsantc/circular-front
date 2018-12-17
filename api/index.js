@@ -15,6 +15,7 @@ const almaMultiRouter = require('./routes/almacenar_multipart');
 const almaPLainRouter = require('./routes/almacenar_plain');
 const authRouter = require('./routes/auth');
 const usuarioRouter = require('./routes/usuario');
+const usuarioExcludedRouter = require('./routes/usuarioExcluded');
 const rolRouter = require('./routes/rol');
 const funcionalidadRouter = require('./routes/funcionalidad');
 
@@ -33,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Import API Routes, las rutas que requieren verifiacion de token, se envía el middleware
 app.use('/auth', authRouter);
+app.use('/usuario_excluded', usuarioExcludedRouter);
 
 app.use('/area', AuthMiddleware, areaRouter);
 app.use('/entidad', AuthMiddleware, entidadRouter);

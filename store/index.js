@@ -46,6 +46,7 @@ const createStore = () => {
         }
         state.rolActual = rol
         state.funcionalidades = state.funcionalidadesPorRol.filter(funcRol => funcRol.rol_id === rol)[0].nav
+        this.$router.push('/bienvenido')
       }
     },
     actions: {

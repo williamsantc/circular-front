@@ -65,7 +65,16 @@
             <i class="fa fa-pencil" aria-hidden="true"></i>
           </b-btn>
           <b-btn
+            variant="warning"
+            size="sm"
+            @click="reestablecerCredenciales(data.item.usua_id)"
+            title="Reestablecer Credenciales"
+          >
+            <i class="icon-reload" aria-hidden="true"></i>
+          </b-btn>
+          <b-btn
             variant="danger"
+            class="ml-1"
             size="sm"
             @click="eliminarUsuario(data.item.usua_id)"
             title="Eliminar"
@@ -97,6 +106,10 @@
         <b-form-group label="Roles:">
           <b-form-checkbox-group v-model="usuario.form.rol" :options="listaRoles"></b-form-checkbox-group>
         </b-form-group>
+        <p>
+          Para la asignación de credenciales, cada usuario debe realizarlo desde
+          <b>{{ url }}/registrarse</b>
+        </p>
         <div slot="modal-footer">
           <b-btn
             class="float-right"
@@ -168,6 +181,9 @@ const FILTRO = {
 }
 
 export default {
+  asyncData({ req, res }) {
+    return { url: process.env.baseUrl }
+  },
   mixins: [validarForm],
   data: function() {
     return {
@@ -198,6 +214,27 @@ export default {
     }
   },
   methods: {
+    reestablecerCredenciales: function(usua_id) {
+      return this.$confirm({
+        title: this.tituloFuncionlidad,
+        content: '¿Desea Reestablecer las credenciales de este usuario?'
+      })
+        .then(resp => {
+          return this.$axios
+            .post('/api/usuario/reestablecer_credenciales', {
+              usua_id: usua_id
+            })
+            .then(resp => {
+              this.$toastr.success(resp.data, 'OK')
+            })
+            .catch(err => {
+              this.$toastr.err(err.response.data, 'ERROR')
+            })
+        })
+        .catch(err => {
+          console.log('err')
+        })
+    },
     eliminarUsuario: function(usua_id) {
       return this.$confirm({
         title: this.tituloFuncionlidad,
@@ -205,15 +242,16 @@ export default {
       })
         .then(success => {
           return this.$axios
-            .$post('/api/usuario/eliminar', { usua_id: usua_id })
+            .post('/api/usuario/eliminar', { usua_id: usua_id })
             .then(resp => {
-              this.$toastr[resp.variant](resp.msg, 'OK')
+              this.$toastr.success(resp.data, 'OK')
             })
             .catch(error => {
-              this.$toastr.error(error.response.data.msg, 'ERROR')
+              this.$toastr.error(error.response.data, 'ERROR')
             })
         })
         .catch(cancel => {
+          return null
           this.$toastr.info('Solicitud cancelada', 'INFO')
         })
         .then(() => {

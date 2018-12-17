@@ -71,8 +71,8 @@ db.funcionalidad.belongsToMany(db.rol, {
   }, foreignKey: 'func_id', as: 'rol'
 });
 
-db.funcionalidad.belongsTo(db.funcionalidad, { foreignKey: 'func_padre', as: 'padre'});
-db.funcionalidad.hasMany(db.funcionalidad, { foreignKey: 'func_padre', as: 'hijas'});
+db.funcionalidad.belongsTo(db.funcionalidad, { foreignKey: 'func_padre', as: 'padre' });
+db.funcionalidad.hasMany(db.funcionalidad, { foreignKey: 'func_padre', as: 'hijas' });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

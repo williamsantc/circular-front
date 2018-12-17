@@ -51,6 +51,9 @@ module.exports = {
     '~/plugins/axios',
     '~/plugins/installer'
   ],
+  env: {
+    baseUrl: process.env.BASE_URL || 'https://www.expresostachira.com.ve'
+  },
 
   /*
   ** Nuxt.js modules
@@ -61,14 +64,21 @@ module.exports = {
     // Doc: https://bootstrap-vue.js.org/docs/
     'bootstrap-vue/nuxt',
     // Doc: https://github.com/nuxt-community/auth-module
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    // Doc: https://pwa.nuxtjs.org
+    '@nuxtjs/pwa'
   ],
+  manifest: {
+    name: 'CirculApp',
+    short_name: 'CirculApp',
+    lang: 'es'
+  },
   /*
   ** Axios module configuration
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    baseURL: process.env.BASE_URL || 'http://localhost:3000/'
+    baseURL: process.env.BASE_URL || 'https://www.expresostachira.com.ve/'
   },
   /*
   auth: {
