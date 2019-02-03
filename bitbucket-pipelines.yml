@@ -6,12 +6,11 @@
 pipelines:
   default:
     - step:
-        name: install dependencies and build
+        name: nuxt build
         image: node:10.15.0
         caches:
           - node
         script:
-          - npm install
           - npm run build
     - step:
         name: Deploy to GCloud
