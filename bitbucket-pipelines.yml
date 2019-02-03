@@ -13,7 +13,9 @@ pipelines:
         script:
           - npm install 
           - npm run build
-          - ls -a
+        artifacts: # defining the artifacts to be passed to each future step.
+          - dist/**
+          - .nuxt/**
     - step:
         name: Deploy to GCloud
         deployment: production   # set to test, staging or production
@@ -22,6 +24,5 @@ pipelines:
         script:
           - echo $GCLOUD_API_KEYFILE | base64 --decode --ignore-garbage > ./gcloud-api-key.json
           - gcloud auth activate-service-account --key-file gcloud-api-key.json
-          - ls -a
           - gcloud config set project $GCLOUD_PROJECT
           - gcloud -q app deploy app.yaml
