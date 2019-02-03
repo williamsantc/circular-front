@@ -11,6 +11,8 @@ pipelines:
         caches:
           - node
         script:
+          - pwd
+          - ls -al
           - npm install -g nuxt
           - npm install 
           - npm run build
