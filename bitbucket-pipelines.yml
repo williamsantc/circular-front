@@ -12,6 +12,7 @@ pipelines:
           - node
         script:
           - npm install -g nuxt
+          - npm install 
           - npm run build
     - step:
         name: Deploy to GCloud
