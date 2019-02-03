@@ -23,7 +23,7 @@ export const AuthMiddleware = (req, res, next) => {
   // verifies secret and checks exp
   jwt.verify(authHeader, dateSign, function (err, decoded) {
     if (err) {
-      console.log(err.name)
+      console.error(err.name)
     }
 
     if (err && err.name === 'TokenExpiredError') {
