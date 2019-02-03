@@ -11,6 +11,7 @@ pipelines:
         caches:
           - node
         script:
+          - npm install -g nuxt
           - npm run build
     - step:
         name: Deploy to GCloud
