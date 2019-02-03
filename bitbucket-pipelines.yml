@@ -11,8 +11,8 @@ pipelines:
         caches:
           - node
         script:
-          - pwd
-          - ls -al
+          - npm config set registry "http://registry.npmjs.org"
+          - npm config set strict-ssl false
           - npm install -g nuxt
           - npm install 
           - npm run build
