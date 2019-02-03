@@ -15,9 +15,12 @@
   },
   "production": {
     "username": "root",
-    "password": "@xataka24",
+    "password": "@Xataka24?",
     "database": "circular",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "host": "localhost",
+    "dialect": "mysql",
+    "dialectOptions": {
+    "socketPath": "/cloudsql/circularv2:us-central1:circularv2"
+    }
   }
 }

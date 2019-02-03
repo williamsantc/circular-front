@@ -52,7 +52,7 @@ module.exports = {
     '~/plugins/installer'
   ],
   env: {
-    baseUrl: process.env.BASE_URL || 'https://www.expresostachira.com.ve'
+    baseUrl: process.env.BASE_URL || 'https://circularv2.appspot.com/'
   },
 
   /*
@@ -78,7 +78,7 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    baseURL: process.env.BASE_URL || 'https://www.expresostachira.com.ve/'
+    baseURL: process.env.BASE_URL || 'https://circularv2.appspot.com/'
   },
   /*
   auth: {
