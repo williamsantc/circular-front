@@ -1,67 +1,66 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const createError = require('http-errors');
-const cors = require('cors');
-const path = require('path');
-const logger = require('morgan');
+const express = require('express')
+const cookieParser = require('cookie-parser')
+const createError = require('http-errors')
+const cors = require('cors')
+const path = require('path')
+const logger = require('morgan')
 import { AuthMiddleware } from './AuthMiddleware'
 
 // Require API routes
-const areaRouter = require('./routes/area');
-const entidadRouter = require('./routes/entidad');
-const responsableRouter = require('./routes/responsable');
-const circularRouter = require('./routes/circular');
-const almaMultiRouter = require('./routes/almacenar_multipart');
-const almaPLainRouter = require('./routes/almacenar_plain');
-const authRouter = require('./routes/auth');
-const usuarioRouter = require('./routes/usuario');
-const usuarioExcludedRouter = require('./routes/usuarioExcluded');
-const rolRouter = require('./routes/rol');
-const funcionalidadRouter = require('./routes/funcionalidad');
+const areaRouter = require('./routes/area')
+const entidadRouter = require('./routes/entidad')
+const responsableRouter = require('./routes/responsable')
+const circularRouter = require('./routes/circular')
+const almaMultiRouter = require('./routes/almacenar_multipart')
+const almaPLainRouter = require('./routes/almacenar_plain')
+const authRouter = require('./routes/auth')
+const usuarioRouter = require('./routes/usuario')
+const usuarioExcludedRouter = require('./routes/usuarioExcluded')
+const rolRouter = require('./routes/rol')
+const funcionalidadRouter = require('./routes/funcionalidad')
 
 // Create express instnace
 const app = express()
 
 // enable CORS
-app.use(cors());
-app.options('*', cors());
+app.use(cors())
+app.options('*', cors())
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(logger('dev'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(express.static(path.join(__dirname, 'public')))
 
 // Import API Routes, las rutas que requieren verifiacion de token, se envía el middleware
-app.use('/auth', authRouter);
-app.use('/usuario_excluded', usuarioExcludedRouter);
+app.use('/auth', authRouter)
+app.use('/usuario_excluded', usuarioExcludedRouter)
 
-app.use('/area', AuthMiddleware, areaRouter);
-app.use('/entidad', AuthMiddleware, entidadRouter);
-app.use('/responsable', AuthMiddleware, responsableRouter);
-app.use('/circular', AuthMiddleware, circularRouter);
-app.use('/almacenar_multi', AuthMiddleware, almaMultiRouter);
-app.use('/almacenar_plain', AuthMiddleware, almaPLainRouter);
-app.use('/usuario', AuthMiddleware, usuarioRouter);
-app.use('/rol', AuthMiddleware, rolRouter);
-app.use('/funcionalidad', AuthMiddleware, funcionalidadRouter);
-
+app.use('/area', AuthMiddleware, areaRouter)
+app.use('/entidad', AuthMiddleware, entidadRouter)
+app.use('/responsable', AuthMiddleware, responsableRouter)
+app.use('/circular', AuthMiddleware, circularRouter)
+app.use('/almacenar_multi', AuthMiddleware, almaMultiRouter)
+app.use('/almacenar_plain', AuthMiddleware, almaPLainRouter)
+app.use('/usuario', AuthMiddleware, usuarioRouter)
+app.use('/rol', AuthMiddleware, rolRouter)
+app.use('/funcionalidad', AuthMiddleware, funcionalidadRouter)
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
+app.use(function(req, res, next) {
+  next(createError(404))
+})
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function(err, req, res, next) {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.message = err.message
+  res.locals.error = req.app.get('env') === 'development' ? err : {}
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+  res.status(err.status || 500)
+  res.render('error')
+})
 
 // Export the server middleware
 module.exports = {

@@ -5,37 +5,54 @@
     </b-card-header>
     <b-card-body>
       <b-row align-h="between">
-        <b-col md="4" sm="4" order="2" order-sm="1">
+        <b-col 
+          md="4" 
+          sm="4" 
+          order="2" 
+          order-sm="1">
           <b-btn
             variant="outline-primary"
-            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
             aria-controls="collapseFilter"
+            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
           >
-            <i class="fa fa-search" aria-hidden="true"></i> Filtrar búsqueda
+            <i 
+              class="fa fa-search" 
+              aria-hidden="true"/> Filtrar búsqueda
             <i
               :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')"
               aria-hidden="true"
-            ></i>
+            />
           </b-btn>
         </b-col>
-        <b-col md="4" sm="4" order-sm="2" align="right">
-          <b-btn variant="primary" @click="crudSettings.showModal = !crudSettings.showModal">
-            <i class="fa fa-plus" aria-hidden="true"></i> Nuevo Usuario
+        <b-col 
+          md="4" 
+          sm="4" 
+          order-sm="2" 
+          align="right">
+          <b-btn 
+            variant="primary" 
+            @click="crudSettings.showModal = !crudSettings.showModal">
+            <i 
+              class="fa fa-plus" 
+              aria-hidden="true"/> Nuevo Usuario
           </b-btn>
         </b-col>
       </b-row>
-      <b-collapse class="mt-2" v-model="crudSettings.toogleFilter" id="collapseFilter">
+      <b-collapse 
+        id="collapseFilter" 
+        v-model="crudSettings.toogleFilter" 
+        class="mt-2">
         <b-row>
           <b-col>
             <b-row>
               <b-col md="4">
                 <b-form-group label="Buscar por documento">
-                  <b-input v-model="filtro.documento"></b-input>
+                  <b-input v-model="filtro.documento"/>
                 </b-form-group>
               </b-col>
               <b-col md="8">
                 <b-form-group label="Buscar por nombre y/o apellido">
-                  <b-input v-model="filtro.nombre"></b-input>
+                  <b-input v-model="filtro.nombre"/>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -43,18 +60,23 @@
         </b-row>
       </b-collapse>
       <br>
-      <b-alert show variant="info" v-if="listaUsuario.length <= 0">No hay registros</b-alert>
+      <b-alert 
+        v-if="listaUsuario.length <= 0" 
+        show 
+        variant="info">No hay registros</b-alert>
       <b-table
         v-else
-        stacked="md"
         :items="listaUsuario"
         :fields="fields"
-        striped
         :per-page="crudSettings.perPage"
         :current-page="crudSettings.currentPage"
+        stacked="md"
+        striped
         hover
       >
-        <template slot="acciones" slot-scope="data">
+        <template 
+          slot="acciones" 
+          slot-scope="data">
           <b-btn
             variant="primary"
             class="mr-1"
@@ -62,49 +84,68 @@
             title="Modificar"
             @click="sendModificar(data.item)"
           >
-            <i class="fa fa-pencil" aria-hidden="true"></i>
+            <i 
+              class="fa fa-pencil" 
+              aria-hidden="true"/>
           </b-btn>
           <b-btn
             variant="warning"
             size="sm"
-            @click="reestablecerCredenciales(data.item.usua_id)"
             title="Reestablecer Credenciales"
+            @click="reestablecerCredenciales(data.item.usua_id)"
           >
-            <i class="icon-reload" aria-hidden="true"></i>
+            <i 
+              class="icon-reload" 
+              aria-hidden="true"/>
           </b-btn>
           <b-btn
             variant="danger"
             class="ml-1"
             size="sm"
-            @click="eliminarUsuario(data.item.usua_id)"
             title="Eliminar"
+            @click="eliminarUsuario(data.item.usua_id)"
           >
-            <i class="fa fa-trash" aria-hidden="true"></i>
+            <i 
+              class="fa fa-trash" 
+              aria-hidden="true"/>
           </b-btn>
         </template>
       </b-table>
       <b-pagination
         v-if="listaUsuario.length > crudSettings.perPage"
-        align="center"
         :total-rows="listaUsuario.length"
         :per-page="crudSettings.perPage"
         v-model="crudSettings.currentPage"
+        align="center"
       />
-      <b-modal v-model="crudSettings.showModal" :title="tituloFuncionlidad">
+      <b-modal 
+        v-model="crudSettings.showModal" 
+        :title="tituloFuncionlidad">
         <b-form-group label="Número de documento:">
-          <b-input v-model="usuario.form.usua_documento" ref="usua_documento"></b-input>
+          <b-input 
+            ref="usua_documento" 
+            v-model="usuario.form.usua_documento"/>
         </b-form-group>
         <b-form-group label="Nombre(s):">
-          <b-input v-model="usuario.form.usua_nombre" ref="usua_nombre"></b-input>
+          <b-input 
+            ref="usua_nombre" 
+            v-model="usuario.form.usua_nombre"/>
         </b-form-group>
         <b-form-group label="Apellido(s):">
-          <b-input v-model="usuario.form.usua_apellido" ref="usua_apellido"></b-input>
+          <b-input 
+            ref="usua_apellido" 
+            v-model="usuario.form.usua_apellido"/>
         </b-form-group>
         <b-form-group label="Correo electrónico:">
-          <b-input type="email" v-model="usuario.form.usua_correo" ref="usua_correo"></b-input>
+          <b-input 
+            ref="usua_correo" 
+            v-model="usuario.form.usua_correo" 
+            type="email"/>
         </b-form-group>
         <b-form-group label="Roles:">
-          <b-form-checkbox-group v-model="usuario.form.rol" :options="listaRoles"></b-form-checkbox-group>
+          <b-form-checkbox-group 
+            v-model="usuario.form.rol" 
+            :options="listaRoles"/>
         </b-form-group>
         <p>
           Para la asignación de credenciales, cada usuario debe realizarlo desde
@@ -213,6 +254,10 @@ export default {
       })
     }
   },
+  beforeMount: function() {
+    this.getRolesWs()
+    this.getUsuariosWs()
+  },
   methods: {
     reestablecerCredenciales: function(usua_id) {
       return this.$confirm({
@@ -305,10 +350,6 @@ export default {
       this.crudSettings.msgBtn = 'Guardar Cambios'
       this.crudSettings.showModal = !this.crudSettings.showModal
     }
-  },
-  beforeMount: function() {
-    this.getRolesWs()
-    this.getUsuariosWs()
   }
 }
 </script>

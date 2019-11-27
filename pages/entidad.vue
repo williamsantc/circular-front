@@ -6,30 +6,46 @@
 
     <b-card-body>
       <b-row>
-        <b-col md="6" order="2" order-sm="1">
+        <b-col 
+          md="6" 
+          order="2" 
+          order-sm="1">
           <b-btn
             variant="outline-primary"
-            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
             aria-controls="collapseFilter"
+            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
           >
-            <i class="fa fa-search" aria-hidden="true"></i> Filtrar búsqueda
+            <i 
+              class="fa fa-search" 
+              aria-hidden="true"/> Filtrar búsqueda
             <i
               :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')"
               aria-hidden="true"
-            ></i>
+            />
           </b-btn>
         </b-col>
-        <b-col md="6" order="1" order-sm="2" align="right">
-          <b-btn variant="primary" @click="crudSettings.showModal = !crudSettings.showModal">
-            <i class="fa fa-plus" aria-hidden="true"></i> Nueva entidad
+        <b-col 
+          md="6" 
+          order="1" 
+          order-sm="2" 
+          align="right">
+          <b-btn 
+            variant="primary" 
+            @click="crudSettings.showModal = !crudSettings.showModal">
+            <i 
+              class="fa fa-plus" 
+              aria-hidden="true"/> Nueva entidad
           </b-btn>
         </b-col>
       </b-row>
-      <b-collapse class="mt-2" v-model="crudSettings.toogleFilter" id="collapseFilter">
+      <b-collapse 
+        id="collapseFilter" 
+        v-model="crudSettings.toogleFilter" 
+        class="mt-2">
         <b-row>
           <b-col>
             <b-form-group label="Nombre de la entidad a buscar">
-              <b-input v-model="nombreSearch"></b-input>
+              <b-input v-model="nombreSearch"/>
             </b-form-group>
           </b-col>
         </b-row>
@@ -37,18 +53,23 @@
       <b-row>
         <b-col>
           <br>
-          <b-alert show variant="info" v-if="listaEntidad.length <= 0">No hay registros</b-alert>
+          <b-alert 
+            v-if="listaEntidad.length <= 0" 
+            show 
+            variant="info">No hay registros</b-alert>
           <b-table
             v-else
-            stacked="md"
             :items="listaEntidad"
             :fields="fields"
-            striped
             :per-page="crudSettings.perPage"
             :current-page="crudSettings.currentPage"
+            stacked="md"
+            striped
             hover
           >
-            <template slot="acciones" slot-scope="data">
+            <template 
+              slot="acciones" 
+              slot-scope="data">
               <b-btn
                 variant="primary"
                 size="sm"
@@ -56,15 +77,19 @@
                 class="mr-1"
                 @click="sendModificar(data.item)"
               >
-                <i class="fa fa-pencil" aria-hidden="true"></i>
+                <i 
+                  class="fa fa-pencil" 
+                  aria-hidden="true"/>
               </b-btn>
               <b-btn
                 variant="danger"
                 size="sm"
-                @click="eliminarArea(data.item.enti_id)"
                 title="Eliminar"
+                @click="eliminarArea(data.item.enti_id)"
               >
-                <i class="fa fa-trash" aria-hidden="true"></i>
+                <i 
+                  class="fa fa-trash" 
+                  aria-hidden="true"/>
               </b-btn>
             </template>
           </b-table>
@@ -74,28 +99,30 @@
         <b-col>
           <b-pagination
             v-if="listaEntidad.length > crudSettings.perPage"
-            align="center"
             :total-rows="listaEntidad.length"
             :per-page="crudSettings.perPage"
             v-model="crudSettings.currentPage"
+            align="center"
           />
         </b-col>
       </b-row>
     </b-card-body>
 
-    <b-modal v-model="crudSettings.showModal" :title="tituloFuncionlidad">
+    <b-modal 
+      v-model="crudSettings.showModal" 
+      :title="tituloFuncionlidad">
       <b-row>
         <b-col>
           <b-form-group label="Nombre de la entidad">
             <b-form-textarea
-              placeholder="Ingrese asunto de la entidad"
-              :rows="6"
-              no-resize
               ref="enti_nombre"
-              @keydown.native="validarCantidadCaracteres($event, entidad.form.enti_nombre, 200)"
+              :rows="6"
               v-model="entidad.form.enti_nombre"
               :max-rows="6"
-            ></b-form-textarea>
+              placeholder="Ingrese asunto de la entidad"
+              no-resize
+              @keydown.native="validarCantidadCaracteres($event, entidad.form.enti_nombre, 200)"
+            />
           </b-form-group>
         </b-col>
       </b-row>
@@ -141,7 +168,7 @@ const ENTIDAD = {
 }
 
 export default {
-  name: 'funcionalidad-entidad',
+  name: 'FuncionalidadEntidad',
   mixins: [validarForm],
   data: function() {
     return {
@@ -170,6 +197,9 @@ export default {
         this.crudSettings.msgBtn = 'Registrar'
       })
     }
+  },
+  created: function() {
+    this.getEntidadesWs()
   },
   methods: {
     getEntidadesWs: function() {
@@ -231,9 +261,6 @@ export default {
           this.$toastr.info('Solicitud cancelada', 'INFO')
         })
     }
-  },
-  created: function() {
-    this.getEntidadesWs()
   }
 }
 </script>

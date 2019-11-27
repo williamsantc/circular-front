@@ -1,12 +1,19 @@
 <template>
   <div>
-    <register v-if="send" :msg="msg" :doc="doc"/>
+    <register 
+      v-if="send" 
+      :msg="msg" 
+      :doc="doc"/>
     <template v-else>
       <div class="app flex-row align-items-center">
         <div class="container">
           <b-row class="justify-content-center">
-            <b-col md="6" sm="8">
-              <b-card no-body class="mx-4">
+            <b-col 
+              md="6" 
+              sm="8">
+              <b-card 
+                no-body 
+                class="mx-4">
                 <b-card-body class="p-4">
                   <b-form>
                     <h1>Registro</h1>
@@ -14,19 +21,22 @@
                     <b-input-group class="mb-3">
                       <b-input-group-prepend>
                         <b-input-group-text>
-                          <i class="icon-user"></i>
+                          <i class="icon-user"/>
                         </b-input-group-text>
                       </b-input-group-prepend>
                       <b-form-input
-                        type="text"
-                        v-model="doc"
                         ref="user"
+                        v-model="doc"
+                        type="text"
                         class="form-control"
                         placeholder="Documento"
                       />
                     </b-input-group>
 
-                    <b-button variant="success" @click="validarDocumento" block>Continuar</b-button>
+                    <b-button 
+                      variant="success" 
+                      block 
+                      @click="validarDocumento">Continuar</b-button>
                   </b-form>
                 </b-card-body>
               </b-card>

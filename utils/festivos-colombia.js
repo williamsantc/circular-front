@@ -1,4 +1,3 @@
-
 const FESTIVOS_FIJOS = [
   '01-01', // AÑO NUEVO
   '05-01', // DIA DEL TRABAJO
@@ -20,7 +19,7 @@ const FESTIVOS_MOVIBLES = [
 
 const festivosColombia = {
   // LOS FESTIVOS DE PASCUA, SON CALCULADOS
-  cargarFestivos (year) {
+  cargarFestivos(year) {
     let lista = []
 
     for (let i = 0; i < FESTIVOS_FIJOS.length; i++) {
@@ -39,7 +38,7 @@ const festivosColombia = {
     }
 
     let domPascua = this.determinarDomingoPascua(year)
-    
+
     lista.push(this.formatDate(this.addDays(domPascua, -3))) // JUEVES SANTO
     lista.push(this.formatDate(this.addDays(domPascua, -2))) // VIERNES SANTO
     lista.push(this.formatDate(this.addDays(domPascua, 43))) // ASCENCION DE JESUS
@@ -51,13 +50,13 @@ const festivosColombia = {
   },
 
   // Añade (o resta) días a a una fecha dada
-  addDays (fecha, days) {
+  addDays(fecha, days) {
     let tmp = new Date(fecha.getTime())
     tmp.setDate(tmp.getDate() + days)
     return tmp
   },
 
-  determinarDomingoPascua (year) {
+  determinarDomingoPascua(year) {
     let M = 24 // CONSTANTES FORMULA 1900-2100
     let N = 5 // CONSTANTES FORMULA 1900-2100
     let A = year
@@ -71,7 +70,8 @@ const festivosColombia = {
     let fecha = new Date(year, 2, 22) // 3 -> Abril, 0 -> Enero
     fecha.setDate(fecha.getDate() + d + e)
 
-    if (fecha.getMonth() === 3) { // 3 -> Abril
+    if (fecha.getMonth() === 3) {
+      // 3 -> Abril
       if (fecha.getDate() === 26) {
         fecha.setDate(19)
       } else if (fecha.getDate() === 25 && d === 28 && e === 6 && a > 10) {
@@ -83,7 +83,7 @@ const festivosColombia = {
   },
 
   // Objeto Date a formato String
-  formatDate (fecha) {
+  formatDate(fecha) {
     let y = fecha.getFullYear()
     let m = fecha.getMonth() + 1
     let d = fecha.getDate()

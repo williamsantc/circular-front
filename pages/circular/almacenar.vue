@@ -5,42 +5,62 @@
     </b-card-header>
     <b-card-body>
       <b-row>
-        <b-col md="6" order="2" order-sm="1">
+        <b-col 
+          md="6" 
+          order="2" 
+          order-sm="1">
           <b-btn
             variant="outline-primary"
-            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
             aria-controls="collapseFilter"
+            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
           >
-            <i class="fa fa-search" aria-hidden="true"></i> Filtrar búsqueda
+            <i 
+              class="fa fa-search" 
+              aria-hidden="true"/> Filtrar búsqueda
             <i
               :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')"
               aria-hidden="true"
-            ></i>
+            />
           </b-btn>
         </b-col>
-        <b-col md="6" order="1" order-sm="2" align="right">
-          <b-btn variant="primary" @click="crudSettings.showModal = !crudSettings.showModal">
-            <i class="fa fa-plus" aria-hidden="true"></i> Almacenar
+        <b-col 
+          md="6" 
+          order="1" 
+          order-sm="2" 
+          align="right">
+          <b-btn 
+            variant="primary" 
+            @click="crudSettings.showModal = !crudSettings.showModal">
+            <i 
+              class="fa fa-plus" 
+              aria-hidden="true"/> Almacenar
           </b-btn>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
           <br>
-          <b-alert show variant="info" v-if="listaAlmacenar.length <= 0">No hay registros</b-alert>
+          <b-alert 
+            v-if="listaAlmacenar.length <= 0" 
+            show 
+            variant="info">No hay registros</b-alert>
           <b-table
             v-else
-            stacked="md"
             :items="listaAlmacenar"
             :fields="fields"
-            striped
-            fixed
             :per-page="crudSettings.perPage"
             :current-page="crudSettings.currentPage"
+            stacked="md"
+            striped
+            fixed
             hover
           >
-            <template slot="circ_id" slot-scope="data">{{ calcularNumeracion(data.item.circ_id) }}</template>
-            <template slot="acciones" slot-scope="data">
+            <template 
+              slot="circ_id" 
+              slot-scope="data">{{ calcularNumeracion(data.item.circ_id) }}</template>
+            <template 
+              slot="acciones" 
+              slot-scope="data">
               <b-btn
                 variant="primary"
                 size="sm"
@@ -48,24 +68,30 @@
                 class="mr-1"
                 @click="sendModificar(data.item)"
               >
-                <i class="fa fa-pencil" aria-hidden="true"></i>
+                <i 
+                  class="fa fa-pencil" 
+                  aria-hidden="true"/>
               </b-btn>
               <b-btn
                 variant="danger"
                 size="sm"
-                @click="eliminar(data.item.alma_id)"
                 title="Eliminar"
+                @click="eliminar(data.item.alma_id)"
               >
-                <i class="fa fa-trash" aria-hidden="true"></i>
+                <i 
+                  class="fa fa-trash" 
+                  aria-hidden="true"/>
               </b-btn>
               <b-btn
                 variant="success"
                 size="sm"
                 title="Descargar"
-                @click="descargarCircular(data.item)"
                 class="ml-1"
+                @click="descargarCircular(data.item)"
               >
-                <i class="fa fa-download" aria-hidden="true"></i>
+                <i 
+                  class="fa fa-download" 
+                  aria-hidden="true"/>
               </b-btn>
             </template>
           </b-table>
@@ -73,44 +99,46 @@
       </b-row>
       <b-pagination
         v-if="listaAlmacenar.length > crudSettings.perPage"
-        align="center"
         :total-rows="listaAlmacenar.length"
         :per-page="crudSettings.perPage"
         v-model="crudSettings.currentPage"
+        align="center"
       />
-      <b-modal v-model="crudSettings.showModal" :title="tituloFuncionlidad">
+      <b-modal 
+        v-model="crudSettings.showModal" 
+        :title="tituloFuncionlidad">
         <b-row>
           <b-col>
             <b-form-group label="Circular a almacenar">
               <multiselect
+                ref="circ_id"
                 v-model="circular"
                 :options="listaCircularSelect"
+                :show-labels="false"
                 placeholder="Seleccione una opción"
                 label="trackBy"
-                :show-labels="false"
-                ref="circ_id"
                 track-by="trackBy"
-              ></multiselect>
+              />
             </b-form-group>
             <b-form-group label="Descripción para almacenar">
               <b-form-textarea
-                placeholder="Ingrese descripcion"
-                :rows="6"
-                no-resize
-                @keydown.native="validarCantidadCaracteres($event, almacenar.form.alma_descripcion, 200)"
                 ref="alma_descripcion"
+                :rows="6"
                 v-model="almacenar.form.alma_descripcion"
                 :max-rows="6"
-              ></b-form-textarea>
+                placeholder="Ingrese descripcion"
+                no-resize
+                @keydown.native="validarCantidadCaracteres($event, almacenar.form.alma_descripcion, 200)"
+              />
             </b-form-group>
             <b-form-group label="Cargar Circular">
               <b-form-file
+                ref="alma_file"
                 v-model="almacenar.form.alma_file"
                 :state="Boolean(almacenar.form.alma_file)"
-                ref="alma_file"
                 placeholder="Seleccione la circular a almacenar"
                 accept="application/pdf"
-              ></b-form-file>
+              />
             </b-form-group>
           </b-col>
         </b-row>
@@ -172,7 +200,7 @@ const ALMACENAR = {
 }
 
 export default {
-  name: 'almacenar',
+  name: 'Almacenar',
   mixins: [validarForm],
   data: function() {
     return {
@@ -214,6 +242,10 @@ export default {
         this.crudSettings.msgBtn = 'Registrar'
       })
     }
+  },
+  beforeMount: function() {
+    this.getCircularWs()
+    this.getAlmacenarWs()
   },
   methods: {
     calcularNumeracion,
@@ -333,10 +365,6 @@ export default {
           console.log(error.response.data)
         })
     }
-  },
-  beforeMount: function() {
-    this.getCircularWs()
-    this.getAlmacenarWs()
   }
 }
 </script>

@@ -2,8 +2,13 @@
   <div class="app flex-row align-items-center">
     <div class="container">
       <b-row class="justify-content-center">
-        <b-col md="6" sm="8" v-if="msg === 'OK'">
-          <b-card no-body class="mx-4">
+        <b-col 
+          v-if="msg === 'OK'" 
+          md="6" 
+          sm="8">
+          <b-card 
+            no-body 
+            class="mx-4">
             <b-card-body class="p-4">
               <b-form>
                 <h1>Registro</h1>
@@ -11,13 +16,13 @@
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>
-                      <i class="icon-user"></i>
+                      <i class="icon-user"/>
                     </b-input-group-text>
                   </b-input-group-prepend>
                   <b-form-input
-                    type="text"
-                    v-model="reg.user"
                     ref="user"
+                    v-model="reg.user"
+                    type="text"
                     class="form-control"
                     placeholder="Usuario"
                     autocomplete="username"
@@ -27,14 +32,14 @@
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>
-                      <i class="icon-lock"></i>
+                      <i class="icon-lock"/>
                     </b-input-group-text>
                   </b-input-group-prepend>
                   <b-form-input
-                    type="password"
-                    class="form-control"
                     ref="pass"
                     v-model="reg.pass"
+                    type="password"
+                    class="form-control"
                     placeholder="Contraseña"
                     autocomplete="new-password"
                   />
@@ -43,28 +48,35 @@
                 <b-input-group class="mb-4">
                   <b-input-group-prepend>
                     <b-input-group-text>
-                      <i class="icon-lock"></i>
+                      <i class="icon-lock"/>
                     </b-input-group-text>
                   </b-input-group-prepend>
                   <b-form-input
-                    type="password"
-                    class="form-control"
                     ref="conf"
                     v-model="reg.conf"
+                    type="password"
+                    class="form-control"
                     placeholder="Repetir contraseña"
                     autocomplete="new-password"
                   />
                 </b-input-group>
 
-                <b-button variant="success" @click="crearCuenta" block>Crer Cuenta</b-button>
+                <b-button 
+                  variant="success" 
+                  block 
+                  @click="crearCuenta">Crer Cuenta</b-button>
               </b-form>
             </b-card-body>
           </b-card>
         </b-col>
-        <b-col v-else md="6">
+        <b-col 
+          v-else 
+          md="6">
           <div class="clearfix">
             <h1 class="float-left display-3 mr-4">
-              <i class="icon-check" aria-hidden="true"></i>
+              <i 
+                class="icon-check" 
+                aria-hidden="true"/>
             </h1>
             <h4 class="pt-3">{{ msg }}.</h4>
             <p class="text-muted">Volver a la página principal.</p>
@@ -105,6 +117,9 @@ export default {
     return {
       reg: JSON.parse(JSON.stringify(REG))
     }
+  },
+  created: function() {
+    this.cargarEnAplicacion()
   },
   methods: {
     cargarEnAplicacion: function() {
@@ -201,9 +216,6 @@ export default {
 
       return true
     }
-  },
-  created: function() {
-    this.cargarEnAplicacion()
   }
 }
 </script>

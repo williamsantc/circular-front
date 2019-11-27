@@ -1,15 +1,19 @@
 <template>
-    <AppHeaderDropdown right no-caret>
+  <AppHeaderDropdown 
+    right 
+    no-caret>
     <template slot="header">
       <img
+        :title="nombreCompleto"
         src="~/static/img/avatars/user.png"
         class="img-avatar"
-        :title="nombreCompleto"
         alt="Usuario"
       >
     </template>\
     <template slot="dropdown">
-      <b-dropdown-header tag="div" class="text-center">
+      <b-dropdown-header 
+        tag="div" 
+        class="text-center">
         <strong>Cuenta</strong>
       </b-dropdown-header>
       <b-dropdown-item>
@@ -51,7 +55,7 @@ export default {
       this.$store.dispatch('cerrarSesion')
       this.$router.push('/login')
     },
-    toggleRol: function () {
+    toggleRol: function() {
       this.$emit('change-rol-request')
     }
   }

@@ -5,30 +5,50 @@
     </b-card-header>
     <b-card-body>
       <b-row align-h="between">
-        <b-col md="4" sm="4" order="2" order-sm="1">
+        <b-col
+          md="4"
+          sm="4"
+          order="2"
+          order-sm="1">
           <b-btn
             variant="outline-primary"
-            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
             aria-controls="collapseFilter"
+            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
           >
-            <i class="fa fa-search" aria-hidden="true"></i> Filtrar búsqueda
+            <i
+              class="fa fa-search"
+              aria-hidden="true"/> Filtrar búsqueda
             <i
               :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')"
               aria-hidden="true"
-            ></i>
+            />
           </b-btn>
         </b-col>
-        <b-col md="4" sm="4" order="1" order-sm="2" align="right">
-          <b-btn variant="primary" @click="$router.push('/circular/gestionar')">
-            <i class="fa fa-plus" aria-hidden="true"></i> Nueva circular
+        <b-col
+          md="4"
+          sm="4"
+          order="1"
+          order-sm="2"
+          align="right">
+          <b-btn
+            variant="primary"
+            @click="$router.push('/circular/gestionar')">
+            <i
+              class="fa fa-plus"
+              aria-hidden="true"/> Nueva circular
           </b-btn>
         </b-col>
       </b-row>
-      <b-collapse class="mt-2" v-model="crudSettings.toogleFilter" id="collapseFilter">
+      <b-collapse
+        id="collapseFilter"
+        v-model="crudSettings.toogleFilter"
+        class="mt-2">
         <b-row>
           <b-col md="6">
             <b-form-group label="Asunto:">
-              <b-input v-model="filtro.circ_asunto" placeholder="Ingrese datos de búsqueda"></b-input>
+              <b-input
+                v-model="filtro.circ_asunto"
+                placeholder="Ingrese datos de búsqueda"/>
             </b-form-group>
           </b-col>
           <b-col md="6">
@@ -39,7 +59,7 @@
                 placeholder="Seleccione una opción"
                 label="enti_nombre"
                 track-by="enti_nombre"
-              ></multiselect>
+              />
             </b-form-group>
           </b-col>
         </b-row>
@@ -52,7 +72,7 @@
                 placeholder="Seleccione una opción"
                 label="resp_nombre"
                 track-by="resp_nombre"
-              ></multiselect>
+              />
             </b-form-group>
           </b-col>
           <b-col md="6">
@@ -63,19 +83,23 @@
                 placeholder="Seleccione una opción"
                 label="area_nombre"
                 track-by="area_nombre"
-              ></multiselect>
+              />
             </b-form-group>
           </b-col>
         </b-row>
         <b-row>
           <b-col md="6">
             <b-form-group label="Fecha Desde:">
-              <b-input v-model="filtro.circ_fechadesde" type="date"></b-input>
+              <b-input
+                v-model="filtro.circ_fechadesde"
+                type="date"/>
             </b-form-group>
           </b-col>
           <b-col md="6">
             <b-form-group label="Fecha Hasta:">
-              <b-input v-model="filtro.circ_fechahasta" type="date"></b-input>
+              <b-input
+                v-model="filtro.circ_fechahasta"
+                type="date"/>
             </b-form-group>
           </b-col>
         </b-row>
@@ -83,19 +107,24 @@
       <br>
       <b-row>
         <b-col>
-          <b-alert show variant="info" v-if="listaCircular.length <= 0">No hay registros</b-alert>
+          <b-alert
+            v-if="listaCircular.length <= 0"
+            show
+            variant="info">No hay registros</b-alert>
           <b-table
             v-else
-            stacked="md"
             :items="listaCircularMutated"
             :fields="fields"
-            striped
-            fixed
             :per-page="crudSettings.perPage"
             :current-page="crudSettings.currentPage"
+            stacked="md"
+            striped
+            fixed
             hover
           >
-            <template slot="acciones" slot-scope="data">
+            <template
+              slot="acciones"
+              slot-scope="data">
               <b-btn
                 variant="primary"
                 size="sm"
@@ -103,24 +132,31 @@
                 class="mr-1"
                 @click="sendModificar(data.item)"
               >
-                <i class="fa fa-pencil" aria-hidden="true"></i>
+                <i
+                  class="fa fa-pencil"
+                  aria-hidden="true"/>
               </b-btn>
               <b-btn
                 variant="danger"
                 size="sm"
-                @click="eliminarCircular(data.item.circ_id)"
                 title="Eliminar"
+                @click="eliminarCircular(data.item.circ_id)"
               >
-                <i class="fa fa-trash" aria-hidden="true"></i>
+                <i
+                  class="fa fa-trash"
+                  aria-hidden="true"/>
               </b-btn>
               <b-btn
                 variant="success"
                 size="sm"
-                @click="generarPDF(data.item)"
                 class="ml-1"
                 title="Descargar"
+                @click="generarPDF(data.item)"
               >
-                <i :class="data.item.downloadIcon" ref="downloadFile" aria-hidden="true"></i>
+                <i
+                  ref="downloadFile"
+                  :class="data.item.downloadIcon"
+                  aria-hidden="true"/>
               </b-btn>
             </template>
           </b-table>
@@ -130,10 +166,10 @@
         <b-col>
           <b-pagination
             v-if="listaCircularMutated.length > crudSettings.perPage"
-            align="center"
             :total-rows="listaCircularMutated.length"
             :per-page="crudSettings.perPage"
             v-model="crudSettings.currentPage"
+            align="center"
           />
         </b-col>
       </b-row>
@@ -161,10 +197,8 @@ const FILTRO = {
   circ_fechahasta: ''
 }
 
-// fa fa-spinner fa-spin fa-1x fa-fw
-
 export default {
-  name: 'listado-circular',
+  name: 'ListadoCircular',
   mixins: [circularMixin],
   data: function() {
     return {
@@ -209,6 +243,10 @@ export default {
   },
   beforeMount: function() {
     this.cargarListasForaneas()
+  },
+  beforeMount: function() {
+    this.cargarListasForaneas()
+    this.getCircularWs()
   },
   methods: {
     generarPDF: function(circular) {
@@ -257,10 +295,6 @@ export default {
         }
       })
     }
-  },
-  beforeMount: function() {
-    this.cargarListasForaneas()
-    this.getCircularWs()
   }
 }
 </script>

@@ -1,5 +1,4 @@
-
-export const fechaParaDocumentos = function (fecha) {
+export const fechaParaDocumentos = function(fecha) {
   let meses = [
     'ENERO',
     'FEBRERO',
@@ -19,5 +18,5 @@ export const fechaParaDocumentos = function (fecha) {
   let mes = fecha.split('-')[1]
   let anio = fecha.split('-')[0]
 
-  return dia + ' DE ' + meses[mes  - 1] + ' DE ' + anio
+  return dia + ' DE ' + meses[mes - 1] + ' DE ' + anio
 }

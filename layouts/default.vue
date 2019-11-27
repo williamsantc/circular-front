@@ -1,8 +1,13 @@
 <template>
   <div class="app">
     <AppHeader fixed>
-      <SidebarToggler class="d-lg-none" display="md" mobile/>
-      <b-link class="navbar-brand" to="#">
+      <SidebarToggler 
+        class="d-lg-none" 
+        display="md" 
+        mobile/>
+      <b-link 
+        class="navbar-brand" 
+        to="#">
         <img
           class="navbar-brand-full"
           src="@/static/img/logo.png"
@@ -18,7 +23,9 @@
           alt="Asimilación Ing. Sistemas"
         >
       </b-link>
-      <SidebarToggler class="d-md-down-none" display="lg"/>
+      <SidebarToggler 
+        class="d-md-down-none" 
+        display="lg"/>
       <b-navbar-nav class="ml-auto">
         <DefaultHeaderDropdownAccnt @change-rol-request="toggleRol"/>
       </b-navbar-nav>
@@ -29,7 +36,7 @@
       <AppSidebar fixed>
         <SidebarHeader/>
         <SidebarForm/>
-        <SidebarNav :navItems="$store.getters.funcionalidades"/>
+        <SidebarNav :nav-items="$store.getters.funcionalidades"/>
         <SidebarFooter/>
         <SidebarMinimizer/>
       </AppSidebar>
@@ -55,8 +62,14 @@
         <a href="https://coreui.io">CoreUI for Vue</a>
       </div>
     </TheFooter>
-    <b-modal size="sm" hide-footer v-model="modalShow" title="Cambiar Rol">
-      <b-select v-model="rol_id" :options="selectRol"></b-select>
+    <b-modal 
+      v-model="modalShow" 
+      size="sm" 
+      hide-footer 
+      title="Cambiar Rol">
+      <b-select 
+        v-model="rol_id" 
+        :options="selectRol"/>
     </b-modal>
   </div>
 </template>
@@ -81,7 +94,7 @@ import DefaultAside from '@/components/default/DefaultAside'
 import DefaultHeaderDropdownAccnt from '@/components/default/DefaultHeaderDropdownAccnt'
 
 export default {
-  name: 'full',
+  name: 'Full',
   components: {
     AsideToggler,
     AppHeader,
@@ -130,14 +143,14 @@ export default {
       }))
     }
   },
+  created: function() {
+    // this.$axios.get('/api/auth/check_token')
+  },
   methods: {
     toggleRol: function() {
       this.modalShow = true
       // this.$alert()
     }
-  },
-  created: function() {
-    // this.$axios.get('/api/auth/check_token')
   }
 }
 </script>

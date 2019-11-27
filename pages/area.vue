@@ -6,30 +6,47 @@
 
     <b-card-body>
       <b-row align-h="between">
-        <b-col md="4" sm="4" order="2" order-sm="1">
+        <b-col 
+          md="4" 
+          sm="4" 
+          order="2" 
+          order-sm="1">
           <b-btn
             variant="outline-primary"
-            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
             aria-controls="collapseFilter"
+            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
           >
-            <i class="fa fa-search" aria-hidden="true"></i> Filtrar búsqueda
+            <i 
+              class="fa fa-search" 
+              aria-hidden="true"/> Filtrar búsqueda
             <i
               :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')"
               aria-hidden="true"
-            ></i>
+            />
           </b-btn>
         </b-col>
-        <b-col md="4" sm="4" order-sm="2" align="right">
-          <b-btn variant="primary" @click="crudSettings.showModal = !crudSettings.showModal">
-            <i class="fa fa-plus" aria-hidden="true"></i> Nueva area
+        <b-col 
+          md="4" 
+          sm="4" 
+          order-sm="2" 
+          align="right">
+          <b-btn 
+            variant="primary" 
+            @click="crudSettings.showModal = !crudSettings.showModal">
+            <i 
+              class="fa fa-plus" 
+              aria-hidden="true"/> Nueva area
           </b-btn>
         </b-col>
       </b-row>
-      <b-collapse class="mt-2" v-model="crudSettings.toogleFilter" id="collapseFilter">
+      <b-collapse 
+        id="collapseFilter" 
+        v-model="crudSettings.toogleFilter" 
+        class="mt-2">
         <b-row>
           <b-col>
             <b-form-group label="Nombre del area a buscar">
-              <b-input v-model="nombreSearch"></b-input>
+              <b-input v-model="nombreSearch"/>
             </b-form-group>
           </b-col>
         </b-row>
@@ -37,18 +54,23 @@
       <b-row>
         <b-col>
           <br>
-          <b-alert show variant="info" v-if="listaArea.length <= 0">No hay registros</b-alert>
+          <b-alert 
+            v-if="listaArea.length <= 0" 
+            show 
+            variant="info">No hay registros</b-alert>
           <b-table
             v-else
-            stacked="md"
             :items="listaArea"
             :fields="fields"
-            striped
             :per-page="crudSettings.perPage"
             :current-page="crudSettings.currentPage"
+            stacked="md"
+            striped
             hover
           >
-            <template slot="acciones" slot-scope="data">
+            <template 
+              slot="acciones" 
+              slot-scope="data">
               <b-btn
                 variant="primary"
                 size="sm"
@@ -56,15 +78,19 @@
                 title="Modificar"
                 @click="sendModificar(data.item)"
               >
-                <i class="fa fa-pencil" aria-hidden="true"></i>
+                <i 
+                  class="fa fa-pencil" 
+                  aria-hidden="true"/>
               </b-btn>
               <b-btn
                 variant="danger"
                 size="sm"
-                @click="eliminarArea(data.item.area_id)"
                 title="Eliminar"
+                @click="eliminarArea(data.item.area_id)"
               >
-                <i class="fa fa-trash" aria-hidden="true"></i>
+                <i 
+                  class="fa fa-trash" 
+                  aria-hidden="true"/>
               </b-btn>
             </template>
           </b-table>
@@ -74,28 +100,30 @@
         <b-col>
           <b-pagination
             v-if="listaArea.length > crudSettings.perPage"
-            align="center"
             :total-rows="listaArea.length"
             :per-page="crudSettings.perPage"
             v-model="crudSettings.currentPage"
+            align="center"
           />
         </b-col>
       </b-row>
     </b-card-body>
 
-    <b-modal v-model="crudSettings.showModal" :title="tituloFuncionlidad">
+    <b-modal 
+      v-model="crudSettings.showModal" 
+      :title="tituloFuncionlidad">
       <b-row>
         <b-col>
           <b-form-group label="Nombre del area">
             <b-form-textarea
-              placeholder="Ingrese Nombre del area"
-              :rows="6"
-              no-resize
               ref="area_nombre"
-              @keydown.native="validarCantidadCaracteres($event, area.form.area_nombre, 200)"
+              :rows="6"
               v-model="area.form.area_nombre"
               :max-rows="6"
-            ></b-form-textarea>
+              placeholder="Ingrese Nombre del area"
+              no-resize
+              @keydown.native="validarCantidadCaracteres($event, area.form.area_nombre, 200)"
+            />
           </b-form-group>
         </b-col>
       </b-row>
@@ -141,7 +169,7 @@ const AREA = {
 }
 
 export default {
-  name: 'funcionalidad-area',
+  name: 'FuncionalidadArea',
   mixins: [validarForm],
   data: function() {
     return {
@@ -170,6 +198,9 @@ export default {
         this.crudSettings.msgBtn = 'Registrar'
       })
     }
+  },
+  created: function() {
+    this.getAreasWs()
   },
   methods: {
     getAreasWs: function() {
@@ -230,9 +261,6 @@ export default {
           this.$toastr.info('Solicitud cancelada', 'INFO')
         })
     }
-  },
-  created: function() {
-    this.getAreasWs()
   }
 }
 </script>

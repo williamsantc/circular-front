@@ -6,30 +6,47 @@
 
     <b-card-body>
       <b-row align-h="between">
-        <b-col md="4" sm="4" order="2" order-sm="1">
+        <b-col 
+          md="4" 
+          sm="4" 
+          order="2" 
+          order-sm="1">
           <b-btn
             variant="outline-primary"
-            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
             aria-controls="collapseFilter"
+            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
           >
-            <i class="fa fa-search" aria-hidden="true"></i> Filtrar búsqueda
+            <i 
+              class="fa fa-search" 
+              aria-hidden="true"/> Filtrar búsqueda
             <i
               :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')"
               aria-hidden="true"
-            ></i>
+            />
           </b-btn>
         </b-col>
-        <b-col md="4" sm="4" order-sm="2" align="right">
-          <b-btn variant="primary" @click="crudSettings.showModal = !crudSettings.showModal">
-            <i class="fa fa-plus" aria-hidden="true"></i> Nueva funcionalidad
+        <b-col 
+          md="4" 
+          sm="4" 
+          order-sm="2" 
+          align="right">
+          <b-btn 
+            variant="primary" 
+            @click="crudSettings.showModal = !crudSettings.showModal">
+            <i 
+              class="fa fa-plus" 
+              aria-hidden="true"/> Nueva funcionalidad
           </b-btn>
         </b-col>
       </b-row>
-      <b-collapse class="mt-2" v-model="crudSettings.toogleFilter" id="collapseFilter">
+      <b-collapse 
+        id="collapseFilter" 
+        v-model="crudSettings.toogleFilter" 
+        class="mt-2">
         <b-row>
           <b-col>
             <b-form-group label="Nombre de la funcionalidad a buscar">
-              <b-input v-model="nombreSearch"></b-input>
+              <b-input v-model="nombreSearch"/>
             </b-form-group>
           </b-col>
         </b-row>
@@ -37,18 +54,23 @@
       <b-row>
         <b-col>
           <br>
-          <b-alert show variant="info" v-if="listaFuncionalidad.length <= 0">No hay registros</b-alert>
+          <b-alert 
+            v-if="listaFuncionalidad.length <= 0" 
+            show 
+            variant="info">No hay registros</b-alert>
           <b-table
             v-else
-            stacked="md"
             :items="listaFuncionalidad"
             :fields="fields"
-            striped
             :per-page="crudSettings.perPage"
             :current-page="crudSettings.currentPage"
+            stacked="md"
+            striped
             hover
           >
-            <template slot="acciones" slot-scope="data">
+            <template 
+              slot="acciones" 
+              slot-scope="data">
               <b-btn
                 variant="primary"
                 size="sm"
@@ -56,15 +78,19 @@
                 title="Modificar"
                 @click="sendModificar(data.item)"
               >
-                <i class="fa fa-pencil" aria-hidden="true"></i>
+                <i 
+                  class="fa fa-pencil" 
+                  aria-hidden="true"/>
               </b-btn>
               <b-btn
                 variant="danger"
                 size="sm"
-                @click="eliminar(data.item.func_id)"
                 title="Eliminar"
+                @click="eliminar(data.item.func_id)"
               >
-                <i class="fa fa-trash" aria-hidden="true"></i>
+                <i 
+                  class="fa fa-trash" 
+                  aria-hidden="true"/>
               </b-btn>
             </template>
           </b-table>
@@ -74,69 +100,76 @@
         <b-col>
           <b-pagination
             v-if="listaFuncionalidad.length > crudSettings.perPage"
-            align="center"
             :total-rows="listaFuncionalidad.length"
             :per-page="crudSettings.perPage"
             v-model="crudSettings.currentPage"
+            align="center"
           />
         </b-col>
       </b-row>
     </b-card-body>
 
-    <b-modal v-model="crudSettings.showModal" :title="tituloFuncionlidad">
+    <b-modal 
+      v-model="crudSettings.showModal" 
+      :title="tituloFuncionlidad">
       <b-row>
         <b-col>
           <b-form-group label="Nombre de la funcionalidad">
             <b-input
               ref="func_descripcion"
-              @keydown.native="validarCantidadCaracteres($event, funcionalidad.form.func_descripcion, 50)"
               v-model="funcionalidad.form.func_descripcion"
-            ></b-input>
+              @keydown.native="validarCantidadCaracteres($event, funcionalidad.form.func_descripcion, 50)"
+            />
           </b-form-group>
           <b-form-group label="URL de la funcionalidad">
             <b-input
-              v-model="funcionalidad.form.func_url"
               ref="func_url"
+              v-model="funcionalidad.form.func_url"
               @keydown.native="validarCantidadCaracteres($event, funcionalidad.form.func_url, 100)"
-            ></b-input>
+            />
           </b-form-group>
           <b-form-group label="Tipo de funcionalidad">
-            <b-select :options="listaTipo" ref="func_tipo" v-model="funcionalidad.form.func_tipo"></b-select>
+            <b-select 
+              ref="func_tipo" 
+              :options="listaTipo" 
+              v-model="funcionalidad.form.func_tipo"/>
           </b-form-group>
           <b-form-group label="Funcionalidad Padre">
             <multiselect
+              ref="func_padre"
               v-model="funcionalidad.form.func_padre"
               :options="funcionalidadesPadre"
+              :show-labels="false"
               placeholder="Seleccione una opción"
               label="func_descripcion"
-              :show-labels="false"
-              ref="func_padre"
               track-by="func_descripcion"
-            ></multiselect>
+            />
           </b-form-group>
           <b-row>
             <b-col>
               <b-form-group label="Icono de la funcionalidad">
                 <b-input-group>
                   <b-input-group-text slot="append">
-                    <i :class="funcionalidad.form.func_icono" aria-hidden="true"></i>
+                    <i 
+                      :class="funcionalidad.form.func_icono" 
+                      aria-hidden="true"/>
                   </b-input-group-text>
                   <b-form-input
-                    v-model="funcionalidad.form.func_icono"
                     ref="func_icono"
+                    v-model="funcionalidad.form.func_icono"
                     @keydown.native="validarCantidadCaracteres($event, funcionalidad.form.func_icono, 45)"
-                  ></b-form-input>
+                  />
                 </b-input-group>
               </b-form-group>
             </b-col>
             <b-col>
               <b-form-group label="Orden">
                 <b-input
-                  v-model="funcionalidad.form.func_orden"
                   ref="func_orden"
+                  v-model="funcionalidad.form.func_orden"
                   @keydown.native="validarCantidadCaracteres($event, funcionalidad.form.func_orden, 2)"
                   @keypress.native="validarKeyNumero"
-                ></b-input>
+                />
               </b-form-group>
             </b-col>
           </b-row>
@@ -217,7 +250,7 @@ const FUNCIONALIDAD = {
 }
 
 export default {
-  name: 'gestionar-funcionalidad',
+  name: 'GestionarFuncionalidad',
   mixins: [validarForm],
   data: function() {
     return {
@@ -263,6 +296,10 @@ export default {
         this.crudSettings.msgBtn = 'Registrar'
       })
     }
+  },
+  created: function() {
+    this.funcionalidad.config.func_tipo.lista = this.listaTipo
+    this.getFuncionalidadWs()
   },
   methods: {
     getFuncionalidadWs: function() {
@@ -332,10 +369,6 @@ export default {
           this.$toastr.info('Solicitud cancelada', 'INFO')
         })
     }
-  },
-  created: function() {
-    this.funcionalidad.config.func_tipo.lista = this.listaTipo
-    this.getFuncionalidadWs()
   }
 }
 </script>

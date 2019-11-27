@@ -5,43 +5,65 @@
     </b-card-header>
     <b-card-body>
       <b-row align-h="between">
-        <b-col md="4" sm="4" order="2" order-sm="1">
+        <b-col 
+          md="4" 
+          sm="4" 
+          order="2" 
+          order-sm="1">
           <b-btn
             variant="outline-primary"
-            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
             aria-controls="collapseFilter"
+            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
           >
-            <i class="fa fa-search" aria-hidden="true"></i> Filtrar búsqueda
+            <i 
+              class="fa fa-search" 
+              aria-hidden="true"/> Filtrar búsqueda
             <i
               :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')"
               aria-hidden="true"
-            ></i>
+            />
           </b-btn>
         </b-col>
-        <b-col md="4" sm="4" order-sm="2" align="right">
-          <b-btn variant="primary" @click="crudSettings.showModal = !crudSettings.showModal">
-            <i class="fa fa-plus" aria-hidden="true"></i> Nuevo Usuario
+        <b-col 
+          md="4" 
+          sm="4" 
+          order-sm="2" 
+          align="right">
+          <b-btn 
+            variant="primary" 
+            @click="crudSettings.showModal = !crudSettings.showModal">
+            <i 
+              class="fa fa-plus" 
+              aria-hidden="true"/> Nuevo Usuario
           </b-btn>
         </b-col>
       </b-row>
-      <b-collapse class="mt-2" v-model="crudSettings.toogleFilter" id="collapseFilter">
+      <b-collapse 
+        id="collapseFilter" 
+        v-model="crudSettings.toogleFilter" 
+        class="mt-2">
         <b-form-group label="Buscar por Descripción">
-          <b-input v-model="filtro.descripcion"></b-input>
+          <b-input v-model="filtro.descripcion"/>
         </b-form-group>
       </b-collapse>
       <br>
-      <b-alert show variant="info" v-if="listaRol.length <= 0">No hay registros</b-alert>
+      <b-alert 
+        v-if="listaRol.length <= 0" 
+        show 
+        variant="info">No hay registros</b-alert>
       <b-table
         v-else
-        stacked="md"
         :items="listaRol"
         :fields="fields"
-        striped
         :per-page="crudSettings.perPage"
         :current-page="crudSettings.currentPage"
+        stacked="md"
+        striped
         hover
       >
-        <template slot="acciones" slot-scope="data">
+        <template 
+          slot="acciones" 
+          slot-scope="data">
           <b-btn
             variant="primary"
             class="mr-1"
@@ -49,39 +71,51 @@
             title="Modificar"
             @click="sendModificar(data.item)"
           >
-            <i class="fa fa-pencil" aria-hidden="true"></i>
+            <i 
+              class="fa fa-pencil" 
+              aria-hidden="true"/>
           </b-btn>
-          <b-btn variant="danger" size="sm" @click="eliminarRol(data.item.rol_id)" title="Eliminar">
-            <i class="fa fa-trash" aria-hidden="true"></i>
+          <b-btn 
+            variant="danger" 
+            size="sm" 
+            title="Eliminar" 
+            @click="eliminarRol(data.item.rol_id)">
+            <i 
+              class="fa fa-trash" 
+              aria-hidden="true"/>
           </b-btn>
         </template>
       </b-table>
       <b-pagination
         v-if="listaRol.length > crudSettings.perPage"
-        align="center"
         :total-rows="listaRol.length"
         :per-page="crudSettings.perPage"
         v-model="crudSettings.currentPage"
+        align="center"
       />
-      <b-modal v-model="crudSettings.showModal" :title="tituloFuncionlidad">
+      <b-modal 
+        v-model="crudSettings.showModal" 
+        :title="tituloFuncionlidad">
         <b-form-group label="Descripción:">
-          <b-input v-model="rol.form.rol_descripcion" ref="rol_descripcion"></b-input>
+          <b-input 
+            ref="rol_descripcion" 
+            v-model="rol.form.rol_descripcion"/>
         </b-form-group>
         <b-form-group label="Roles:">
           <b-row>
             <b-col sm="6">
               <b-form-checkbox-group
                 v-model="rol.form.funcionalidadTemp"
-                stacked
                 :options="listaFuncionalidad.slice(0, listaFuncionalidad.length / 2)"
-              ></b-form-checkbox-group>
+                stacked
+              />
             </b-col>
             <b-col sm="6">
               <b-form-checkbox-group
                 v-model="rol.form.funcionalidadTemp"
-                stacked
                 :options="listaFuncionalidad.slice(listaFuncionalidad.length / 2) "
-              ></b-form-checkbox-group>
+                stacked
+              />
             </b-col>
           </b-row>
         </b-form-group>
@@ -159,6 +193,10 @@ export default {
         this.crudSettings.msgBtn = 'Registrar'
       })
     }
+  },
+  mounted: function() {
+    this.getRolesWs()
+    this.getFuncionalidadesWs()
   },
   methods: {
     gestionarRol: function() {
@@ -281,10 +319,6 @@ export default {
 
       return funcionalidades
     }
-  },
-  mounted: function() {
-    this.getRolesWs()
-    this.getFuncionalidadesWs()
   }
 }
 </script>

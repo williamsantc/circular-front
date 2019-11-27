@@ -3,17 +3,17 @@ import FestivosColombia from '@/utils/festivos-colombia.js'
 
 const validarForm = {
   methods: {
-    estrategiaFestivosColombia: function () {
+    estrategiaFestivosColombia: function() {
       return FestivosColombia
     },
-    stringToDate (dateString) {
+    stringToDate(dateString) {
       return new Date(
         parseInt(dateString.split('-')[0]),
         parseInt(dateString.split('-')[1]) - 1,
         parseInt(dateString.split('-')[2])
       )
     },
-    getFechaVisual (dateString) {
+    getFechaVisual(dateString) {
       return (
         dateString.split('-')[2] +
         ' / ' +
@@ -22,11 +22,11 @@ const validarForm = {
         dateString.split('-')[0]
       )
     },
-    getObjetoFechaActual () {
+    getObjetoFechaActual() {
       return this.stringToDate(FestivosColombia.formatDate(new Date()))
     },
     // si el día seleccionado no es hábil, busca el proximo día habil
-    setHabilDay: function (date) {
+    setHabilDay: function(date) {
       if (!this.isDiaHabil(date)) {
         do {
           date = FestivosColombia.addDays(date, 1)
@@ -35,10 +35,10 @@ const validarForm = {
 
       return FestivosColombia.formatDate(date)
     },
-    addDays: function (date, cant) {
+    addDays: function(date, cant) {
       return FestivosColombia.formatDate(FestivosColombia.addDays(date, cant))
     },
-    addDaysSoloHabiles: function (date, cant) {
+    addDaysSoloHabiles: function(date, cant) {
       let tmpDate
       let diasFestivos = FestivosColombia.cargarFestivos(
         new Date().getFullYear() + ''
@@ -54,7 +54,8 @@ const validarForm = {
 
         for (let festivo in diasFestivos) {
           if (
-            tmpDate.getTime() === this.stringToDate(diasFestivos[festivo]).getTime()
+            tmpDate.getTime() ===
+            this.stringToDate(diasFestivos[festivo]).getTime()
           ) {
             cant++
             break
@@ -64,7 +65,7 @@ const validarForm = {
 
       return FestivosColombia.formatDate(tmpDate)
     },
-    isDiaHabil: function (fecha) {
+    isDiaHabil: function(fecha) {
       let diasFestivos = FestivosColombia.cargarFestivos(
         new Date().getFullYear() + ''
       )
@@ -85,7 +86,7 @@ const validarForm = {
 
       return res
     },
-    validarCantidadCaracteres: function (event, campo, limite) {
+    validarCantidadCaracteres: function(event, campo, limite) {
       if (
         campo.length >= limite &&
         event.keyCode !== 8 &&
@@ -99,7 +100,7 @@ const validarForm = {
         event.preventDefault()
       }
     },
-    validarKeyNumero: function (evt) {
+    validarKeyNumero: function(evt) {
       var controlKeys =
         evt.keyCode === 8 ||
         evt.keyCode === 46 ||
@@ -115,7 +116,7 @@ const validarForm = {
         evt.preventDefault()
       }
     },
-    calcularDiferenciaDiasHabiles (fechaDesde, fechaHasta) {
+    calcularDiferenciaDiasHabiles(fechaDesde, fechaHasta) {
       if (!fechaDesde || !fechaHasta) {
         return 0
       }
@@ -137,7 +138,8 @@ const validarForm = {
         let pivoteFecha = this.stringToDate(fechaString)
         for (let festivo in diasFestivos) {
           if (
-            pivoteFecha.getTime() === this.stringToDate(diasFestivos[festivo]).getTime()
+            pivoteFecha.getTime() ===
+            this.stringToDate(diasFestivos[festivo]).getTime()
           ) {
             diasNoHabiles++
           }
@@ -149,7 +151,7 @@ const validarForm = {
 
       return diffDays - diasNoHabiles
     },
-    validarCampos: function (formData, indexDinamico) {
+    validarCampos: function(formData, indexDinamico) {
       var form = formData.form
       var config = formData.config
       for (var values in config) {
@@ -162,10 +164,9 @@ const validarForm = {
         let selector = config[values].hasOwnProperty('ref')
           ? config[values].ref
           : values
-        let ref =
-          !this.isEmpty(indexDinamico)
-            ? this.$refs[selector][indexDinamico]
-            : this.$refs[selector]
+        let ref = !this.isEmpty(indexDinamico)
+          ? this.$refs[selector][indexDinamico]
+          : this.$refs[selector]
         switch (config[values].type) {
           case 'String':
             if (
@@ -174,8 +175,9 @@ const validarForm = {
             ) {
               this.sendFocus(ref)
               this.$toastr.error(
-                'Verifique: ' + config[values].msg
-                , 'Campos incompletos')
+                'Verifique: ' + config[values].msg,
+                'Campos incompletos'
+              )
               return false
             } else if (
               config[values].hasOwnProperty('limite') &&
@@ -184,11 +186,12 @@ const validarForm = {
               this.sendFocus(ref)
               this.$toastr.error(
                 'Limite de caracteres en el campo: ' +
-                config[values].msg +
-                ' superado (máximo: ' +
-                config[values].limite +
-                ')'
-                , 'Campos incompletos')
+                  config[values].msg +
+                  ' superado (máximo: ' +
+                  config[values].limite +
+                  ')',
+                'Campos incompletos'
+              )
               return false
             }
 
@@ -201,8 +204,9 @@ const validarForm = {
             ) {
               this.sendFocus(ref)
               this.$toastr.error(
-                'Verifique el campo: ' + config[values].msg
-                , 'Campos incompletos')
+                'Verifique el campo: ' + config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
 
@@ -210,8 +214,9 @@ const validarForm = {
               this.sendFocus(ref)
               this.$toastr.error(
                 'El campo solo permite números, verifique: ' +
-                config[values].msg
-                , 'Campos incompletos')
+                  config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
             if (
@@ -221,10 +226,11 @@ const validarForm = {
               this.sendFocus(ref)
               this.$toastr.error(
                 'El número debe ser mayor que ' +
-                config[values].mayorQue +
-                ', verifique: ' +
-                config[values].msg
-                , 'Campos incompletos')
+                  config[values].mayorQue +
+                  ', verifique: ' +
+                  config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
 
@@ -235,10 +241,11 @@ const validarForm = {
               this.sendFocus(ref)
               this.$toastr.error(
                 'El número debe ser menor que' +
-                config[values].menorQue +
-                ', verifique: ' +
-                config[values].msg
-                , 'Campos incompletos')
+                  config[values].menorQue +
+                  ', verifique: ' +
+                  config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
 
@@ -250,14 +257,18 @@ const validarForm = {
             ) {
               this.sendFocus(ref)
               this.$toastr.error(
-                'Verifique el campo: ' + config[values].msg
-                , 'Campos incompletos')
+                'Verifique el campo: ' + config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
 
             if (!this.validateEmail(form[values])) {
               this.sendFocus(ref)
-              this.$toastr.error(config[values].msg + ' Invalido', 'campos incompletos')
+              this.$toastr.error(
+                config[values].msg + ' Invalido',
+                'campos incompletos'
+              )
               return false
             }
 
@@ -277,8 +288,9 @@ const validarForm = {
             ) {
               this.sendFocus(ref.$el.querySelector('input'))
               this.$toastr.error(
-                'Verifique el campo: ' + config[values].msg
-                , 'Campos incompletos')
+                'Verifique el campo: ' + config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
             break
@@ -288,8 +300,9 @@ const validarForm = {
               !config[values].hasOwnProperty('validar')
             ) {
               this.$toastr.error(
-                'No hay elementos en la lista: ' + config[values].msg
-              , 'Campos incompletos')
+                'No hay elementos en la lista: ' + config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
             break
@@ -300,8 +313,9 @@ const validarForm = {
             ) {
               this.sendFocus(ref)
               this.$toastr.error(
-                'Verifique el campo: ' + config[values].msg
-                , 'Campos incompletos')
+                'Verifique el campo: ' + config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
 
@@ -318,15 +332,17 @@ const validarForm = {
               let diasMaximo = config[values].difference
 
               if (
-                this.calcularDiferenciaDiasHabiles(fechaDesde, date) > diasMaximo
+                this.calcularDiferenciaDiasHabiles(fechaDesde, date) >
+                diasMaximo
               ) {
                 this.sendFocus(ref)
                 this.$toastr.error(
                   'La diferencia entre las fecha debe ser de ' +
-                  config[values].difference +
-                  ' día(s) Hábiles, verifique el campo: ' +
-                  config[values].msg
-                  , 'Campos incompletos')
+                    config[values].difference +
+                    ' día(s) Hábiles, verifique el campo: ' +
+                    config[values].msg,
+                  'Campos incompletos'
+                )
                 return false
               }
             }
@@ -337,7 +353,10 @@ const validarForm = {
             ) {
               if (!this.isDiaHabil(date)) {
                 this.sendFocus(ref)
-                this.$toastr.error('Solo se permiten días hábiles.', 'Campos incompletos')
+                this.$toastr.error(
+                  'Solo se permiten días hábiles.',
+                  'Campos incompletos'
+                )
                 return false
               }
             }
@@ -349,8 +368,9 @@ const validarForm = {
               this.sendFocus(ref)
               this.$toastr.error(
                 'La fecha no es válida, verifique el campo: ' +
-                config[values].msg
-                , 'Campos incompletos')
+                  config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
 
@@ -361,8 +381,9 @@ const validarForm = {
               this.sendFocus(ref)
               this.$toastr.error(
                 'La fecha no es válida, verifique el campo: ' +
-                config[values].msg
-                , 'Campos incompletos')
+                  config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
             break
@@ -373,8 +394,9 @@ const validarForm = {
             ) {
               this.sendFocus(ref)
               this.$toastr.error(
-                'Verifique el campo: ' + config[values].msg
-                , 'Campos incompletos')
+                'Verifique el campo: ' + config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
 
@@ -397,20 +419,25 @@ const validarForm = {
                 this.sendFocus(ref)
                 this.$toastr.error(
                   'La hora es inferior a las ' +
-                  greaterShow +
-                  ', verifique el campo: ' +
-                  config[values].msg
-                  , 'Campos incompletos')
+                    greaterShow +
+                    ', verifique el campo: ' +
+                    config[values].msg,
+                  'Campos incompletos'
+                )
                 return false
               }
             }
             break
           case 'CheckBox':
-            if (this.isEmpty(form[values]) && !config[values].hasOwnProperty('validar')) {
+            if (
+              this.isEmpty(form[values]) &&
+              !config[values].hasOwnProperty('validar')
+            ) {
               this.sendFocus(ref)
               this.$toastr.error(
-                'Verifique el campo: ' + config[values].msg
-                , 'Campos incompletos')
+                'Verifique el campo: ' + config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
             break
@@ -421,8 +448,9 @@ const validarForm = {
             ) {
               this.sendFocus(ref.$el.querySelector('input'))
               this.$toastr.error(
-                'Verifique: ' + config[values].msg
-                , 'Campos incompletos')
+                'Verifique: ' + config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
             break
@@ -433,15 +461,19 @@ const validarForm = {
             ) {
               this.sendFocus(ref.$el)
               this.$toastr.error(
-                'Verifique: ' + config[values].msg
-                , 'Campos incompletos')
+                'Verifique: ' + config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
 
             if (config[values].hasOwnProperty('lista')) {
               let checkModificacion = false
               config[values].lista.forEach(element => {
-                if (element.value === form[values] || element === form[values]) {
+                if (
+                  element.value === form[values] ||
+                  element === form[values]
+                ) {
                   checkModificacion = true
                 }
               })
@@ -450,10 +482,11 @@ const validarForm = {
                 this.sendFocus(ref.$el)
                 this.$toastr.error(
                   'ERROR FATAL: Alteración del HTML el valor ' +
-                  form[values] +
-                  ' no existe, verifique: ' +
-                  config[values].msg
-                  , 'Campos incompletos')
+                    form[values] +
+                    ' no existe, verifique: ' +
+                    config[values].msg,
+                  'Campos incompletos'
+                )
                 return false
               }
             }
@@ -466,21 +499,23 @@ const validarForm = {
             ) {
               this.sendFocus(ref.$el)
               this.$toastr.error(
-                'Verifique: ' + config[values].msg
-                , 'Campos incompletos')
+                'Verifique: ' + config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
 
             // crea elemento html temporal
-            let tmp = document.createElement("div")
+            let tmp = document.createElement('div')
             document.body.appendChild(tmp)
             tmp.innerHTML = form[values]
 
             if (tmp.innerText.trim().length <= 0) {
               this.sendFocus(ref.$el)
               this.$toastr.error(
-                'Verifique: ' + config[values].msg
-                , 'Campos incompletos')
+                'Verifique: ' + config[values].msg,
+                'Campos incompletos'
+              )
               tmp.parentNode.removeChild(tmp)
               return false
             }
@@ -492,18 +527,21 @@ const validarForm = {
           case 'File':
             if (this.isEmpty(form[values])) {
               this.sendFocus(ref.$el.querySelector('input'))
-              this.$toastr.error(
-                '' + config[values].msg
-                , 'Campos incompletos')
+              this.$toastr.error('' + config[values].msg, 'Campos incompletos')
               return false
             }
 
             if (config[values].accept) {
-              if (typeof config[values].accept === 'string' && form[values].type !== config[values].accept) {
+              if (
+                typeof config[values].accept === 'string' &&
+                form[values].type !== config[values].accept
+              ) {
                 this.sendFocus(ref.$el.querySelector('input'))
                 this.$toastr.error(
-                  'Tipo de archivo no permitido, verifique: ' + config[values].msg
-                  , 'Campos incompletos')
+                  'Tipo de archivo no permitido, verifique: ' +
+                    config[values].msg,
+                  'Campos incompletos'
+                )
                 return false
               } else {
                 let accepted = false
@@ -517,19 +555,28 @@ const validarForm = {
                 if (!accepted) {
                   this.sendFocus(ref.$el.querySelector('input'))
                   this.$toastr.error(
-                    'Tipo de archivo no permitido, verifique: ' + config[values].msg
-                    , 'Campos incompletos')
+                    'Tipo de archivo no permitido, verifique: ' +
+                      config[values].msg,
+                    'Campos incompletos'
+                  )
                   return false
                 }
               }
             }
 
-            if (config[values].maxSize && config[values].maxSize < form[values].size) {
+            if (
+              config[values].maxSize &&
+              config[values].maxSize < form[values].size
+            ) {
               let maxSize = config[values].maxSize / 1024 / 1024
               this.sendFocus(ref.$el.querySelector('input'))
               this.$toastr.error(
-                'Tamaño máximo permitido: ' + maxSize + 'Mb , verifique: ' + config[values].msg
-                , 'Campos incompletos')
+                'Tamaño máximo permitido: ' +
+                  maxSize +
+                  'Mb , verifique: ' +
+                  config[values].msg,
+                'Campos incompletos'
+              )
               return false
             }
             break
@@ -540,14 +587,18 @@ const validarForm = {
       }
       return true
     },
-    isEmpty: function (element) {
-      return (element === undefined || element === null || (typeof element === 'string' && element.trim() === ''))
+    isEmpty: function(element) {
+      return (
+        element === undefined ||
+        element === null ||
+        (typeof element === 'string' && element.trim() === '')
+      )
     },
-    validateEmail: function (email) {
+    validateEmail: function(email) {
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return re.test(String(email).toLowerCase())
     },
-    sendFocus (element) {
+    sendFocus(element) {
       Vue.nextTick(() => {
         element.focus()
       })

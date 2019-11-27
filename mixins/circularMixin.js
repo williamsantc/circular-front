@@ -1,5 +1,5 @@
 const circularMixin = {
-  data: function () {
+  data: function() {
     return {
       listaArea: [],
       listaEntidad: [],
@@ -10,15 +10,15 @@ const circularMixin = {
     }
   },
   methods: {
-    getAreasWs: function () {
+    getAreasWs: function() {
       return this.$axios
         .$get('/api/area/list')
         .then(resp => {
           this.listaArea = resp
         })
-        .catch(error => { })
+        .catch(error => {})
     },
-    getEntidadesWs: function () {
+    getEntidadesWs: function() {
       return this.$axios
         .$get('/api/entidad/list')
         .then(resp => {
@@ -28,7 +28,7 @@ const circularMixin = {
           console.log(error)
         })
     },
-    getResponsablesWs: function () {
+    getResponsablesWs: function() {
       return this.$axios
         .$get('/api/responsable/list')
         .then(resp => {
@@ -38,7 +38,7 @@ const circularMixin = {
           console.log(error)
         })
     },
-    cargarListasForaneas: function () {
+    cargarListasForaneas: function() {
       return this.getAreasWs().then(() => {
         this.getEntidadesWs().then(() => {
           this.getResponsablesWs().then(() => {

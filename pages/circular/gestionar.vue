@@ -8,45 +8,45 @@
         <b-col>
           <b-form-group label="Asunto:">
             <b-form-textarea
-              placeholder="Ingrese asunto de la circular"
-              :rows="3"
-              no-resize
               ref="circ_asunto"
+              :rows="3"
               v-model="circular.form.circ_asunto"
               :max-rows="6"
-            ></b-form-textarea>
+              placeholder="Ingrese asunto de la circular"
+              no-resize
+            />
           </b-form-group>
           <b-form-group label="Contenido Circular:">
             <tiny-mce
+              ref="circ_contenido"
               v-model="circular.form.circ_contenido"
               :init="initTinyMce"
-              ref="circ_contenido"
               :api-key="apiTiny"
-            ></tiny-mce>
+            />
           </b-form-group>
           <b-row>
             <b-col md="6">
               <b-form-group label="Area:">
                 <multiselect
+                  ref="area_id"
                   v-model="area"
                   :options="listaArea"
                   placeholder="Seleccione una opción"
                   label="area_nombre"
-                  ref="area_id"
                   track-by="area_nombre"
-                ></multiselect>
+                />
               </b-form-group>
             </b-col>
             <b-col md="6">
               <b-form-group label="Entidad:">
                 <multiselect
+                  ref="enti_id"
                   v-model="entidad"
                   :options="listaEntidad"
                   placeholder="Seleccione una opción"
                   label="enti_nombre"
-                  ref="enti_id"
                   track-by="enti_nombre"
-                ></multiselect>
+                />
               </b-form-group>
             </b-col>
           </b-row>
@@ -54,28 +54,31 @@
             <b-col md="6">
               <b-form-group label="Responsable:">
                 <multiselect
+                  ref="resp_id"
                   v-model="responsable"
                   :options="listaResponsable"
                   placeholder="Seleccione una opción"
                   label="resp_nombre"
-                  ref="resp_id"
                   track-by="resp_nombre"
-                ></multiselect>
+                />
               </b-form-group>
             </b-col>
             <b-col md="6">
               <b-form-group label="Fecha emisión:">
-                <b-input type="date" ref="circ_fecha" v-model="circular.form.circ_fecha"></b-input>
+                <b-input 
+                  ref="circ_fecha" 
+                  v-model="circular.form.circ_fecha" 
+                  type="date"/>
               </b-form-group>
             </b-col>
           </b-row>
           <b-form-group label="Anexos:">
             <tiny-mce
+              ref="circ_anexos"
               v-model="circular.form.circ_anexos"
               :init="initTinyMce"
-              ref="circ_anexos"
               :api-key="apiTiny"
-            ></tiny-mce>
+            />
           </b-form-group>
         </b-col>
       </b-row>
@@ -83,10 +86,14 @@
     <b-card-footer>
       <b-row>
         <b-col>
-          <b-btn variant="default" @click="$router.push('/circular')">Volver</b-btn>
+          <b-btn 
+            variant="default" 
+            @click="$router.push('/circular')">Volver</b-btn>
         </b-col>
         <b-col align="right">
-          <b-btn variant="primary" @click="gestionarCircular">{{ btnText }}</b-btn>
+          <b-btn 
+            variant="primary" 
+            @click="gestionarCircular">{{ btnText }}</b-btn>
         </b-col>
       </b-row>
     </b-card-footer>
@@ -156,7 +163,7 @@ const CIRCULAR = {
 }
 
 export default {
-  name: 'circular-gestionar',
+  name: 'CircularGestionar',
   mixins: [validarForm, circularMixin],
   data: function() {
     return {
@@ -192,6 +199,17 @@ export default {
       this.circular.form.resp_id = newValue ? newValue.resp_id : ''
     }
   },
+  beforeMount: function() {
+    this.cargarListasForaneas().then(() => {
+      if (this.$route.params.circular) {
+        this.circular.form = this.$route.params.circular
+        this.entidad = this.$route.params.circular.entidad
+        this.responsable = this.$route.params.circular.responsable
+        this.area = this.$route.params.circular.area
+        this.btnText = 'Guardar cambios'
+      }
+    })
+  },
   methods: {
     gestionarCircular: function() {
       if (!this.validarCampos(this.circular)) {
@@ -207,17 +225,6 @@ export default {
           this.$toastr.error(error.response.data.msg, 'ERROR')
         })
     }
-  },
-  beforeMount: function() {
-    this.cargarListasForaneas().then(() => {
-      if (this.$route.params.circular) {
-        this.circular.form = this.$route.params.circular
-        this.entidad = this.$route.params.circular.entidad
-        this.responsable = this.$route.params.circular.responsable
-        this.area = this.$route.params.circular.area
-        this.btnText = 'Guardar cambios'
-      }
-    })
   }
 }
 </script>

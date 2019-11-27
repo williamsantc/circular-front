@@ -6,30 +6,46 @@
 
     <b-card-body>
       <b-row>
-        <b-col md="6" order="2" order-sm="1">
+        <b-col 
+          md="6" 
+          order="2" 
+          order-sm="1">
           <b-btn
             variant="outline-primary"
-            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
             aria-controls="collapseFilter"
+            @click="crudSettings.toogleFilter = !crudSettings.toogleFilter"
           >
-            <i class="fa fa-search" aria-hidden="true"></i> Filtrar búsqueda
+            <i 
+              class="fa fa-search" 
+              aria-hidden="true"/> Filtrar búsqueda
             <i
               :class="(crudSettings.toogleFilter ? 'fa fa-angle-up': 'fa fa-angle-down')"
               aria-hidden="true"
-            ></i>
+            />
           </b-btn>
         </b-col>
-        <b-col md="6" order="1" order-sm="2" align="right">
-          <b-btn variant="primary" @click="crudSettings.showModal = !crudSettings.showModal">
-            <i class="fa fa-plus" aria-hidden="true"></i> Nuevo responsable
+        <b-col 
+          md="6" 
+          order="1" 
+          order-sm="2" 
+          align="right">
+          <b-btn 
+            variant="primary" 
+            @click="crudSettings.showModal = !crudSettings.showModal">
+            <i 
+              class="fa fa-plus" 
+              aria-hidden="true"/> Nuevo responsable
           </b-btn>
         </b-col>
       </b-row>
-      <b-collapse class="mt-2" v-model="crudSettings.toogleFilter" id="collapseFilter">
+      <b-collapse 
+        id="collapseFilter" 
+        v-model="crudSettings.toogleFilter" 
+        class="mt-2">
         <b-row>
           <b-col>
             <b-form-group label="Nombre del responsable a buscar">
-              <b-input v-model="nombreSearch"></b-input>
+              <b-input v-model="nombreSearch"/>
             </b-form-group>
           </b-col>
         </b-row>
@@ -37,18 +53,23 @@
       <b-row>
         <b-col>
           <br>
-          <b-alert show variant="info" v-if="listaResponsable.length <= 0">No hay registros</b-alert>
+          <b-alert 
+            v-if="listaResponsable.length <= 0" 
+            show 
+            variant="info">No hay registros</b-alert>
           <b-table
             v-else
-            stacked="md"
             :items="listaResponsable"
             :fields="fields"
-            striped
             :per-page="crudSettings.perPage"
             :current-page="crudSettings.currentPage"
+            stacked="md"
+            striped
             hover
           >
-            <template slot="acciones" slot-scope="data">
+            <template 
+              slot="acciones" 
+              slot-scope="data">
               <b-btn
                 variant="primary"
                 size="sm"
@@ -56,15 +77,19 @@
                 title="Modificar"
                 @click="sendModificar(data.item)"
               >
-                <i class="fa fa-pencil" aria-hidden="true"></i>
+                <i 
+                  class="fa fa-pencil" 
+                  aria-hidden="true"/>
               </b-btn>
               <b-btn
                 variant="danger"
                 size="sm"
-                @click="eliminarResponsable(data.item.resp_id)"
                 title="Eliminar"
+                @click="eliminarResponsable(data.item.resp_id)"
               >
-                <i class="fa fa-trash" aria-hidden="true"></i>
+                <i 
+                  class="fa fa-trash" 
+                  aria-hidden="true"/>
               </b-btn>
             </template>
           </b-table>
@@ -74,35 +99,37 @@
         <b-col>
           <b-pagination
             v-if="listaResponsable.length > crudSettings.perPage"
-            align="center"
             :total-rows="listaResponsable.length"
             :per-page="crudSettings.perPage"
             v-model="crudSettings.currentPage"
+            align="center"
           />
         </b-col>
       </b-row>
     </b-card-body>
 
-    <b-modal v-model="crudSettings.showModal" :title="tituloFuncionlidad">
+    <b-modal 
+      v-model="crudSettings.showModal" 
+      :title="tituloFuncionlidad">
       <b-row>
         <b-col>
           <b-form-group label="Nombre del responsable">
             <b-form-textarea
-              placeholder="Ingrese nombre del responsable"
-              :rows="6"
-              no-resize
-              @keydown.native="validarCantidadCaracteres($event, responsable.form.resp_nombre, 200)"
               ref="resp_nombre"
+              :rows="6"
               v-model="responsable.form.resp_nombre"
               :max-rows="6"
-            ></b-form-textarea>
+              placeholder="Ingrese nombre del responsable"
+              no-resize
+              @keydown.native="validarCantidadCaracteres($event, responsable.form.resp_nombre, 200)"
+            />
           </b-form-group>
           <b-form-group label="Cargo del responsable">
             <b-input
-              v-model="responsable.form.resp_cargo"
               ref="resp_cargo"
+              v-model="responsable.form.resp_cargo"
               @keydown.native="validarCantidadCaracteres($event, responsable.form.resp_cargo, 200)"
-            ></b-input>
+            />
           </b-form-group>
         </b-col>
       </b-row>
@@ -155,7 +182,7 @@ const ENTIDAD = {
 }
 
 export default {
-  name: 'funcionalidad-responsable',
+  name: 'FuncionalidadResponsable',
   mixins: [validarForm],
   data: function() {
     return {
@@ -201,6 +228,9 @@ export default {
         this.crudSettings.msgBtn = 'Registrar'
       })
     }
+  },
+  created: function() {
+    this.getResponsablesWs()
   },
   methods: {
     getResponsablesWs: function() {
@@ -265,9 +295,6 @@ export default {
           this.$toastr.info('Solicitud cancelada', 'INFO')
         })
     }
-  },
-  created: function() {
-    this.getResponsablesWs()
   }
 }
 </script>

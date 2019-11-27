@@ -4,7 +4,7 @@ export const randomWord = function(limit) {
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   let generated = false
   // Por lo menos un número, una letra minúscula y una mayúscula
-      // Al menos 6 caracteres
+  // Al menos 6 caracteres
   let re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])./
   while (!generated) {
     for (var i = 0; i < limit; i++) {
